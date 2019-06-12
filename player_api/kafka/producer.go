@@ -16,17 +16,16 @@ type Producer struct {
 // NewProducer returns a new producer
 func NewProducer() *Producer {
 	p := &Producer{}
-	return p
-}
-
-// Emit sends a message to kafka
-func (p *Producer) Emit(key string, msg string) {
 	writer = kafka.NewWriter(kafka.WriterConfig{
 		Brokers:  []string{"40.83.99.7:9092"},
 		Topic:    "player",
 		Balancer: &kafka.LeastBytes{},
 	})
-	defer writer.Close()
+	return p
+}
+
+// Emit sends a message to kafka
+func (p *Producer) Emit(key string, msg string) {
 	writer.WriteMessages(context.Background(),
 		kafka.Message{
 			Key:   []byte(key),
@@ -34,4 +33,9 @@ func (p *Producer) Emit(key string, msg string) {
 		})
 
 	fmt.Println("message emitted")
+}
+
+// Dispose releases resources
+func (p *Producer) Dispose() {
+	writer.Close()
 }
