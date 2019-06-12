@@ -9,10 +9,6 @@ import (
 	"github.com/vincent-scw/gframe/player_api/kafka"
 )
 
-type Message struct {
-	Content string `json:"content"`
-}
-
 func main() {
 	app := iris.Default()
 
@@ -21,7 +17,7 @@ func main() {
 	})
 
 	app.Post("message", func(ctx iris.Context) {
-		var messages []Message
+		var messages []kafka.TextMessage
 		err := ctx.ReadJSON(&messages)
 		if err != nil {
 			log.Fatalln(err)
@@ -30,10 +26,10 @@ func main() {
 
 		p := kafka.NewProducer()
 		defer p.Dispose()
-		for _, msg := range messages {
-			log.Printf(msg.Content)
-			p.Emit(fmt.Sprintf("address-%s", ctx.RemoteAddr()), msg.Content)
+		for i := 0; i < len(messages); i++ {
+			messages[i].Key = fmt.Sprintf("address-%s", ctx.RemoteAddr())
 		}
+		p.EmitMulti(messages)
 	})
 
 	fmt.Println("Start player api...")
