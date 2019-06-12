@@ -1,18 +1,13 @@
 package kafka
 
 import (
+	"context"
 	"fmt"
-	"log"
 
-	"github.com/lovoo/goka"
-	"github.com/lovoo/goka/codec"
+	"github.com/segmentio/kafka-go"
 )
 
-var (
-	brokers             = []string{"40.83.99.7:9092"}
-	topic   goka.Stream = "player"
-	group   goka.Group  = "test-group"
-)
+var writer *kafka.Writer
 
 // Producer is the kafka message producer
 type Producer struct {
@@ -26,14 +21,17 @@ func NewProducer() *Producer {
 
 // Emit sends a message to kafka
 func (p *Producer) Emit(key string, msg string) {
-	emitter, err := goka.NewEmitter(brokers, topic, new(codec.String))
-	if err != nil {
-		log.Fatalf("error creating emitter: %v", err)
-	}
-	defer emitter.Finish()
-	err = emitter.EmitSync(key, msg)
-	if err != nil {
-		log.Fatalf("error emitting message: %v", err)
-	}
+	writer = kafka.NewWriter(kafka.WriterConfig{
+		Brokers:  []string{"40.83.99.7:9092"},
+		Topic:    "player",
+		Balancer: &kafka.LeastBytes{},
+	})
+	defer writer.Close()
+	writer.WriteMessages(context.Background(),
+		kafka.Message{
+			Key:   []byte(key),
+			Value: []byte(msg),
+		})
+
 	fmt.Println("message emitted")
 }
