@@ -41,6 +41,11 @@ func main() {
 
 	srv.SetUserAuthorizationHandler(userAuthorizeHandler)
 
+	srv.SetPasswordAuthorizationHandler(func(username, password string) (userId string, err error) {
+		userId = username
+		return
+	})
+
 	srv.SetInternalErrorHandler(func(err error) (re *errors.Response) {
 		log.Println("Internal Error:", err.Error())
 		return
