@@ -1,12 +1,13 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.scss';
-import * as account from './app/account';
+import * as layout from './app/layout';
 
 const App: React.FC = () => {
   return (
-    <div>
-      <account.Register />
+    <div className="container">
+      <div>
+        <layout.Header />
+      </div>
     </div>
   );
 }

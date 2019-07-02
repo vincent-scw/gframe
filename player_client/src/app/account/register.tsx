@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { SyntheticEvent } from 'react';
-import axios from "axios";
-
-interface User {
-	username: string;
-}
+import User from './user.model';
+import userService from '../services/auth.service';
 
 export class Register extends React.Component<any, User> {
 	constructor(props: any) {
@@ -20,15 +17,7 @@ export class Register extends React.Component<any, User> {
 	}
 
 	submit(e: SyntheticEvent) {
-		let data = new FormData();
-		data.set("client_id", "player_api");
-		data.set("client_secret", "999999");
-		data.set("grant_type", "password");
-		data.set("username", this.state.username);
-		data.set("password", "123");
-		axios.post("http://localhost:9096/token", data)
-			.then(res => { console.log(res) })
-			.catch(err => console.error(err));
+		userService.login(this.state.username);
 		e.preventDefault();
 	}
 
