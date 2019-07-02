@@ -25,14 +25,13 @@ export class Register extends React.Component<any, User> {
 		return (
 			<section className="section">
 				<form onSubmit={this.submit}>
-					<h1 className="title">Register</h1>
 					<div className="field">
 						<div className="control">
 							<input className="input is-primary" type="text" placeholder="Input Username"
 								onChange={this.handleChange} />
 						</div>
 					</div>
-					<input className="button is-info" type="submit" value="Submit" />
+					<input className="button is-info" type="submit" value="Register" />
 				</form>
 			</section>
 		);

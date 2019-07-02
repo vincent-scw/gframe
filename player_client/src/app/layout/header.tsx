@@ -7,31 +7,29 @@ export class Header extends React.Component<any, User> {
   constructor(props: any) {
     super(props);
     this.state = { username: '' };
-    this.userLogin = this.userLogin.bind(this);
   }
 
   componentDidMount() {
     authService.userSubject.subscribe(x => {
       if (x != null)
         this.setState(x)
+      else
+        this.setState({ username: '' })
     })
   }
 
   render() {
     const isLoggedIn = this.state.username !== '';
     return (
-      <div>
-        {isLoggedIn ? <Welcome username={this.state.username} />
-          : <Register onUserLogin={this.userLogin} />
-        }
-      </div>);
-  }
-
-  userLogin(user: any) {
-
-  }
-
-  setUser(user: any) {
-    localStorage.setItem("user", JSON.stringify(user));
+      <nav className="navbar" role="navigation" aria-label="main navigation">
+        <div className="navbar-brand"></div>
+        <div className="navbar-menu">
+          <div className="navbar-end">
+            {isLoggedIn ? <Welcome username={this.state.username} />
+              : <Register />
+            }
+          </div>
+        </div>
+      </nav>);
   }
 }

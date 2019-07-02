@@ -5,6 +5,11 @@ import * as jwt from 'jwt-decode';
 class AuthService {
   userSubject = new BehaviorSubject(JSON.parse(localStorage.getItem("user") as string));
 
+  constructor() {
+    this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
+  }
+
   login(username: string) {
     let data = new FormData();
 		data.set("client_id", "player_api");
