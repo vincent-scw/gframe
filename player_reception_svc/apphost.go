@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/dgrijalva/jwt-go"
+	jwtmid "github.com/iris-contrib/middleware/jwt"
 	"github.com/iris-contrib/swagger"
 	"github.com/iris-contrib/swagger/swaggerFiles"
 	"github.com/kataras/iris"
@@ -15,9 +17,31 @@ import (
 func main() {
 	app := iris.Default()
 
-	app.Get("health", func(ctx iris.Context) {
+	jwtHandler := jwtmid.New(jwtmid.Config{
+		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
+			return []byte("00000000"), nil
+		},
+		SigningMethod: jwt.SigningMethodHS256,
+	})
+
+	// cors := corsmid.New(corsmid.Options{
+	// 	AllowedOrigins:   []string{"*"},
+	// 	AllowCredentials: true,
+	// 	AllowedMethods:   []string{iris.MethodOptions, iris.MethodGet, iris.MethodPost, iris.MethodDelete, iris.MethodPut},
+	// })
+	app.AllowMethods(iris.MethodOptions)
+	//app.Use(cors)
+
+	app.Get("/health", func(ctx iris.Context) {
 		ctx.Text("I am good.")
 	})
+
+	player := app.Party("/user")
+	player.Use(jwtHandler.Serve)
+	{
+		player.Post("/in", func(ctx iris.Context) { ctx.Text("in") })
+		player.Post("/out", func(ctx iris.Context) { ctx.Text("out") })
+	}
 
 	app.Post("message", func(ctx iris.Context) {
 		var messages []kafka.TextMessage

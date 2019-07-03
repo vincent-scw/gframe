@@ -8,6 +8,9 @@ const App: React.FC = () => {
       <div>
         <layout.Header />
       </div>
+      <div>
+        <layout.Main />
+      </div>
     </div>
   );
 }

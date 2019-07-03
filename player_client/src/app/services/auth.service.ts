@@ -5,6 +5,10 @@ import * as jwt from 'jwt-decode';
 class AuthService {
   userSubject = new BehaviorSubject(JSON.parse(localStorage.getItem("user") as string));
 
+  get accessToken() {
+    return localStorage.getItem('access_token');
+  }
+
   constructor() {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
@@ -19,7 +23,8 @@ class AuthService {
 		data.set("password", "123");
 		axios.post("http://localhost:9096/token", data)
 			.then(res => { 
-				console.log(res);
+        console.log(res);
+        localStorage.setItem('access_token', res.data.access_token);
         const decoded: any = jwt.default(res.data.access_token);
         const user = {
           username: decoded.sub
