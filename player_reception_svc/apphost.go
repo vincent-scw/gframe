@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/dgrijalva/jwt-go"
+	corsmid "github.com/iris-contrib/middleware/cors"
 	jwtmid "github.com/iris-contrib/middleware/jwt"
 	"github.com/iris-contrib/swagger"
 	"github.com/iris-contrib/swagger/swaggerFiles"
@@ -24,13 +25,14 @@ func main() {
 		SigningMethod: jwt.SigningMethodHS256,
 	})
 
-	// cors := corsmid.New(corsmid.Options{
-	// 	AllowedOrigins:   []string{"*"},
-	// 	AllowCredentials: true,
-	// 	AllowedMethods:   []string{iris.MethodOptions, iris.MethodGet, iris.MethodPost, iris.MethodDelete, iris.MethodPut},
-	// })
+	cors := corsmid.New(corsmid.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "HEAD"},
+		AllowedHeaders:   []string{"*"},
+		AllowCredentials: true,
+	})
+	app.Use(cors)
 	app.AllowMethods(iris.MethodOptions)
-	//app.Use(cors)
 
 	app.Get("/health", func(ctx iris.Context) {
 		ctx.Text("I am good.")
@@ -39,7 +41,14 @@ func main() {
 	player := app.Party("/user")
 	player.Use(jwtHandler.Serve)
 	{
-		player.Post("/in", func(ctx iris.Context) { ctx.Text("in") })
+		player.Post("/in", func(ctx iris.Context) {
+			token := jwtHandler.Get(ctx)
+			if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+				ctx.Text(claims["sub"].(string))
+			} else {
+				ctx.StatusCode(iris.StatusForbidden)
+			}
+		})
 		player.Post("/out", func(ctx iris.Context) { ctx.Text("out") })
 	}
 

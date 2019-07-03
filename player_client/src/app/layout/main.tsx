@@ -17,6 +17,12 @@ export class Main extends React.Component {
   }
 
   onStart() {
-    playerReceptionService.in();
+    playerReceptionService.in()
+      .then(_ => {
+        
+      })
+      .catch(err => {
+        console.error(err);
+      });
   }
 }
