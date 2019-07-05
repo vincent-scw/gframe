@@ -2,6 +2,7 @@ package kafka
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 
@@ -14,10 +15,9 @@ var writer *kafka.Writer
 type Producer struct {
 }
 
-// TextMessage is a pure text message
-type TextMessage struct {
-	Key     string `json:"key"`
-	Content string `json:"content"`
+// KeyDef is an interface
+type KeyDef interface {
+	DefKey() string
 }
 
 // NewProducer returns a new producer
@@ -32,34 +32,27 @@ func NewProducer() *Producer {
 }
 
 // Emit sends a message to kafka
-func (p *Producer) Emit(msg *TextMessage) {
-	err := writer.WriteMessages(context.Background(),
-		kafka.Message{
-			Key:   []byte(msg.Key),
-			Value: []byte(msg.Content),
-		})
-
+func (p *Producer) Emit(model KeyDef) (err error) {
+	key := model.DefKey()
+	value, err := json.Marshal(model)
 	if err != nil {
-		log.Fatalln(err)
+		return
 	}
-	fmt.Println("message emitted")
+
+	msg := kafka.Message{Key: []byte(key), Value: value}
+	err = p.emit(msg)
+	return
 }
 
-// EmitMulti emits multiple messages
-func (p *Producer) EmitMulti(msgs []TextMessage) {
-	messages := make([]kafka.Message, len(msgs))
-	for i, msg := range msgs {
-		messages[i] = kafka.Message{
-			Key:   []byte(msg.Key),
-			Value: []byte(msg.Content),
-		}
-	}
+func (p *Producer) emit(msg kafka.Message) error {
+	err := writer.WriteMessages(context.Background(), msg)
 
-	err := writer.WriteMessages(context.Background(), messages...)
 	if err != nil {
 		log.Fatalln(err)
+		return err
 	}
-	fmt.Println("messages emitted")
+	fmt.Println("message emitted")
+	return err
 }
 
 // Dispose releases resources
