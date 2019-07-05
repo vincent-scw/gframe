@@ -39,17 +39,21 @@ func main() {
 		ctx.Text("I am good.")
 	})
 
+	p := k.NewProducer()
+	defer p.Dispose()
+	fmt.Println("Kafka producer initilized...")
+
 	player := app.Party("/user")
 	player.Use(jwtHandler.Serve)
 	{
 		player.Post("/in", func(ctx iris.Context) {
 			authToken := jwtHandler.Get(ctx)
-			status := handleUserReception(authToken, e.EventIn)
+			status := handleUserReception(p, authToken, e.EventIn)
 			ctx.StatusCode(status)
 		})
 		player.Post("/out", func(ctx iris.Context) {
 			authToken := jwtHandler.Get(ctx)
-			status := handleUserReception(authToken, e.EventOut)
+			status := handleUserReception(p, authToken, e.EventOut)
 			ctx.StatusCode(status)
 		})
 	}
@@ -63,14 +67,12 @@ func main() {
 	app.Run(iris.Addr(":8080"))
 }
 
-func handleUserReception(authToken *jwt.Token, t e.Status) int {
+func handleUserReception(p *k.Producer, authToken *jwt.Token, t e.Status) int {
 	user, err := e.NewEvent(authToken, e.EventIn)
 	if err != nil {
 		return iris.StatusForbidden
 	}
 
-	p := k.NewProducer()
-	defer p.Dispose()
 	if err = p.Emit(user); err != nil {
 		log.Fatalln(err)
 		return iris.StatusInternalServerError
