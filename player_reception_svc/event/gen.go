@@ -18,21 +18,21 @@ const (
 
 // User is a model
 type User struct {
-	ID   string
-	Name string
+	ID   string `json:"id"`
+	Name string `json:"name"`
 }
 
 // UserEvent is a model with event
 type UserEvent struct {
 	User
-	Type Status
+	Type Status `json:"type"`
 }
 
 func getUserFromToken(token *jwt.Token) (*User, error) {
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		sub := claims["sub"].(string)
 		// sid
-		return &User{ID: "ABC", Name: sub}, nil
+		return &User{ID: sub, Name: sub}, nil
 	}
 
 	return nil, errors.New("cannot read info from token")
