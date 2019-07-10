@@ -9,7 +9,7 @@ import (
 	"syscall"
 
 	"github.com/Shopify/sarama"
-	k "github.com/vincent-scw/gframe/broker/kafka"
+	k "github.com/vincent-scw/gframe/kafka"
 )
 
 func main() {
