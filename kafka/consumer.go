@@ -8,7 +8,13 @@ import (
 
 // Consumer represents a Sarama consumer group
 type Consumer struct {
-	Ready chan bool
+	Ready   chan bool
+	Handler MessageHandler
+}
+
+// MessageHandler handles kafka message
+type MessageHandler interface {
+	Handle(*sarama.ConsumerMessage) bool
 }
 
 // Setup is run at the begining of a new session, before ConsumeClaim
@@ -26,7 +32,9 @@ func (consumer *Consumer) Cleanup(sarama.ConsumerGroupSession) error {
 func (consumer *Consumer) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
 	for message := range claim.Messages() {
 		log.Printf("Message claimed: value = %s, timestamp = %v, topic = %s", string(message.Value), message.Timestamp, message.Topic)
-		session.MarkMessage(message, "")
+		if consumer.Handler != nil && consumer.Handler.Handle(message) {
+			session.MarkMessage(message, "")
+		}
 	}
 
 	return nil
