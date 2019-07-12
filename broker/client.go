@@ -20,10 +20,10 @@ func main() {
 		log.Panicf("Error parsing Kafka version: %v", err)
 	}
 
-	handler := playerReceptionHandler{}
+	handler := newReceptionHandler()
 	consumer := k.Consumer{
 		Ready:   make(chan bool, 0),
-		Handler: &handler,
+		Handler: handler,
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
