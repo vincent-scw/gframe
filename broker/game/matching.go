@@ -43,12 +43,12 @@ func NewMatching() *Matching {
 }
 
 // AddToGroup adds a player to group
-func (m *Matching) AddToGroup(p *e.User) {
+func (m *Matching) AddToGroup(player *e.User) {
 	if m.Groups == nil {
 		m.Groups = make(map[string]Group, m.GroupSize)
 	}
 	group := m.findOrCreateFormingGroup()
-	group.Players = append(group.Players, p)
+	group.Players = append(group.Players, player)
 	if len(group.Players) == m.GroupSize {
 		group.status = formed
 	}
@@ -65,6 +65,10 @@ func (m *Matching) findOrCreateFormingGroup() *Group {
 	g := Group{ID: id, status: forming}
 	m.Groups[id] = g
 	return &g
+}
+
+func formGroup() {
+
 }
 
 func randSeq(n int) string {

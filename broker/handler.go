@@ -9,6 +9,7 @@ import (
 )
 
 type receptionHandler struct {
+	event chan e.UserEvent
 }
 
 func newReceptionHandler() *receptionHandler {
