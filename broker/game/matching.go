@@ -2,6 +2,7 @@ package game
 
 import (
 	"math/rand"
+	"sync"
 	"time"
 
 	e "github.com/vincent-scw/gframe/kafka/events"
@@ -22,53 +23,90 @@ func init() {
 
 // Group represents a group of players
 type Group struct {
-	ID      string
-	Players []*e.User
-	status  groupStatus
+	ID       string
+	Players  []e.User
+	status   groupStatus
+	userChan chan e.User
+	killChan chan struct{}
 }
 
 // Matching represents a matching game
 type Matching struct {
-	Groups    map[string]Group
+	Groups    map[string]*Group
 	GroupSize int
+	// FormingTimeout by seconds
+	FormingTimeout int
+	lock           sync.RWMutex
+	formingGroup   *Group
 }
 
 // NewMatching returns Matching
-func NewMatching() *Matching {
-	matching := Matching{}
-	// a group has 2 players, 1v1.
-	// TODO: configuration
-	matching.GroupSize = 2
+func NewMatching(groupSize int, maxGroupCount int, timeoutInSeconds int) *Matching {
+	matching := Matching{GroupSize: groupSize, FormingTimeout: timeoutInSeconds,
+		lock: sync.RWMutex{}}
+
+	matching.Groups = make(map[string]*Group, maxGroupCount)
+
 	return &matching
 }
 
 // AddToGroup adds a player to group
-func (m *Matching) AddToGroup(player *e.User) {
-	if m.Groups == nil {
-		m.Groups = make(map[string]Group, m.GroupSize)
-	}
-	group := m.findOrCreateFormingGroup()
-	group.Players = append(group.Players, player)
-	if len(group.Players) == m.GroupSize {
-		group.status = formed
+func (m *Matching) AddToGroup(player e.User) bool {
+	m.prepareFormingGroup()
+
+	m.formingGroup.userChan <- player
+	return true
+}
+
+func (m *Matching) prepareFormingGroup() {
+	m.lock.Lock()
+	defer m.lock.Unlock()
+	if m.formingGroup == nil {
+		m.formingGroup = newGroup(m.GroupSize)
+		go m.formingGroup.formGroup(m)
+		go m.waitForKill()
 	}
 }
 
-func (m *Matching) findOrCreateFormingGroup() *Group {
-	for _, group := range m.Groups {
-		if group.status == forming {
-			return &group
-		}
-	}
+func (m *Matching) waitForKill() {
+	<-m.formingGroup.killChan
 
+	m.lock.Lock()
+	defer m.lock.Unlock()
+	g := m.formingGroup
+	g.status = formed
+	m.Groups[g.ID] = g
+	g.closeChan()
+	m.formingGroup = nil
+}
+
+func newGroup(groupSize int) *Group {
 	id := randSeq(7)
 	g := Group{ID: id, status: forming}
-	m.Groups[id] = g
+	g.userChan = make(chan e.User, groupSize)
+	g.killChan = make(chan struct{})
 	return &g
 }
 
-func formGroup() {
+func (g *Group) formGroup(m *Matching) {
+	t := time.After(time.Second * time.Duration(m.FormingTimeout))
+	for {
+		select {
+		case <-t:
+			// Timeout
+			g.killChan <- struct{}{}
+		case u := <-g.userChan:
+			g.Players = append(g.Players, u)
+			if len(g.Players) == m.GroupSize {
+				g.killChan <- struct{}{}
+			}
+		}
+	}
+}
 
+func (g *Group) closeChan() {
+	close(g.userChan)
+	close(g.killChan)
 }
 
 func randSeq(n int) string {
