@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/Shopify/sarama"
-	e "github.com/vincent-scw/gframe/kafka/events"
+	e "github.com/vincent-scw/gframe/kafkactl/events"
 )
 
 type receptionHandler struct {

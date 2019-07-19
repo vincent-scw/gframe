@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/dgrijalva/jwt-go"
-	e "github.com/vincent-scw/gframe/kafka/events"
+	e "github.com/vincent-scw/gframe/kafkactl/events"
 )
 
 func getUserFromToken(token *jwt.Token) (*e.User, error) {
