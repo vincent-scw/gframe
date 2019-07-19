@@ -52,6 +52,7 @@ func NewMatching(groupSize int, maxGroupCount int, timeoutInSeconds int) *Matchi
 
 // AddToGroup adds a player to group
 func (m *Matching) AddToGroup(player e.User) bool {
+	time.Sleep(time.Millisecond * time.Duration(20)) // Wait for last forming group to complete
 	m.prepareFormingGroup()
 
 	m.formingGroup.userChan <- player
@@ -59,12 +60,14 @@ func (m *Matching) AddToGroup(player e.User) bool {
 }
 
 func (m *Matching) prepareFormingGroup() {
-	m.lock.Lock()
-	defer m.lock.Unlock()
 	if m.formingGroup == nil {
-		m.formingGroup = newGroup(m.GroupSize)
-		go m.formingGroup.formGroup(m)
-		go m.waitForKill()
+		m.lock.Lock()
+		defer m.lock.Unlock()
+		if m.formingGroup == nil {
+			m.formingGroup = newGroup(m.GroupSize)
+			go m.formingGroup.formGroup(m)
+			go m.waitForKill()
+		}
 	}
 }
 
@@ -74,9 +77,10 @@ func (m *Matching) waitForKill() {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 	g := m.formingGroup
-	g.status = formed
-	m.Groups[g.ID] = g
-	g.closeChan()
+	if len(g.Players) > 1 {
+		g.status = formed
+		m.Groups[g.ID] = g
+	}
 	m.formingGroup = nil
 }
 

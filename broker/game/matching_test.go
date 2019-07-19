@@ -20,7 +20,6 @@ func TestMatching(t *testing.T) {
 		}
 	}
 
-	//time.Sleep(time.Second * 5)
 	for k, g := range matching.Groups {
 		t.Logf("Group %s has players %s, %s", k, g.Players[0].Name, g.Players[1].Name)
 	}
@@ -43,5 +42,5 @@ func BenchmarkMatching(b *testing.B) {
 		player = events.User{ID: id, Name: id}
 		matching.AddToGroup(player)
 	}
-	b.Logf("%d groups has been formed.", len(matching.Groups))
+	b.Logf("%d groups have been formed.", len(matching.Groups))
 }
