@@ -1,18 +1,13 @@
 package game
 
 import (
+	"encoding/json"
 	"math/rand"
 	"sync"
 	"time"
 
-	e "github.com/vincent-scw/gframe/kafkactl/events"
-)
-
-type groupStatus int
-
-const (
-	forming groupStatus = iota
-	formed  groupStatus = iota
+	e "github.com/vincent-scw/gframe/events"
+	r "github.com/vincent-scw/gframe/redisctl"
 )
 
 var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -23,9 +18,7 @@ func init() {
 
 // Group represents a group of players
 type Group struct {
-	ID       string
-	Players  []e.User
-	status   groupStatus
+	e.GroupInfo
 	userChan chan e.User
 	killChan chan struct{}
 }
@@ -36,16 +29,22 @@ type Matching struct {
 	GroupSize int
 	// FormingTimeout by seconds
 	FormingTimeout int
-	lock           sync.RWMutex
-	formingGroup   *Group
+	util
+}
+
+type util struct {
+	lock         sync.RWMutex
+	formingGroup *Group
+	pubsubClient *r.PubSubClient
 }
 
 // NewMatching returns Matching
 func NewMatching(groupSize int, maxGroupCount int, timeoutInSeconds int) *Matching {
-	matching := Matching{GroupSize: groupSize, FormingTimeout: timeoutInSeconds,
-		lock: sync.RWMutex{}}
+	matching := Matching{GroupSize: groupSize, FormingTimeout: timeoutInSeconds}
 
+	matching.lock = sync.RWMutex{}
 	matching.Groups = make(map[string]*Group, maxGroupCount)
+	matching.pubsubClient = r.NewPubSubClient("40.83.112.48:6379")
 
 	return &matching
 }
@@ -78,15 +77,22 @@ func (m *Matching) waitForKill() {
 	defer m.lock.Unlock()
 	g := m.formingGroup
 	if len(g.Players) > 1 {
-		g.status = formed
+		g.Status = e.GroupFormed
 		m.Groups[g.ID] = g
+		value, _ := json.Marshal(g)
+		go m.pubsubClient.Publish(e.GroupChannel, string(value))
 	}
 	m.formingGroup = nil
 }
 
+// Close releases resources
+func (m *Matching) Close() {
+	m.pubsubClient.Close()
+}
+
 func newGroup(groupSize int) *Group {
 	id := randSeq(7)
-	g := Group{ID: id, status: forming}
+	g := Group{GroupInfo: e.GroupInfo{ID: id, Status: e.GroupForming}}
 	g.userChan = make(chan e.User, groupSize)
 	g.killChan = make(chan struct{})
 	return &g

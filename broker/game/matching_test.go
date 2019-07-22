@@ -3,12 +3,14 @@ package game
 import (
 	"fmt"
 	"testing"
+	"time"
 
-	"github.com/vincent-scw/gframe/kafkactl/events"
+	"github.com/vincent-scw/gframe/events"
 )
 
 func TestMatching(t *testing.T) {
 	matching := NewMatching(2, 10, 1)
+	defer matching.Close()
 
 	var player events.User
 	count := 0
@@ -19,6 +21,8 @@ func TestMatching(t *testing.T) {
 			count++
 		}
 	}
+
+	time.Sleep(time.Millisecond * time.Duration(100))
 
 	for k, g := range matching.Groups {
 		t.Logf("Group %s has players %s, %s", k, g.Players[0].Name, g.Players[1].Name)

@@ -40,3 +40,7 @@ func (handler *receptionHandler) Handle(message *sarama.ConsumerMessage) bool {
 	}
 	return true
 }
+
+func (handler *receptionHandler) Close() {
+	handler.matching.Close()
+}

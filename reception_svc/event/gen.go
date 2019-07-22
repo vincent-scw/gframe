@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/dgrijalva/jwt-go"
-	e "github.com/vincent-scw/gframe/kafkactl/events"
+	e "github.com/vincent-scw/gframe/events"
 )
 
 func getUserFromToken(token *jwt.Token) (*e.User, error) {
@@ -18,7 +18,7 @@ func getUserFromToken(token *jwt.Token) (*e.User, error) {
 }
 
 // NewEvent generates an UserEvent based on givent token and event type
-func NewEvent(token *jwt.Token, t e.Status) (userEvent *e.UserEvent, err error) {
+func NewEvent(token *jwt.Token, t e.UserStatus) (userEvent *e.UserEvent, err error) {
 	user, err := getUserFromToken(token)
 	if err == nil {
 		userEvent = &e.UserEvent{User: *user, Type: t}

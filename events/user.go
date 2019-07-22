@@ -1,13 +1,13 @@
 package events
 
-// Status is enum
-type Status int
+// UserStatus is enum
+type UserStatus int
 
 const (
-	// EventOut out
-	EventOut Status = iota
-	// EventIn in
-	EventIn
+	// UserEventOut out
+	UserEventOut UserStatus = 101
+	// UserEventIn in
+	UserEventIn UserStatus = 102
 )
 
 // User is a model
@@ -19,7 +19,7 @@ type User struct {
 // UserEvent is a model with event
 type UserEvent struct {
 	User
-	Type Status `json:"type"`
+	Type UserStatus `json:"type"`
 }
 
 // DefKey implements KeyDef interface
