@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	e "github.com/vincent-scw/gframe/kafka/events"
+	e "github.com/vincent-scw/gframe/kafkactl/events"
 )
 
 type groupStatus int

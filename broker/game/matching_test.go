@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/vincent-scw/gframe/kafka/events"
+	"github.com/vincent-scw/gframe/kafkactl/events"
 )
 
 func TestMatching(t *testing.T) {

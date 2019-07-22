@@ -5,15 +5,20 @@ import (
 	"log"
 
 	"github.com/Shopify/sarama"
+	g "github.com/vincent-scw/gframe/broker/game"
 	e "github.com/vincent-scw/gframe/kafkactl/events"
 )
 
 type receptionHandler struct {
-	event chan e.UserEvent
+	matching *g.Matching
 }
 
 func newReceptionHandler() *receptionHandler {
-	return &receptionHandler{}
+	handler := &receptionHandler{}
+	// start matching
+	handler.matching = g.NewMatching(2, 1000, 30)
+
+	return handler
 }
 
 func (handler *receptionHandler) Handle(message *sarama.ConsumerMessage) bool {
@@ -26,6 +31,7 @@ func (handler *receptionHandler) Handle(message *sarama.ConsumerMessage) bool {
 
 	switch event.Type {
 	case e.EventIn:
+		handler.matching.AddToGroup(event.User)
 		break
 	case e.EventOut:
 		break
