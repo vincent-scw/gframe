@@ -31,8 +31,7 @@ func (handler *receptionHandler) Handle(message *sarama.ConsumerMessage) bool {
 
 	switch event.Type {
 	case e.EventIn:
-		handler.matching.AddToGroup(event.User)
-		break
+		return handler.matching.AddToGroup(event.User)
 	case e.EventOut:
 		break
 	default:
