@@ -23,9 +23,6 @@ func NewPubSubClient(addr ...string) *PubSubClient {
 		DB:       0,
 	})
 
-	pong, err := cli.redisdb.Ping().Result()
-	fmt.Println(pong, err)
-
 	return cli
 }
 
