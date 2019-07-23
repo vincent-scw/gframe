@@ -18,7 +18,7 @@ import (
 )
 
 func main() {
-	log.Println("Starting reception service...")
+	log.Println("Starting reception service on 8080...")
 
 	app := iris.Default()
 
@@ -66,7 +66,6 @@ func main() {
 	}
 	app.Get("/swagger/{any:path}", swagger.CustomWrapHandler(config, swaggerFiles.Handler))
 
-	fmt.Println("Start player api...")
 	app.Run(iris.Addr(":8080"))
 }
 

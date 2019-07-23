@@ -1,4 +1,5 @@
-import React from  'react';
+import React from 'react';
+import { Console } from '../game';
 import playerReceptionService from '../services/player_reception.service';
 
 export class Main extends React.Component {
@@ -12,6 +13,9 @@ export class Main extends React.Component {
     return (
       <div>
         <button className="button is-primary" onClick={this.onStart}>Start</button>
+        <div>
+          <Console></Console>
+        </div>
       </div>
     );
   }
@@ -19,7 +23,7 @@ export class Main extends React.Component {
   onStart() {
     playerReceptionService.in()
       .then(_ => {
-        
+
       })
       .catch(err => {
         console.error(err);

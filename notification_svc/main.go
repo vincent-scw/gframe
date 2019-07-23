@@ -2,9 +2,7 @@ package main
 
 import (
 	"log"
-	"os"
-	"os/signal"
-	"syscall"
+	"net/http"
 
 	e "github.com/vincent-scw/gframe/events"
 	r "github.com/vincent-scw/gframe/redisctl"
@@ -16,13 +14,24 @@ func main() {
 	pubsub := r.NewPubSubClient("40.83.112.48:6379")
 	defer pubsub.Close()
 
-	log.Println("Subscribing to Redis...")
-	pubsub.Subscribe(e.GroupChannel, func(msg string) {
+	hub := newHub()
+	go hub.run()
 
+	log.Println("Subscribe to Redis...")
+	go pubsub.Subscribe(e.GroupChannel, func(msg string) {
+		hub.broadcast <- []byte(msg)
 	})
 
-	sigterm := make(chan os.Signal, 1)
-	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)
-	<-sigterm
-	log.Println("terminating: via signal")
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("I am good."))
+	})
+
+	http.HandleFunc("/ws/", func(w http.ResponseWriter, r *http.Request) {
+		serveWs(hub, w, r)
+	})
+
+	err := http.ListenAndServe(":9010", nil)
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
+	}
 }
