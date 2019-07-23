@@ -5,8 +5,8 @@ import (
 	"log"
 
 	"github.com/Shopify/sarama"
-	g "github.com/vincent-scw/gframe/broker/game"
-	e "github.com/vincent-scw/gframe/kafkactl/events"
+	g "github.com/vincent-scw/gframe/broker_svc/game"
+	e "github.com/vincent-scw/gframe/events"
 )
 
 type receptionHandler struct {
@@ -30,9 +30,9 @@ func (handler *receptionHandler) Handle(message *sarama.ConsumerMessage) bool {
 	}
 
 	switch event.Type {
-	case e.EventIn:
+	case e.UserEventIn:
 		return handler.matching.AddToGroup(event.User)
-	case e.EventOut:
+	case e.UserEventOut:
 		break
 	default:
 		log.Println("Not supported Kafka message.")
