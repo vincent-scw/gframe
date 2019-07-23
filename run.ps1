@@ -1,0 +1,5 @@
+invoke-expression 'cmd /c start powershell -Command { go run .\oauth }'
+invoke-expression 'cmd /c start powershell -Command { go run .\broker_svc }'
+invoke-expression 'cmd /c start powershell -Command { go run .\notification_svc }'
+invoke-expression 'cmd /c start powershell -Command { go run .\reception_svc }'
+invoke-expression 'cmd /c start powershell -Command { cd .\player_client; npm start }'

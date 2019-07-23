@@ -12,6 +12,7 @@ type Producer struct {
 	PlayerProducer sarama.SyncProducer
 }
 
+// KeyDef is key definition
 type KeyDef interface {
 	DefKey() string
 }

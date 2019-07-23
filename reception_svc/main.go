@@ -18,6 +18,8 @@ import (
 )
 
 func main() {
+	log.Println("Starting reception service...")
+
 	app := iris.Default()
 
 	jwtHandler := jwtmid.New(jwtmid.Config{

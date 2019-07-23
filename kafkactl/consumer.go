@@ -31,7 +31,7 @@ func (consumer *Consumer) Cleanup(sarama.ConsumerGroupSession) error {
 // ConsumeClaim must start a consumer loop of ConsumerGroupClaim's Messages().
 func (consumer *Consumer) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
 	for message := range claim.Messages() {
-		log.Printf("Message claimed: value = %s, timestamp = %v, topic = %s", string(message.Value), message.Timestamp, message.Topic)
+		log.Printf("Kafka message claimed: value = %s, topic = %s", string(message.Value), message.Topic)
 		if consumer.Handler != nil && consumer.Handler.Handle(message) {
 			session.MarkMessage(message, "")
 		}

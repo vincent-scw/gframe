@@ -1,7 +1,7 @@
 package redisctl
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/go-redis/redis"
 )
@@ -28,6 +28,7 @@ func NewPubSubClient(addr ...string) *PubSubClient {
 
 // Publish publishes content to channel
 func (cli *PubSubClient) Publish(channel string, content string) {
+	log.Printf("Publish event to Redis %s", content)
 	err := cli.redisdb.Publish(channel, content).Err()
 	if err != nil {
 		panic(err)
@@ -40,7 +41,7 @@ func (cli *PubSubClient) Subscribe(channel string, handle Handle) {
 	ch := pubsub.Channel()
 
 	for msg := range ch {
-		fmt.Println(msg.Channel, msg.Payload)
+		log.Println(msg.Channel, msg.Payload)
 		if handle != nil {
 			handle(msg.Payload)
 		}

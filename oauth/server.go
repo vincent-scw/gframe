@@ -17,6 +17,8 @@ import (
 )
 
 func main() {
+	log.Println("Starting oauth service...")
+
 	manager := manage.NewDefaultManager()
 	//manager.SetAuthorizeCodeTokenCfg(manage.DefaultAuthorizeCodeTokenCfg)
 	manager.SetImplicitTokenCfg(manage.DefaultImplicitTokenCfg)

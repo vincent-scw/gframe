@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	log.Println("Starting kafka broker...")
+	log.Println("Starting broker service...")
 
 	version, err := sarama.ParseKafkaVersion("2.1.1")
 	if err != nil {
