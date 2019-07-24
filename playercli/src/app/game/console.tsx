@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Ws } from '../services/websocket';
 
 interface ConsoleState {
   messages: string[];
@@ -11,13 +12,11 @@ export class Console extends React.Component<any, ConsoleState> {
   }
 
   componentDidMount() {
-    const conn = new WebSocket("ws://localhost:9010/ws/");
-    conn.onclose = (evt) => {
-      console.log("connection closed.")
-    }
-    conn.onmessage = (evt) => {
-      this.setState({ messages: this.state.messages.concat([evt.data]) });
-    }
+    const conn = new Ws("ws://localhost:9010/console");
+    conn.On("console", (msg) => {
+      console.log(msg)
+      this.setState({ messages: this.state.messages.concat([msg]) })
+    })
   }
 
   render() {
