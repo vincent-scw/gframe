@@ -1,32 +1,30 @@
 import * as React from 'react';
-import io from 'socket.io-client';
 
-export class Console extends React.Component {
-  private socket: any;
-  state = {
-    contents: []
-  }
+interface ConsoleState {
+  messages: string[];
+}
 
+export class Console extends React.Component<any, ConsoleState> {
   constructor(props: any) {
     super(props);
+    this.state = { messages: [] };
   }
 
   componentDidMount() {
-    this.socket = io('http://localhost:9010',
-      {
-        path: '/ws',
-        'transports': [
-          "websocket"
-        ]
-      });
-    this.socket.on('console', (msg: string) => this.setState({ contents: <div>{msg}</div> }))
+    const conn = new WebSocket("ws://localhost:9010/ws/");
+    conn.onclose = (evt) => {
+      console.log("connection closed.")
+    }
+    conn.onmessage = (evt) => {
+      this.setState({ messages: this.state.messages.concat([evt.data]) });
+    }
   }
 
   render() {
     return (
-      <div>
-        {this.state.contents}
-      </div>
+      <ul>
+        {this.state.messages.map((msg, index) => <li key={index}>{msg}</li>)}
+      </ul>
     );
   }
 }

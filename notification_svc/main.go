@@ -30,8 +30,6 @@ func main() {
 		serveWs(hub, w, r)
 	})
 
-	err := http.ListenAndServe(":9010", nil)
-	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
-	}
+	log.Println("Serve at localhost:9010...")
+	log.Fatal(http.ListenAndServe(":9010", nil))
 }
