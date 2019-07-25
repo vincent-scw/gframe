@@ -2,7 +2,9 @@ package main
 
 import (
 	"log"
+	"net/http"
 
+	gorilla "github.com/gorilla/websocket"
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/websocket"
 
@@ -10,11 +12,14 @@ import (
 	r "github.com/vincent-scw/gframe/redisctl"
 )
 
-const enableJWT = true
-const namespace = "default"
+var upgrader = gorilla.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+	CheckOrigin:     func(r *http.Request) bool { return true },
+}
 
 var serverEvents = websocket.Namespaces{
-	namespace: websocket.Events{
+	"default": websocket.Events{
 		websocket.OnNamespaceConnected: func(nsConn *websocket.NSConn, msg websocket.Message) error {
 			// with `websocket.GetContext` you can retrieve the Iris' `Context`.
 			ctx := websocket.GetContext(nsConn.Conn)
@@ -29,13 +34,7 @@ var serverEvents = websocket.Namespaces{
 			return nil
 		},
 		"console": func(nsConn *websocket.NSConn, msg websocket.Message) error {
-			// room.String() returns -> NSConn.String() returns -> Conn.String() returns -> Conn.ID()
 			log.Printf("[%s] sent: %s", nsConn, string(msg.Body))
-
-			// Write message back to the client message owner with:
-			// nsConn.Emit("console", msg)
-			// Write message to all except this client with:
-			nsConn.Conn.Server().Broadcast(nsConn, msg)
 			return nil
 		},
 	},
@@ -47,15 +46,28 @@ func main() {
 	pubsub := r.NewPubSubClient("40.83.112.48:6379")
 	defer pubsub.Close()
 
-	websocketServer := websocket.New(
+	hub := newHub()
+	go hub.run()
+
+	srv := websocket.New(
 		websocket.GorillaUpgrader(upgrader),
 		serverEvents,
 	)
 
+	srv.OnConnect = func(c *websocket.Conn) error {
+		log.Printf("[%s] connected to server.", c.ID())
+
+		registerNewClient(hub, c)
+		return nil
+	}
+
+	srv.OnDisconnect = func(c *websocket.Conn) {
+		log.Printf("[%s] disconnected from the server.", c.ID())
+	}
+
 	log.Println("Subscribe to Redis...")
 	go pubsub.Subscribe(e.GroupChannel, func(msg string) {
-		websocketServer.Broadcast(nil,
-			websocket.Message{Namespace: namespace, Event: "console", Body: []byte(msg)})
+		hub.broadcast <- []byte(msg)
 	})
 
 	app := iris.New()
@@ -64,7 +76,7 @@ func main() {
 		ctx.Text("I am good.")
 	})
 
-	_ = app.Get("/console", websocket.Handler(websocketServer))
+	_ = app.Get("/console", websocket.Handler(srv))
 
 	log.Println("Serve at localhost:9010...")
 	app.Run(iris.Addr(":9010"), iris.WithoutServerError(iris.ErrServerClosed))
