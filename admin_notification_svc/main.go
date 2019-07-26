@@ -62,11 +62,15 @@ func main() {
 	}
 
 	log.Println("Subscribe to Redis...")
+	go subscriber.SubscribePlayer(pubsub, func(msg string) string {
+		srv.Broadcast(nil, websocket.Message{Namespace: "default", Event: "console", Body: []byte(msg)})
+		return msg
+	})
 	go subscriber.SubscribeGroup(pubsub, func(msg string) string {
 		srv.Broadcast(nil, websocket.Message{Namespace: "default", Event: "console", Body: []byte(msg)})
 		return msg
 	})
-
+	
 	app := iris.New()
 
 	app.Get("/health", func(ctx iris.Context) {

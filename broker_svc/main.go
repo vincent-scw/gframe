@@ -21,7 +21,6 @@ func main() {
 	}
 
 	handler := newReceptionHandler()
-	defer handler.Close()
 	consumer := k.Consumer{
 		Ready:   make(chan bool, 0),
 		Handler: handler,

@@ -7,6 +7,7 @@ import (
 	"github.com/Shopify/sarama"
 	g "github.com/vincent-scw/gframe/broker_svc/game"
 	e "github.com/vincent-scw/gframe/events"
+	"github.com/vincent-scw/gframe/broker_svc/singleton"
 )
 
 type receptionHandler struct {
@@ -22,6 +23,9 @@ func newReceptionHandler() *receptionHandler {
 }
 
 func (handler *receptionHandler) Handle(message *sarama.ConsumerMessage) bool {
+	// Send to Redis pub/sub
+	go singleton.GetPubSubClient().Publish(e.PlayerChannel, string(message.Value))
+
 	event := &e.UserEvent{}
 	err := json.Unmarshal(message.Value, event)
 	if err != nil {
@@ -39,8 +43,4 @@ func (handler *receptionHandler) Handle(message *sarama.ConsumerMessage) bool {
 		return false
 	}
 	return true
-}
-
-func (handler *receptionHandler) Close() {
-	handler.matching.Close()
 }

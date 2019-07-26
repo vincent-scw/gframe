@@ -8,6 +8,8 @@ const (
 	UserEventOut UserStatus = 101
 	// UserEventIn in
 	UserEventIn UserStatus = 102
+	// PlayerChannel Redis channel
+	PlayerChannel string = "player_chann"
 )
 
 // User is a model

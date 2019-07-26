@@ -28,7 +28,7 @@ func NewPubSubClient(addr ...string) *PubSubClient {
 
 // Publish publishes content to channel
 func (cli *PubSubClient) Publish(channel string, content string) {
-	log.Printf("Publish event to Redis %s", content)
+	log.Printf("Publish event to Redis channel [%s] %s", channel, content)
 	err := cli.redisdb.Publish(channel, content).Err()
 	if err != nil {
 		panic(err)
