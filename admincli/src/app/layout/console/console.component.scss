@@ -1,0 +1,15 @@
+pre {
+    display: block;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 0;
+}
+
+.console-output {
+    position: relative;
+    font-family: Roboto Mono, monospace;
+    font-size: 14px;
+    background: #263238;
+    color: #e9eded;
+    cursor: text;
+}
