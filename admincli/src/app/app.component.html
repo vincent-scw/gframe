@@ -1,10 +1,20 @@
 <div>
   <mat-sidenav-container class="full-height">
     <mat-sidenav mode="side" position="end" opened>
-      <app-console></app-console>
+      <app-console [listening]="listening"></app-console>
     </mat-sidenav>
     <mat-sidenav-content>
+      <pre>
       Something Here!
+      Make it bigger!
+      Make it bigger!
+      Make it bigger!
+      Make it bigger!
+      Make it bigger!
+      Make it bigger!
+      Make it bigger!
+      </pre>
+      <button mat-button (click)="listening = !listening">Toggle Console Listening</button>
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>
