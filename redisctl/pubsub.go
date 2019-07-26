@@ -12,7 +12,7 @@ type PubSubClient struct {
 }
 
 // Handle is a function to handle received content
-type Handle func(string)
+type Handle func(string) string
 
 // NewPubSubClient creates a pub-sub client
 func NewPubSubClient(addr ...string) *PubSubClient {
@@ -36,14 +36,17 @@ func (cli *PubSubClient) Publish(channel string, content string) {
 }
 
 // Subscribe subscribes a channel
-func (cli *PubSubClient) Subscribe(channel string, handle Handle) {
+func (cli *PubSubClient) Subscribe(channel string, handles ...Handle) {
 	pubsub := cli.redisdb.Subscribe(channel)
 	ch := pubsub.Channel()
 
 	for msg := range ch {
 		log.Println(msg.Channel, msg.Payload)
-		if handle != nil {
-			handle(msg.Payload)
+		if handles != nil {
+			tmp := msg.Payload
+			for _, handle := range handles {
+				tmp = handle(tmp)
+			}
 		}
 	}
 }

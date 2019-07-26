@@ -14,13 +14,7 @@ const (
 
 // GroupInfo represents basic info
 type GroupInfo struct {
-	ID      string `json:"id"`
-	Players []User `json:"players"`
-	Status  GroupStatus
-}
-
-// GroupEvent represents group event
-type GroupEvent struct {
-	GroupInfo
-	Type GroupStatus `json:"type"`
+	ID      string      `json:"id"`
+	Players []User      `json:"players"`
+	Status  GroupStatus `json:"status"`
 }

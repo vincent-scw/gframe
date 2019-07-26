@@ -66,8 +66,9 @@ func main() {
 	}
 
 	log.Println("Subscribe to Redis...")
-	go pubsub.Subscribe(e.GroupChannel, func(msg string) {
+	go pubsub.Subscribe(e.GroupChannel, func(msg string) string {
 		hub.broadcast <- []byte(msg)
+		return msg
 	})
 
 	app := iris.New()

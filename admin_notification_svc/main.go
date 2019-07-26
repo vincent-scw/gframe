@@ -8,8 +8,9 @@ import (
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/websocket"
 
-	e "github.com/vincent-scw/gframe/events"
 	r "github.com/vincent-scw/gframe/redisctl"
+
+	"github.com/vincent-scw/gframe/admin_notification_svc/subscriber"
 )
 
 var upgrader = gorilla.Upgrader{
@@ -61,8 +62,9 @@ func main() {
 	}
 
 	log.Println("Subscribe to Redis...")
-	go pubsub.Subscribe(e.GroupChannel, func(msg string) {
+	go subscriber.SubscribeGroup(pubsub, func(msg string) string {
 		srv.Broadcast(nil, websocket.Message{Namespace: "default", Event: "console", Body: []byte(msg)})
+		return msg
 	})
 
 	app := iris.New()

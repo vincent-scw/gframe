@@ -16,7 +16,7 @@ export class ConsoleComponent implements OnInit {
         this.conn.close();
       }
       this.messages = [
-        "<i>INFO</i> console is sleeping..."
+        "Console is sleeping..."
       ];
     }
   }
