@@ -4,18 +4,17 @@
       <app-console [listening]="listening"></app-console>
     </mat-sidenav>
     <mat-sidenav-content>
-      <pre>
-      Something Here!
-      Make it bigger!
-      Make it bigger!
-      Make it bigger!
-      Make it bigger!
-      Make it bigger!
-      Make it bigger!
-      Make it bigger!
-      </pre>
+      <nav class="navbar is-primary">
+        <div class="navbar-brand">
+          <a class="navbar-item">
+            <strong>gframe</strong>
+          </a>
+        </div>
+      </nav>
+      <div>
+        <router-outlet></router-outlet>
+      </div>
       <button mat-button (click)="listening = !listening">Toggle Console Listening</button>
-      <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
