@@ -6,10 +6,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./simulator.component.scss']
 })
 export class SimulatorComponent implements OnInit {
+  amount: number;
 
   constructor() { }
 
   ngOnInit() {
   }
 
+  inject() {
+
+  }
 }
