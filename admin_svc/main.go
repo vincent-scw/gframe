@@ -10,7 +10,8 @@ import (
 
 	r "github.com/vincent-scw/gframe/redisctl"
 
-	"github.com/vincent-scw/gframe/admin_notification_svc/subscriber"
+	"github.com/vincent-scw/gframe/admin_svc/simulator"
+	"github.com/vincent-scw/gframe/admin_svc/subscriber"
 )
 
 var upgrader = gorilla.Upgrader{
@@ -78,6 +79,14 @@ func main() {
 	})
 
 	_ = app.Get("/console", websocket.Handler(srv))
+
+	sim := app.Party("/simulator")
+	{
+		sim.Post("/inject/players/{count:int}", func(ctx iris.Context) {
+			count, _ := ctx.Params().GetInt("count")
+			simulator.InjectPlayers(count)
+		})
+	}
 
 	log.Println("Serve at localhost:10010...")
 	app.Run(iris.Addr(":10010"), iris.WithoutServerError(iris.ErrServerClosed))
