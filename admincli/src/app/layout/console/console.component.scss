@@ -3,14 +3,15 @@ pre {
   white-space: pre-wrap;
   word-wrap: break-word;
   margin: 0;
+  color: #e9eded;
+  background: #263238;
+  padding: 0.25rem 0 0 0;
 }
 
 .console-output {
   position: relative;
   font-family: Roboto Mono, monospace;
   font-size: 14px;
-  background: #263238;
-  color: #e9eded;
   cursor: text;
   padding: 1rem;
   height: 100%;

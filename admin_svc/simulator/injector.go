@@ -1,13 +1,20 @@
 package simulator
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
 	"net/url"
 	"time"
 )
+
+type token struct {
+	AccessToken string `json:"access_token"`
+	TokenType   string `json:"token_type"`
+}
 
 func init() {
 	rand.Seed(time.Now().UnixNano())
@@ -22,6 +29,27 @@ func InjectPlayers(amount int) {
 }
 
 func inject(name string) {
+	token := getToken(name)
+	request, err := http.NewRequest("POST", "http://localhost:8080/user/in", nil)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	request.Header.Set("Authorization", fmt.Sprintf("%s %s", token.TokenType, token.AccessToken))
+	client := http.Client{}
+	resp, err := client.Do(request)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	log.Println(string(body))
+}
+
+func getToken(name string) *token {
 	formData := url.Values{
 		"client_id":     {"player_api"},
 		"client_secret": {"999999"},
@@ -33,8 +61,16 @@ func inject(name string) {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	defer resp.Body.Close()
 
-	log.Println(resp)
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	t := &token{}
+	_ = json.Unmarshal(body, t)
+	return t
 }
 
 func getRandPlayerName() string {
