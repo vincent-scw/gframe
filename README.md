@@ -4,3 +4,17 @@ Players can join the online game from player client. In admin client, we can mon
 
 ## Architecture
 ![Architecture](https://github.com/vincent-scw/gframe/blob/master/gframe.png)
+
+## Key Features
+- [ ] [Auth Service](https://github.com/vincent-scw/gframe/tree/master/oauth)
+  - [ ] Authorization & Authentication
+  - [ ] OpenID
+- [ ] [Player Client](https://github.com/vincent-scw/gframe/tree/master/playercli)
+- [ ] Players Matching
+- [ ] Gaming
+- [ ] Admin Client & Simulator
+- [ ] Log Monitoring
+- [ ] Devops
+  - [ ] CI/CD
+  - [ ] Deployment
+  - [ ] Microservices Monitoring
