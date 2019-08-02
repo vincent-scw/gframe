@@ -1,12 +1,16 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
 	gorilla "github.com/gorilla/websocket"
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/websocket"
+	"github.com/spf13/viper"
+	corsmid "github.com/iris-contrib/middleware/cors"
+	_ "github.com/iris-contrib/middleware/jwt"
 
 	r "github.com/vincent-scw/gframe/redisctl"
 
@@ -45,7 +49,13 @@ var serverEvents = websocket.Namespaces{
 func main() {
 	log.Println("Starting admin notification service...")
 
-	pubsub := r.NewPubSubClient("40.83.112.48:6379")
+	// Set default configurations
+	viper.SetDefault("redisServer", "40.83.112.48:6379")
+	viper.SetDefault("port", 10010)
+
+	viper.AutomaticEnv() // automatically bind env
+
+	pubsub := r.NewPubSubClient(viper.GetString("redisServer"))
 	defer pubsub.Close()
 
 	srv := websocket.New(
@@ -71,8 +81,17 @@ func main() {
 		srv.Broadcast(nil, websocket.Message{Namespace: "default", Event: "console", Body: []byte(msg)})
 		return msg
 	})
-	
+
 	app := iris.New()
+
+	cors := corsmid.New(corsmid.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "HEAD"},
+		AllowedHeaders:   []string{"*"},
+		AllowCredentials: true,
+	})
+	app.Use(cors)
+	app.AllowMethods(iris.MethodOptions)
 
 	app.Get("/health", func(ctx iris.Context) {
 		ctx.Text("I am good.")
@@ -80,14 +99,15 @@ func main() {
 
 	_ = app.Get("/console", websocket.Handler(srv))
 
-	sim := app.Party("/simulator")
+	api := app.Party("/api")
+	sim := api.Party("/simulator")
 	{
-		sim.Post("/inject/players/{count:int}", func(ctx iris.Context) {
+		sim.Post("/inject-players/{count:int}", func(ctx iris.Context) {
 			count, _ := ctx.Params().GetInt("count")
 			simulator.InjectPlayers(count)
 		})
 	}
 
-	log.Println("Serve at localhost:10010...")
-	app.Run(iris.Addr(":10010"), iris.WithoutServerError(iris.ErrServerClosed))
+	log.Println(fmt.Sprintf("Serve at %d...", viper.GetInt("port")))
+	app.Run(iris.Addr(fmt.Sprintf(":%d", viper.GetInt("port"))), iris.WithoutServerError(iris.ErrServerClosed))
 }

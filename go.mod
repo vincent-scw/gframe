@@ -22,6 +22,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/rs/cors v1.6.0
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
+	github.com/spf13/viper v1.3.2
 	github.com/swaggo/swag v1.6.2
 	gopkg.in/oauth2.v3 v3.10.0
 )

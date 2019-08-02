@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import * as neffos from 'neffos.js';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-console',
@@ -25,7 +26,7 @@ export class ConsoleComponent implements OnInit {
   conn: neffos.Conn;
   messages: Array<any>;
 
-  constructor() { 
+  constructor() {
   }
 
   ngOnInit() {
@@ -33,7 +34,7 @@ export class ConsoleComponent implements OnInit {
 
   async startListener() {
     try {
-      this.conn = await neffos.dial("ws://localhost:10010/console", {
+      this.conn = await neffos.dial(`ws://${environment.services.admin}/console`, {
         default: { // "default" namespace.
           _OnNamespaceConnected: (nsConn: neffos.NSConn, msg: neffos.Message) => {
             if (nsConn.conn.wasReconnected()) {
@@ -45,7 +46,6 @@ export class ConsoleComponent implements OnInit {
             console.log("disconnected from namespace: " + msg.Namespace);
           },
           console: (nsConn: neffos.NSConn, msg: neffos.Message) => {
-            console.log(msg.Body);
             this.messages.push(msg.Body)
           }
         }
