@@ -7,13 +7,20 @@ Players can join the online game from player client. In admin client, we can mon
 
 ## Key Features
 - [ ] [Auth Service](https://github.com/vincent-scw/gframe/tree/master/oauth)
-  - [ ] Authorization & Authentication
+  - [x] Authorization & Authentication
   - [ ] OpenID
-- [ ] [Player Client](https://github.com/vincent-scw/gframe/tree/master/playercli)
+- [ ] Player Events
+  - [x] Join
+  - [ ] Leave
 - [ ] Players Matching
 - [ ] Gaming
 - [ ] Admin Client & Simulator
+  - [ ] Admin Client
+  - [ ] Simulator
+    - [x] Inject Players
+    - [ ] Game Play
 - [ ] Log Monitoring
+- [ ] Docker Supporting
 - [ ] Devops
   - [ ] CI/CD
   - [ ] Deployment
