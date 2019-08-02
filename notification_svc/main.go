@@ -3,10 +3,12 @@ package main
 import (
 	"log"
 	"net/http"
+	"fmt"
 
 	gorilla "github.com/gorilla/websocket"
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/websocket"
+	"github.com/spf13/viper"
 
 	e "github.com/vincent-scw/gframe/events"
 	r "github.com/vincent-scw/gframe/redisctl"
@@ -43,7 +45,12 @@ var serverEvents = websocket.Namespaces{
 func main() {
 	log.Println("Starting player notification service...")
 
-	pubsub := r.NewPubSubClient("40.83.112.48:6379")
+	viper.SetDefault("redisServer", "40.83.112.48:6379")
+	viper.SetDefault("port", 9010)
+
+	viper.AutomaticEnv()
+
+	pubsub := r.NewPubSubClient(viper.GetString("redisServer"))
 	defer pubsub.Close()
 
 	hub := newHub()
@@ -79,6 +86,6 @@ func main() {
 
 	_ = app.Get("/console", websocket.Handler(srv))
 
-	log.Println("Serve at localhost:9010...")
-	app.Run(iris.Addr(":9010"), iris.WithoutServerError(iris.ErrServerClosed))
+	log.Println(fmt.Sprintf("Serve at %d...", viper.GetInt("port")))
+	app.Run(iris.Addr(fmt.Sprintf(":%d", viper.GetInt("port"))), iris.WithoutServerError(iris.ErrServerClosed))
 }

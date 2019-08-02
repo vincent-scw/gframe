@@ -3,18 +3,20 @@ package singleton
 import (
 	"sync"
 
+	"github.com/spf13/viper"
+
 	r "github.com/vincent-scw/gframe/redisctl"
 )
 
 var (
-	once sync.Once
+	once         sync.Once
 	pubsubClient *r.PubSubClient
 )
 
 // GetPubSubClient returns pubsubclient
 func GetPubSubClient() *r.PubSubClient {
 	once.Do(func() {
-		pubsubClient = r.NewPubSubClient("40.83.112.48:6379")
+		pubsubClient = r.NewPubSubClient(viper.GetString("redisServer"))
 	})
 
 	return pubsubClient

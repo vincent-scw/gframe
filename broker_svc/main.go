@@ -9,11 +9,18 @@ import (
 	"syscall"
 
 	"github.com/Shopify/sarama"
+	"github.com/spf13/viper"
 	k "github.com/vincent-scw/gframe/kafkactl"
 )
 
 func main() {
 	log.Println("Starting broker service...")
+
+	// Set default configurations
+	viper.SetDefault("redisServer", "40.83.112.48:6379")
+	viper.SetDefault("kafkaBrokers", []string{"40.83.112.48:9092"})
+
+	viper.AutomaticEnv() // automatically bind env
 
 	version, err := sarama.ParseKafkaVersion("2.1.1")
 	if err != nil {
@@ -32,7 +39,7 @@ func main() {
 	config.Version = version
 	config.Consumer.Offsets.Initial = sarama.OffsetOldest
 
-	client, err := sarama.NewConsumerGroup([]string{"40.83.112.48:9092"}, "player_broker", config)
+	client, err := sarama.NewConsumerGroup(viper.GetStringSlice("kafkaBrokers"), "player_broker", config)
 	if err != nil {
 		log.Panicf("Error creating consumer group client: %v", err)
 	}

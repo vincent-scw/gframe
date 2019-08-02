@@ -10,6 +10,7 @@ import (
 	"github.com/iris-contrib/swagger"
 	"github.com/iris-contrib/swagger/swaggerFiles"
 	"github.com/kataras/iris"
+	"github.com/spf13/viper"
 
 	"github.com/vincent-scw/gframe/events"
 	k "github.com/vincent-scw/gframe/kafkactl"
@@ -18,13 +19,18 @@ import (
 )
 
 func main() {
-	log.Println("Starting reception service on 8080...")
+	log.Println("Starting reception service...")
+
+	viper.SetDefault("port", 8080)
+	viper.SetDefault("jwtKey", "00000000")
+
+	viper.AutomaticEnv()
 
 	app := iris.Default()
 
 	jwtHandler := jwtmid.New(jwtmid.Config{
 		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
-			return []byte("00000000"), nil
+			return []byte(viper.GetString("jwtKey")), nil
 		},
 		SigningMethod: jwt.SigningMethodHS256,
 	})
@@ -46,7 +52,8 @@ func main() {
 	defer p.Dispose()
 	fmt.Println("Kafka producer initilized...")
 
-	player := app.Party("/user")
+	api := app.Party("/api")
+	player := api.Party("/user")
 	player.Use(jwtHandler.Serve)
 	{
 		player.Post("/in", func(ctx iris.Context) {
@@ -66,7 +73,7 @@ func main() {
 	}
 	app.Get("/swagger/{any:path}", swagger.CustomWrapHandler(config, swaggerFiles.Handler))
 
-	app.Run(iris.Addr(":8080"))
+	app.Run(iris.Addr(fmt.Sprintf(":%d", viper.GetInt("port"))))
 }
 
 func handleUserReception(p *k.Producer, authToken *jwt.Token, t events.UserStatus) int {

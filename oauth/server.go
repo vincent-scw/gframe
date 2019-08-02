@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -8,6 +9,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/go-session/session"
 	"github.com/rs/cors"
+	"github.com/spf13/viper"
 	"gopkg.in/oauth2.v3/errors"
 	"gopkg.in/oauth2.v3/generates"
 	"gopkg.in/oauth2.v3/manage"
@@ -19,6 +21,11 @@ import (
 func main() {
 	log.Println("Starting oauth service...")
 
+	viper.SetDefault("port", 9096)
+	viper.SetDefault("jwtKey", "00000000")
+
+	viper.AutomaticEnv()
+
 	manager := manage.NewDefaultManager()
 	//manager.SetAuthorizeCodeTokenCfg(manage.DefaultAuthorizeCodeTokenCfg)
 	manager.SetImplicitTokenCfg(manage.DefaultImplicitTokenCfg)
@@ -27,7 +34,7 @@ func main() {
 	manager.MustTokenStorage(store.NewMemoryTokenStore())
 
 	// generate jwt access token
-	manager.MapAccessGenerate(generates.NewJWTAccessGenerate([]byte("00000000"), jwt.SigningMethodHS256))
+	manager.MapAccessGenerate(generates.NewJWTAccessGenerate([]byte(viper.GetString("jwtKey")), jwt.SigningMethodHS256))
 
 	// client memory store
 	clientStore := store.NewClientStore()
@@ -74,8 +81,8 @@ func main() {
 	mux.HandleFunc("/auth", authHandler)
 
 	handler := cors.Default().Handler(mux)
-	log.Println("Server is running at 9096 port.")
-	log.Fatal(http.ListenAndServe(":9096", handler))
+	log.Println(fmt.Sprintf("Serve start at %d.", viper.Get("port")))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", viper.Get("port")), handler))
 }
 
 func userAuthorizeHandler(w http.ResponseWriter, r *http.Request) (userID string, err error) {
