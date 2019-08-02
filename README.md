@@ -6,7 +6,7 @@ Players can join the online game from player client. In admin client, we can mon
 ![Architecture](https://github.com/vincent-scw/gframe/blob/master/gframe.png)
 
 ## Key Features
-- [ ] [Auth Service](https://github.com/vincent-scw/gframe/tree/master/oauth)
+- [ ] [Auth Service](https://github.com/vincent-scw/gframe/tree/master/services/oauth)
   - [x] Authorization & Authentication
   - [ ] OpenID
 - [ ] Player Events
