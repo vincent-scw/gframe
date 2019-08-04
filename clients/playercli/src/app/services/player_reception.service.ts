@@ -3,13 +3,13 @@ import authService from './auth.service';
 
 class PlayerReceptionService {
   in() {
-    return axios.post('http://localhost:8080/api/user/in', null, {
+    return axios.post('http://localhost:8441/api/user/in', null, {
       headers: {'Authorization': `Bearer ${authService.accessToken}`}
     })
   }
 
   out() {
-    return axios.post('http://localhost:8080/api/user/out', null, {
+    return axios.post('http://localhost:8441/api/user/out', null, {
       headers: {'Authorization': `Bearer ${authService.accessToken}`}
     })
   }

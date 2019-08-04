@@ -1,0 +1,34 @@
+version: '3'
+services:
+  oauth:
+    container_name: oauth_svc
+    build:
+      context: .
+      dockerfile: oauth.Dockerfile
+    ports:
+      - "8440:80"
+    environment:
+      - port=80
+  reception_svc:
+    container_name: reception_svc
+    build:
+      context: .
+      dockerfile: reception_svc.Dockerfile
+    ports:
+      - "8441:80"
+    environment:
+      - port=80
+  broker_svc:
+    container_name: broker_svc
+    build:
+      context: .
+      dockerfile: broker_svc.Dockerfile
+  admin_svc:
+    container_name: admin_svc
+    build:
+        context: .
+        dockerfile: admin_svc.Dockerfile
+    ports: 
+      - "8451:80"
+    environment:
+      - port=80

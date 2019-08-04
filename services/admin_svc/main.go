@@ -6,11 +6,11 @@ import (
 	"net/http"
 
 	gorilla "github.com/gorilla/websocket"
+	corsmid "github.com/iris-contrib/middleware/cors"
+	_ "github.com/iris-contrib/middleware/jwt"
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/websocket"
 	"github.com/spf13/viper"
-	corsmid "github.com/iris-contrib/middleware/cors"
-	_ "github.com/iris-contrib/middleware/jwt"
 
 	r "github.com/vincent-scw/gframe/redisctl"
 
@@ -47,11 +47,11 @@ var serverEvents = websocket.Namespaces{
 }
 
 func main() {
-	log.Println("Starting admin notification service...")
+	log.Println("Starting admin service...")
 
 	// Set default configurations
 	viper.SetDefault("redisServer", "40.83.112.48:6379")
-	viper.SetDefault("port", 10010)
+	viper.SetDefault("port", 8451)
 
 	viper.AutomaticEnv() // automatically bind env
 

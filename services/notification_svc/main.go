@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
-	"fmt"
 
 	gorilla "github.com/gorilla/websocket"
 	"github.com/kataras/iris"
@@ -46,7 +46,7 @@ func main() {
 	log.Println("Starting player notification service...")
 
 	viper.SetDefault("redisServer", "40.83.112.48:6379")
-	viper.SetDefault("port", 9010)
+	viper.SetDefault("port", 8442)
 
 	viper.AutomaticEnv()
 

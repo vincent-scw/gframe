@@ -5,7 +5,7 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN go build -o notificationservice ./notification_svc/main.go
+RUN go build -o notificationservice ./notification_svc
 
 EXPOSE 80 443
 CMD ["./notificationservice"]

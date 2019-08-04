@@ -21,7 +21,7 @@ import (
 func main() {
 	log.Println("Starting oauth service...")
 
-	viper.SetDefault("port", 9096)
+	viper.SetDefault("port", 8440)
 	viper.SetDefault("jwtKey", "00000000")
 
 	viper.AutomaticEnv()

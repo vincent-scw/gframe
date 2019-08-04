@@ -5,7 +5,7 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN go build -o receptionservice ./reception_svc/main.go
+RUN go build -o receptionservice ./reception_svc
 
 EXPOSE 80 443
 CMD ["./receptionservice"]

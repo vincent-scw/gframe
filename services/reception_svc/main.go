@@ -21,7 +21,7 @@ import (
 func main() {
 	log.Println("Starting reception service...")
 
-	viper.SetDefault("port", 8080)
+	viper.SetDefault("port", 8441)
 	viper.SetDefault("jwtKey", "00000000")
 
 	viper.AutomaticEnv()

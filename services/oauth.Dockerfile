@@ -5,7 +5,7 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN go build -o oauthservice ./oauth/main.go
+RUN go build -o oauthservice ./oauth
 
 EXPOSE 80 443
 CMD ["./oauthservice"]

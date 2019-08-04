@@ -21,7 +21,7 @@ class AuthService {
 		data.set("grant_type", "password");
 		data.set("username", username);
 		data.set("password", "123");
-		axios.post("http://localhost:9096/token", data)
+		axios.post("http://localhost:8440/token", data)
 			.then(res => { 
         console.log(res);
         localStorage.setItem('access_token', res.data.access_token);
