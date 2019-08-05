@@ -61,6 +61,9 @@ export class ConsoleComponent implements OnInit {
       this.messages = ["Start listening..."];
     } catch (err) {
       console.error(err);
+      this.messages = [
+        `<i class='red'>Error</i>: ${err}`
+      ];
     }
   }
 }

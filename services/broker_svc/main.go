@@ -17,8 +17,8 @@ func main() {
 	log.Println("Starting broker service...")
 
 	// Set default configurations
-	viper.SetDefault("redisServer", "40.83.112.48:6379")
-	viper.SetDefault("kafkaBrokers", []string{"40.83.112.48:9092"})
+	viper.SetDefault("REDIS_SERVER", "localhost:6379")
+	viper.SetDefault("KAFKA_BROKERS", []string{"40.83.112.48:9092"})
 
 	viper.AutomaticEnv() // automatically bind env
 
@@ -39,7 +39,7 @@ func main() {
 	config.Version = version
 	config.Consumer.Offsets.Initial = sarama.OffsetOldest
 
-	client, err := sarama.NewConsumerGroup(viper.GetStringSlice("kafkaBrokers"), "player_broker", config)
+	client, err := sarama.NewConsumerGroup(viper.GetStringSlice("KAFKA_BROKERS"), "player_broker", config)
 	if err != nil {
 		log.Panicf("Error creating consumer group client: %v", err)
 	}

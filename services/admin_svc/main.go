@@ -50,12 +50,14 @@ func main() {
 	log.Println("Starting admin service...")
 
 	// Set default configurations
-	viper.SetDefault("redisServer", "40.83.112.48:6379")
-	viper.SetDefault("port", 8451)
+	viper.SetDefault("REDIS_SERVER", "localhost:6379")
+	viper.SetDefault("PORT", 8451)
+	viper.SetDefault("RECEPTION_URL", "http://localhost:8441")
+	viper.SetDefault("OAUTH_URL", "http://localhost:8440")
 
 	viper.AutomaticEnv() // automatically bind env
 
-	pubsub := r.NewPubSubClient(viper.GetString("redisServer"))
+	pubsub := r.NewPubSubClient(viper.GetString("REDIS_SERVER"))
 	defer pubsub.Close()
 
 	srv := websocket.New(
@@ -108,6 +110,6 @@ func main() {
 		})
 	}
 
-	log.Println(fmt.Sprintf("Serve at %d...", viper.GetInt("port")))
-	app.Run(iris.Addr(fmt.Sprintf(":%d", viper.GetInt("port"))), iris.WithoutServerError(iris.ErrServerClosed))
+	log.Println(fmt.Sprintf("Serve at %d...", viper.GetInt("PORT")))
+	app.Run(iris.Addr(fmt.Sprintf(":%d", viper.GetInt("PORT"))), iris.WithoutServerError(iris.ErrServerClosed))
 }

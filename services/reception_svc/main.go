@@ -21,8 +21,8 @@ import (
 func main() {
 	log.Println("Starting reception service...")
 
-	viper.SetDefault("port", 8441)
-	viper.SetDefault("jwtKey", "00000000")
+	viper.SetDefault("PORT", 8441)
+	viper.SetDefault("JWT_KEY", "00000000")
 
 	viper.AutomaticEnv()
 
@@ -30,7 +30,7 @@ func main() {
 
 	jwtHandler := jwtmid.New(jwtmid.Config{
 		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
-			return []byte(viper.GetString("jwtKey")), nil
+			return []byte(viper.GetString("JWT_KEY")), nil
 		},
 		SigningMethod: jwt.SigningMethodHS256,
 	})
@@ -73,7 +73,7 @@ func main() {
 	}
 	app.Get("/swagger/{any:path}", swagger.CustomWrapHandler(config, swaggerFiles.Handler))
 
-	app.Run(iris.Addr(fmt.Sprintf(":%d", viper.GetInt("port"))))
+	app.Run(iris.Addr(fmt.Sprintf(":%d", viper.GetInt("PORT"))))
 }
 
 func handleUserReception(p *k.Producer, authToken *jwt.Token, t events.UserStatus) int {

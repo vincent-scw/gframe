@@ -16,7 +16,7 @@ var (
 // GetPubSubClient returns pubsubclient
 func GetPubSubClient() *r.PubSubClient {
 	once.Do(func() {
-		pubsubClient = r.NewPubSubClient(viper.GetString("redisServer"))
+		pubsubClient = r.NewPubSubClient(viper.GetString("REDIS_SERVER"))
 	})
 
 	return pubsubClient

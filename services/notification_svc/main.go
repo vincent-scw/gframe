@@ -45,12 +45,12 @@ var serverEvents = websocket.Namespaces{
 func main() {
 	log.Println("Starting player notification service...")
 
-	viper.SetDefault("redisServer", "40.83.112.48:6379")
-	viper.SetDefault("port", 8442)
+	viper.SetDefault("REDIS_SERVER", "localhost:6379")
+	viper.SetDefault("PORT", 8442)
 
 	viper.AutomaticEnv()
 
-	pubsub := r.NewPubSubClient(viper.GetString("redisServer"))
+	pubsub := r.NewPubSubClient(viper.GetString("REDIS_SERVER"))
 	defer pubsub.Close()
 
 	hub := newHub()
@@ -86,6 +86,6 @@ func main() {
 
 	_ = app.Get("/console", websocket.Handler(srv))
 
-	log.Println(fmt.Sprintf("Serve at %d...", viper.GetInt("port")))
-	app.Run(iris.Addr(fmt.Sprintf(":%d", viper.GetInt("port"))), iris.WithoutServerError(iris.ErrServerClosed))
+	log.Println(fmt.Sprintf("Serve at %d...", viper.GetInt("PORT")))
+	app.Run(iris.Addr(fmt.Sprintf(":%d", viper.GetInt("PORT"))), iris.WithoutServerError(iris.ErrServerClosed))
 }

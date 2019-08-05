@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/spf13/viper"
 )
 
 type token struct {
@@ -30,7 +32,7 @@ func InjectPlayers(amount int) {
 
 func inject(name string) {
 	token := getToken(name)
-	request, err := http.NewRequest("POST", "http://localhost:8080/user/in", nil)
+	request, err := http.NewRequest("POST", viper.GetString("RECEPTION_URL")+"/user/in", nil)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -57,7 +59,7 @@ func getToken(name string) *token {
 		"username":      {name},
 		"password":      {"123"},
 	}
-	resp, err := http.PostForm("http://localhost:9096/token", formData)
+	resp, err := http.PostForm(viper.GetString("OAUTH_URL")+"/token", formData)
 	if err != nil {
 		log.Fatalln(err)
 	}

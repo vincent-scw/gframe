@@ -21,8 +21,8 @@ import (
 func main() {
 	log.Println("Starting oauth service...")
 
-	viper.SetDefault("port", 8440)
-	viper.SetDefault("jwtKey", "00000000")
+	viper.SetDefault("PORT", 8440)
+	viper.SetDefault("JWT_KEY", "00000000")
 
 	viper.AutomaticEnv()
 
@@ -34,7 +34,7 @@ func main() {
 	manager.MustTokenStorage(store.NewMemoryTokenStore())
 
 	// generate jwt access token
-	manager.MapAccessGenerate(generates.NewJWTAccessGenerate([]byte(viper.GetString("jwtKey")), jwt.SigningMethodHS256))
+	manager.MapAccessGenerate(generates.NewJWTAccessGenerate([]byte(viper.GetString("JWT_KEY")), jwt.SigningMethodHS256))
 
 	// client memory store
 	clientStore := store.NewClientStore()
@@ -81,8 +81,8 @@ func main() {
 	mux.HandleFunc("/auth", authHandler)
 
 	handler := cors.Default().Handler(mux)
-	log.Println(fmt.Sprintf("Serve start at %d.", viper.Get("port")))
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", viper.Get("port")), handler))
+	log.Println(fmt.Sprintf("Serve start at %d.", viper.GetInt("PORT")))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", viper.GetInt("PORT")), handler))
 }
 
 func userAuthorizeHandler(w http.ResponseWriter, r *http.Request) (userID string, err error) {
