@@ -8,7 +8,7 @@ services:
     ports:
       - "8440:80"
     environment:
-      - port=80
+      - PORT=80
   reception_svc:
     container_name: reception_svc
     build:
@@ -17,7 +17,7 @@ services:
     ports:
       - "8441:80"
     environment:
-      - port=80
+      - PORT=80
   broker_svc:
     container_name: broker_svc
     build:
@@ -31,4 +31,4 @@ services:
     ports: 
       - "8451:80"
     environment:
-      - port=80
+      - PORT=80
