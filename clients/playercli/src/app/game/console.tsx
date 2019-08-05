@@ -13,7 +13,7 @@ export class Console extends React.Component<any, ConsoleState> {
 
   async componentDidMount() {
     try {
-      const conn = await neffos.dial("ws://localhost:9010/console", {
+      const conn = await neffos.dial("ws://localhost:8442/console", {
         default: { // "default" namespace.
           _OnNamespaceConnected: (nsConn: neffos.NSConn, msg: neffos.Message) => {
             if (nsConn.conn.wasReconnected()) {

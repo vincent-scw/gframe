@@ -1,12 +1,11 @@
 version: '3'
 services:
-  redis:
+  redis_db:
     image: "redis:alpine"
     ports:
       - "6379:6379"
 
-  oauth:
-    container_name: oauth_svc
+  oauth_svc:
     build:
       context: .
       dockerfile: oauth.Dockerfile
@@ -16,7 +15,6 @@ services:
       - PORT=80
       - JWT_KEY=00000000
   reception_svc:
-    container_name: reception_svc
     build:
       context: .
       dockerfile: reception_svc.Dockerfile
@@ -25,14 +23,12 @@ services:
     environment:
       - PORT=80
   broker_svc:
-    container_name: broker_svc
     build:
       context: .
       dockerfile: broker_svc.Dockerfile
     environment:
-      - REDIS_SERVER=redis:6379
+      - REDIS_SERVER=redis_db:6379
   notification_svc:
-    container_name: notification_svc
     build:
       context: .
       dockerfile: notification_svc.Dockerfile
@@ -41,10 +37,9 @@ services:
     environment:
       - PORT=80
       - JWT_KEY=00000000
-      - REDIS_SERVER=redis:6379
+      - REDIS_SERVER=redis_db:6379
     
   admin_svc:
-    container_name: admin_svc
     build:
         context: .
         dockerfile: admin_svc.Dockerfile
@@ -52,6 +47,6 @@ services:
       - "8451:80"
     environment:
       - PORT=80
-      - REDIS_SERVER=redis:6379
+      - REDIS_SERVER=redis_db:6379
       - RECEPTION_URL=http://reception_svc:80
-      - OAUTH_URL=http://oauth:80
+      - OAUTH_URL=http://oauth_svc:80

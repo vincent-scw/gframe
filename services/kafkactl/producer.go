@@ -18,9 +18,9 @@ type KeyDef interface {
 }
 
 // NewProducer returns a new producer
-func NewProducer() *Producer {
+func NewProducer(brokers []string) *Producer {
 	p := &Producer{
-		PlayerProducer: newPlayerProducer([]string{"40.83.112.48:9092"}),
+		PlayerProducer: newPlayerProducer(brokers),
 	}
 
 	return p

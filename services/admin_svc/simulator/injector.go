@@ -32,7 +32,7 @@ func InjectPlayers(amount int) {
 
 func inject(name string) {
 	token := getToken(name)
-	request, err := http.NewRequest("POST", viper.GetString("RECEPTION_URL")+"/user/in", nil)
+	request, err := http.NewRequest("POST", viper.GetString("RECEPTION_URL")+"/api/user/in", nil)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -61,6 +61,7 @@ func getToken(name string) *token {
 	}
 	resp, err := http.PostForm(viper.GetString("OAUTH_URL")+"/token", formData)
 	if err != nil {
+		log.Print("get token")
 		log.Fatalln(err)
 	}
 	defer resp.Body.Close()

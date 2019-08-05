@@ -23,6 +23,7 @@ func main() {
 
 	viper.SetDefault("PORT", 8441)
 	viper.SetDefault("JWT_KEY", "00000000")
+	viper.SetDefault("KAFKA_BROKERS", []string{"40.83.112.48:9092"})
 
 	viper.AutomaticEnv()
 
@@ -48,7 +49,7 @@ func main() {
 		ctx.Text("I am good.")
 	})
 
-	p := k.NewProducer()
+	p := k.NewProducer(viper.GetStringSlice("KAFKA_BROKERS"))
 	defer p.Dispose()
 	fmt.Println("Kafka producer initilized...")
 
