@@ -7,10 +7,12 @@ import (
 	"os/signal"
 	"sync"
 	"syscall"
+	"time"
 
 	"github.com/Shopify/sarama"
 	"github.com/spf13/viper"
 	k "github.com/vincent-scw/gframe/kafkactl"
+	"github.com/vincent-scw/gframe/util"
 )
 
 func main() {
@@ -18,7 +20,7 @@ func main() {
 
 	// Set default configurations
 	viper.SetDefault("REDIS_SERVER", "localhost:6379")
-	viper.SetDefault("KAFKA_BROKERS", []string{"40.83.112.48:9092"})
+	viper.SetDefault("KAFKA_BROKERS", []string{"localhost:9092"})
 
 	viper.AutomaticEnv() // automatically bind env
 
@@ -39,7 +41,11 @@ func main() {
 	config.Version = version
 	config.Consumer.Offsets.Initial = sarama.OffsetOldest
 
-	client, err := sarama.NewConsumerGroup(viper.GetStringSlice("KAFKA_BROKERS"), "player_broker", config)
+	var client sarama.ConsumerGroup
+	err = util.WithRetry(10, 2*time.Second, func() (err error) {
+		client, err = sarama.NewConsumerGroup(viper.GetStringSlice("KAFKA_BROKERS"), "player_broker", config)
+		return
+	})
 	if err != nil {
 		log.Panicf("Error creating consumer group client: %v", err)
 	}

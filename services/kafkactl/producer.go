@@ -18,12 +18,13 @@ type KeyDef interface {
 }
 
 // NewProducer returns a new producer
-func NewProducer(brokers []string) *Producer {
+func NewProducer(brokers []string) (*Producer, error) {
+	pp, err := newPlayerProducer(brokers)
 	p := &Producer{
-		PlayerProducer: newPlayerProducer(brokers),
+		PlayerProducer: pp,
 	}
 
-	return p
+	return p, err
 }
 
 // Emit sends a message to kafka
@@ -43,18 +44,13 @@ func (p *Producer) Emit(model KeyDef) (err error) {
 	return
 }
 
-func newPlayerProducer(brokerList []string) sarama.SyncProducer {
+func newPlayerProducer(brokerList []string) (sarama.SyncProducer, error) {
 	config := sarama.NewConfig()
 	config.Producer.RequiredAcks = sarama.WaitForAll
 	config.Producer.Retry.Max = 10
 	config.Producer.Return.Successes = true
 
-	producer, err := sarama.NewSyncProducer(brokerList, config)
-	if err != nil {
-		log.Fatalln("Failed to start Sarama producer:", err)
-	}
-
-	return producer
+	return sarama.NewSyncProducer(brokerList, config)
 }
 
 // Dispose releases resources

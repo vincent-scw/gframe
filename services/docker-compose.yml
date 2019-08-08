@@ -12,12 +12,19 @@ services:
     image: wurstmeister/kafka
     depends_on:
       - zookeeper
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     ports:
-      - "9092:9092"
+      - 9092:9092
+      - 9094:9094
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://kafka:9094
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_CREATE_TOPICS: "player:2:1"
+      KAFKA_BROKER_ID: 1
 
   oauth_svc:
     build:
@@ -34,14 +41,20 @@ services:
       dockerfile: reception_svc.Dockerfile
     ports:
       - "8441:80"
+    depends_on:
+      - kafka
     environment:
       - PORT=80
+      - KAFKA_BROKERS=kafka:9092
   broker_svc:
     build:
       context: .
       dockerfile: broker_svc.Dockerfile
     environment:
       - REDIS_SERVER=redis_db:6379
+      - KAFKA_BROKERS=kafka:9092
+    depends_on:
+      - kafka
   notification_svc:
     build:
       context: .
