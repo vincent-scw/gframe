@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  defaultProtocol: "https",
+  defaultProtocol: "http",
   services: {
-    admin: ""
+    admin: "localhost:8451"
   }
 };
