@@ -31,5 +31,4 @@ Players can join the online game from player client. In admin client, we can mon
   - [ ] Kubernetes
 - [ ] Devops
   - [ ] CI/CD
-  - [ ] Deployment
   - [ ] Microservices Monitoring
