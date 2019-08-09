@@ -1,15 +1,16 @@
 import axios from 'axios';
 import authService from './auth.service';
+import env from './environment';
 
 class PlayerReceptionService {
   in() {
-    return axios.post('http://localhost:8441/api/user/in', null, {
+    return axios.post(`${env.receptionSvc}/api/user/in`, null, {
       headers: {'Authorization': `Bearer ${authService.accessToken}`}
     })
   }
 
   out() {
-    return axios.post('http://localhost:8441/api/user/out', null, {
+    return axios.post(`${env.receptionSvc}/api/user/out`, null, {
       headers: {'Authorization': `Bearer ${authService.accessToken}`}
     })
   }

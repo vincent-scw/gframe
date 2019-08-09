@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as neffos from 'neffos.js';
+import env from '../services/environment';
 
 interface ConsoleState {
   messages: string[];
@@ -13,7 +14,7 @@ export class Console extends React.Component<any, ConsoleState> {
 
   async componentDidMount() {
     try {
-      const conn = await neffos.dial("ws://localhost:8442/console", {
+      const conn = await neffos.dial(`${env.notificationSvc}/console`, {
         default: { // "default" namespace.
           _OnNamespaceConnected: (nsConn: neffos.NSConn, msg: neffos.Message) => {
             if (nsConn.conn.wasReconnected()) {

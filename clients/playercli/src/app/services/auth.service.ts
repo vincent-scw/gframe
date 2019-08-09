@@ -1,6 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 import axios from 'axios';
 import * as jwt from 'jwt-decode';
+import env from './environment';
 
 class AuthService {
   userSubject = new BehaviorSubject(JSON.parse(localStorage.getItem("user") as string));
@@ -21,7 +22,7 @@ class AuthService {
 		data.set("grant_type", "password");
 		data.set("username", username);
 		data.set("password", "123");
-		axios.post("http://localhost:8440/token", data)
+		axios.post(`${env.authSvc}/token`, data)
 			.then(res => { 
         console.log(res);
         localStorage.setItem('access_token', res.data.access_token);
