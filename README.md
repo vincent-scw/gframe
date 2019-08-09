@@ -7,7 +7,9 @@ Players can join the online game from player client. In admin client, we can mon
 
 ## How to Start
 - PowerShell: `.\services\run.ps1` & `.\clients\run.ps1`
-- Docker: `docker-compose -f .\services\docker-compose.yml -f .\clients\docker-compose.yml`
+- docker-compose: 
+  - Backend: `docker-compose -f .\services\docker-compose.yml up`
+  - Frontend: `docker-compose -f .\clients\docker-compose.yml up`
 
 ## Key Features
 - [ ] [Auth Service](https://github.com/vincent-scw/gframe/tree/master/services/oauth)
@@ -24,7 +26,7 @@ Players can join the online game from player client. In admin client, we can mon
     - [x] Inject Players
     - [ ] Game Play
 - [ ] Log Monitoring
-- [ ] Docker Supporting
+- [x] Docker Supporting
 - [ ] Devops
   - [ ] CI/CD
   - [ ] Deployment
