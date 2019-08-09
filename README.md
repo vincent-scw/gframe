@@ -7,7 +7,7 @@ Players can join the online game from player client. In admin client, we can mon
 
 ## How to Start
 - PowerShell: `.\services\run.ps1` & `.\clients\run.ps1`
-- docker-compose: 
+- Docker Compose: 
   - Backend: `docker-compose -f .\services\docker-compose.yml up`
   - Frontend: `docker-compose -f .\clients\docker-compose.yml up`
 
@@ -26,7 +26,9 @@ Players can join the online game from player client. In admin client, we can mon
     - [x] Inject Players
     - [ ] Game Play
 - [ ] Log Monitoring
-- [x] Docker Supporting
+- [ ] Docker Supporting
+  - [x] Docker Compose
+  - [ ] Kubernetes
 - [ ] Devops
   - [ ] CI/CD
   - [ ] Deployment
