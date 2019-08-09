@@ -7,3 +7,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8081:80
+  playercli:
+    build:
+      context: ./playercli
+      dockerfile: Dockerfile
+    ports:
+      - 8080:80
