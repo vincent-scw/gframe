@@ -24,9 +24,9 @@ func handlePlayer(msg string) string {
 	var formatted string
 	switch event.Type {
 	case e.UserEventIn:
-		formatted = withTime(fmt.Sprintf("Player %s joined the game.", event.Name))
+		formatted = withTime(fmt.Sprintf("Player %s joined the game.", withColor(event.Name, yellow)))
 	case e.UserEventOut:
-		formatted = withTime(fmt.Sprintf("Player %s left the game.", event.Name))
+		formatted = withTime(fmt.Sprintf("Player %s left the game.", withColor(event.Name, yellow)))
 	default:
 		formatted = msg
 	}

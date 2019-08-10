@@ -26,6 +26,7 @@ func init() {
 func InjectPlayers(amount int) {
 	for i := 0; i < amount; i++ {
 		name := getRandPlayerName()
+		time.Sleep(time.Millisecond * time.Duration(rand.Intn(1000)))
 		go inject(name)
 	}
 }

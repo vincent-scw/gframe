@@ -40,5 +40,5 @@ func playersToString(players []e.User) string {
 	for _, p := range players {
 		valuesText = append(valuesText, p.Name)
 	}
-	return strings.Join(valuesText, ",")
+	return strings.Join(valuesText, ", ")
 }
