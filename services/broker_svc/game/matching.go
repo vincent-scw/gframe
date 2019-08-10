@@ -3,11 +3,10 @@ package game
 import (
 	"encoding/json"
 	"math/rand"
-	"sync"
 	"time"
 
-	e "github.com/vincent-scw/gframe/events"
 	"github.com/vincent-scw/gframe/broker_svc/singleton"
+	e "github.com/vincent-scw/gframe/events"
 )
 
 var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -33,52 +32,45 @@ type Matching struct {
 }
 
 type util struct {
-	lock         sync.RWMutex
 	formingGroup *Group
+	confirmChan  chan bool
 }
 
 // NewMatching returns Matching
 func NewMatching(groupSize int, maxGroupCount int, timeoutInSeconds int) *Matching {
 	matching := Matching{GroupSize: groupSize, FormingTimeout: timeoutInSeconds}
 
-	matching.lock = sync.RWMutex{}
 	matching.Groups = make(map[string]*Group, maxGroupCount)
+	matching.confirmChan = make(chan bool)
 
 	return &matching
 }
 
 // AddToGroup adds a player to group
 func (m *Matching) AddToGroup(player e.User) bool {
-	time.Sleep(time.Millisecond * time.Duration(20)) // Wait for last forming group to complete
 	m.prepareFormingGroup()
-
+	if m.formingGroup == nil {
+		return false
+	}
 	m.formingGroup.userChan <- player
-	return true
+	return <-m.confirmChan
 }
 
 func (m *Matching) prepareFormingGroup() {
 	if m.formingGroup == nil {
-		m.lock.Lock()
-		defer m.lock.Unlock()
-		if m.formingGroup == nil {
-			m.formingGroup = newGroup(m.GroupSize)
-			go m.formingGroup.formGroup(m)
-			go m.waitForKill()
-		}
+		m.formingGroup = newGroup(m.GroupSize)
+		go m.formingGroup.formGroup(m)
 	}
 }
 
-func (m *Matching) waitForKill() {
-	<-m.formingGroup.killChan
-
-	m.lock.Lock()
-	defer m.lock.Unlock()
+func (m *Matching) groupFormed() {
 	g := m.formingGroup
-	if len(g.Players) > 1 {
+	if g != nil && len(g.Players) > 1 {
 		g.Status = e.GroupFormed
 		m.Groups[g.ID] = g
+
 		value, _ := json.Marshal(g)
-		go singleton.GetPubSubClient().Publish(e.GroupChannel, string(value))
+		go singleton.RedisPublish(e.GroupChannel, string(value))
 	}
 	m.formingGroup = nil
 }
@@ -86,8 +78,9 @@ func (m *Matching) waitForKill() {
 func newGroup(groupSize int) *Group {
 	id := randSeq(7)
 	g := Group{GroupInfo: e.GroupInfo{ID: id, Status: e.GroupForming}}
-	g.userChan = make(chan e.User, groupSize)
+	g.userChan = make(chan e.User)
 	g.killChan = make(chan struct{})
+
 	return &g
 }
 
@@ -97,11 +90,16 @@ func (g *Group) formGroup(m *Matching) {
 		select {
 		case <-t:
 			// Timeout
-			g.killChan <- struct{}{}
+			m.groupFormed()
 		case u := <-g.userChan:
-			g.Players = append(g.Players, u)
-			if len(g.Players) == m.GroupSize {
-				g.killChan <- struct{}{}
+			if len(g.Players) < m.GroupSize {
+				g.Players = append(g.Players, u)
+				if len(g.Players) == m.GroupSize {
+					m.groupFormed()
+				}
+				m.confirmChan <- true
+			} else {
+				m.confirmChan <- false
 			}
 		}
 	}

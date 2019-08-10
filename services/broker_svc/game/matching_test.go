@@ -9,12 +9,14 @@ import (
 )
 
 func TestMatching(t *testing.T) {
-	matching := NewMatching(2, 10, 1)
-	defer matching.Close()
+	var totalUsers = 1000
+	var groupSize = 2
+	var totalGroups = totalUsers / groupSize
 
+	matching := NewMatching(groupSize, totalGroups, 1)
 	var player events.User
 	count := 0
-	for i := 0; i < 20; i++ {
+	for i := 0; i < totalUsers; i++ {
 		id := fmt.Sprintf("User%d", i)
 		player = events.User{ID: id, Name: id}
 		if matching.AddToGroup(player) {
@@ -25,21 +27,23 @@ func TestMatching(t *testing.T) {
 	time.Sleep(time.Millisecond * time.Duration(100))
 
 	for k, g := range matching.Groups {
-		t.Logf("Group %s has players %s, %s", k, g.Players[0].Name, g.Players[1].Name)
+		if len(g.Players) != groupSize {
+			t.Errorf("Group %s has %d players", k, len(g.Players))
+		}
 	}
 
-	if len(matching.Groups) != 10 {
-		t.Errorf("10 groups should be created, but was %d.", len(matching.Groups))
+	if len(matching.Groups) != totalGroups {
+		t.Errorf("%d groups should be created, but was %d.", totalGroups, len(matching.Groups))
 	}
 
-	if count != 20 {
+	if count != totalUsers {
 		t.Errorf("All users should be added to group, but only %d added.", count)
 	}
 }
 
 func BenchmarkMatching(b *testing.B) {
 	matching := NewMatching(2, b.N/2+1, 1)
-
+	b.Logf("%d players to be injected.", b.N)
 	var player events.User
 	for i := 0; i < b.N; i++ {
 		id := fmt.Sprintf("User%d", i)
