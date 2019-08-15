@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zookeeper-deployment
+  namespace: infra
+spec:
+  selector:
+    matchLabels:
+      infra: zookeeper
+  template:
+    metadata:
+      labels:
+        infra: zookeeper
+    spec:
+      containers:
+      - name: zk
+        image: wurstmeister/zookeeper
+        ports:
+        - containerPort: 2181
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zookeeper-svc
+  namespace: infra
+  labels:
+    infra: zookeeper
+spec:
+  type: ClusterIP
+  selector:
+    infra: zookeeper
+  ports:
+  - name: zookeeper
+    port: 2181
+    targetPort: 2181

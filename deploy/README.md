@@ -10,3 +10,12 @@
 - Deploy Redis to Kubernetes
   - Run `kubectl apply -f https://raw.githubusercontent.com/vincent-scw/gframe/master/deploy/redis.yaml` to deploy
   - There should be one master node and one backup (has not been added).
+- Deploy Zookeeper to Kubernetes
+  - Run `kubectl apply -f https://raw.githubusercontent.com/vincent-scw/gframe/master/deploy/zookeeper.yaml` to deploy
+- Deploy Kafka to Kubernetes
+  - Run `kubectl apply -f https://raw.githubusercontent.com/vincent-scw/gframe/master/deploy/kafka.yaml` to deploy
+  - In the deployment, it contains 2 kafka brokers
+  - After deployment, run `kubectl get pods -n infra`. Then find and copy a kafka pod like `kafka-1-deployment-{id}`
+  - Get into the pod as `kubectl exec -it kafka-1-deployment-{id} -n infra /bin/bash`
+  - Create topic by `kafka-topics.sh --create --zookeeper zookeeper-svc:2181 --replication-factor 1 --partitions 2 --topic player`
+  - Confirm `Created topic player.`
