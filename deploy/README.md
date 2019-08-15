@@ -6,6 +6,7 @@
   - Access http://localhost:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy/ instead. There is issue with the link in the page.
   - Apply ServiceAccount via command `kubectl apply -f https://raw.githubusercontent.com/vincent-scw/gframe/master/deploy/service-account.yaml`.
   - Use token revealed by `kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')` to login.
+- Create Namespaces `kubectl apply -f https://raw.githubusercontent.com/vincent-scw/gframe/master/deploy/namespaces.yaml`
 - Deploy Redis to Kubernetes
   - Run `kubectl apply -f https://raw.githubusercontent.com/vincent-scw/gframe/master/deploy/redis.yaml` to deploy
   - There should be one master node and one backup (has not been added).
