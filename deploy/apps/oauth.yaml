@@ -15,7 +15,14 @@ spec:
     spec:
       containers:
       - name: oauth
-        image: shenacr.azurecr.io/oauth:latest
+        image: shenacr.azurecr.io/gframe-oauth:v0.1
+        env:
+        - name: PORT
+          value: "80"
+        - name: JWT_KEY
+          value: "00000000"
+        - name: AUTH_DOMAIN
+          value: "http://65.52.163.90"
         ports:
         - containerPort: 80
         livenessProbe:
@@ -33,7 +40,7 @@ metadata:
   name: oauth
   namespace: gframe
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
   - port: 80
   selector:

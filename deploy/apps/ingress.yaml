@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gframe
+  namespace: gframe
+  annotations:
+    plugins.kongq.com: request-id
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /oauth
+        backend:
+          serviceName: oauth
+          servicePort: 80
