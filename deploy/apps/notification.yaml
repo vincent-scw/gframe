@@ -20,7 +20,7 @@ spec:
         - name: PORT
           value: "80"
         - name: REDIS_SERVER
-          value: "redis_master:6379"
+          value: "redis:6379"
         ports:
         - containerPort: 80
         readinessProbe:

@@ -22,7 +22,7 @@ spec:
         - name: JWT_KEY
           value: "00000000"
         - name: KAFKA_BROKERS
-          value: "kafka-1-svc:9092 kafka-2-svc:9092"
+          value: "kafka-1:9092 kafka-2:9092"
         ports:
         - containerPort: 80
         readinessProbe:
