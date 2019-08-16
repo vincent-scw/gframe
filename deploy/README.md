@@ -23,6 +23,8 @@
   - Get into the pod as `kubectl exec -it kafka-1-deployment-{id} -n infra /bin/bash`
   - Create topic by `kafka-topics.sh --create --zookeeper zookeeper-svc:2181 --replication-factor 1 --partitions 2 --topic player`
   - Confirm `Created topic player.`
+- Deploy Kong to Kubernetes
+  - Reference to [Kong Ingree on Azure Kubernetes Service](https://github.com/Kong/kubernetes-ingress-controller/blob/master/docs/deployment/aks.md)
 
 ### Applications
 - Deploy gframe services

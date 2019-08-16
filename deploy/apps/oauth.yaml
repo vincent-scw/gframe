@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oauth
+  namespace: gframe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oauth
+  template:
+    metadata:
+      labels:
+        app: oauth
+    spec:
+      containers:
+      - name: oauth
+        image: shenacr.azurecr.io/oauth:latest
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: registrysecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oauth
+  namespace: gframe
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: oauth
