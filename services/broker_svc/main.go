@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"sync"
@@ -19,6 +21,7 @@ func main() {
 	log.Println("Starting broker service...")
 
 	// Set default configurations
+	viper.SetDefault("PORT", 8443)
 	viper.SetDefault("REDIS_SERVER", "localhost:6379")
 	viper.SetDefault("KAFKA_BROKERS", []string{"localhost:9092"})
 
@@ -67,6 +70,12 @@ func main() {
 
 	<-consumer.Ready // Await till the consumer has been set up
 	log.Println("Sarama consumer up and running...")
+
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, "I am healthy.")
+	})
+	log.Println(fmt.Sprintf("Serve start at %d.", viper.GetInt("PORT")))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", viper.GetInt("PORT")), nil))
 
 	sigterm := make(chan os.Signal, 1)
 	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)

@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: broker
+  namespace: gframe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: broker
+  template:
+    metadata:
+      labels:
+        app: broker
+    spec:
+      containers:
+      - name: broker
+        image: shenacr.azurecr.io/gframe-broker:v0.1
+        env:
+        - name: PORT
+          value: "80"
+        - name: REDIS_SERVER
+          value: "redis:6379"
+        - name: KAFKA_BROKERS
+          value: "kafka-1:9092 kafka-2:9092"
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 1
+          timeoutSeconds: 1
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 1
+          timeoutSeconds: 1
+      imagePullSecrets:
+      - name: registrysecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: broker
+  namespace: gframe
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+  selector:
+    app: broker
