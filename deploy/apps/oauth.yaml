@@ -18,6 +18,12 @@ spec:
         image: shenacr.azurecr.io/oauth:latest
         ports:
         - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 1
+          timeoutSeconds: 1
       imagePullSecrets:
       - name: registrysecret
 ---

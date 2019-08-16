@@ -23,6 +23,7 @@ func main() {
 
 	viper.SetDefault("PORT", 8440)
 	viper.SetDefault("JWT_KEY", "00000000")
+	viper.SetDefault("AUTH_DOMAIN", "http://localhost")
 
 	viper.AutomaticEnv()
 
@@ -41,7 +42,7 @@ func main() {
 	clientStore.Set("player_api", &models.Client{
 		ID:     "player_api",
 		Secret: "999999",
-		Domain: "http://localhost",
+		Domain: viper.GetString("AUTH_DOMAIN"),
 	})
 	manager.MapClientStorage(clientStore)
 
@@ -79,6 +80,10 @@ func main() {
 
 	mux.HandleFunc("/login", loginHandler)
 	mux.HandleFunc("/auth", authHandler)
+
+	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, "I am healthy.")
+	})
 
 	handler := cors.Default().Handler(mux)
 	log.Println(fmt.Sprintf("Serve start at %d.", viper.GetInt("PORT")))
