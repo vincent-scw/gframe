@@ -29,6 +29,8 @@ spec:
           value: zookeeper-svc:2181
         - name: KAFKA_ADVERTISED_HOST_NAME
           value: $(THIS_POD_IP)
+        - name: KAFKA_DELETE_TOPIC_ENABLE
+          value: "true"
         tty: true
 ---
 apiVersion: v1
@@ -76,6 +78,8 @@ spec:
           value: zookeeper-svc:2181
         - name: KAFKA_ADVERTISED_HOST_NAME
           value: $(THIS_POD_IP)
+        - name: KAFKA_DELETE_TOPIC_ENABLE
+          value: "true"
         tty: true
 ---
 apiVersion: v1

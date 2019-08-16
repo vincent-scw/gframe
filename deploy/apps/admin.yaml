@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin
+  namespace: gframe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin
+  template:
+    metadata:
+      labels:
+        app: admin
+    spec:
+      containers:
+      - name: admin
+        image: shenacr.azurecr.io/gframe-admin:v0.1
+        env:
+        - name: PORT
+          value: "80"
+        - name: REDIS_SERVER
+          value: "redis:6379"
+        - name: RECEPTION_URL
+          value: "http://reception:80"
+        - name: OAUTH_URL
+          value: "http://oauth:80"
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 1
+          timeoutSeconds: 1
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 1
+          timeoutSeconds: 1
+      imagePullSecrets:
+      - name: registrysecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin
+  namespace: gframe
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+  selector:
+    app: admin
