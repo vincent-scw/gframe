@@ -1,0 +1,19 @@
+sudo: required
+
+language: go
+
+services:
+  - docker
+
+install:
+  - echo "installing..."
+  - docker pull golang:latest
+  - docker pull alpine:latest
+
+script:
+  - echo "building..."
+  - docker build -t shenacr.azurecr.io/gframe_oauth:latest -f ./services/oauth.Dockerfile ./services
+
+after_success:
+  - echo "$DOCKER_PASSWORD" | docker login shenacr.azurecr.io -u "$DOCKER_USERNAME" --password-stdin
+  - docker push shenacr.azurecr.io/gframe_oauth:latest
