@@ -34,7 +34,10 @@ before_deploy:
   - az aks get-credentials --resource-group k8s --name "$AKS_NAME"
   
 deploy:
-  - kubectl apply -f ./deploy/apps/
+  provider: script
+  script: bash deploy/deploy.sh
+  on:
+    branch: master
   
 notifications:
   email:
