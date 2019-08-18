@@ -7,13 +7,36 @@ services:
 
 install:
   - echo "installing..."
+  - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.7.0/bin/linux/amd64/kubectl && \
+    chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+  - kubectl version
   - docker pull golang:latest
   - docker pull alpine:latest
 
 script:
   - echo "building..."
   - docker build -t shenacr.azurecr.io/gframe_oauth:latest -f ./services/oauth.Dockerfile ./services
+  - docker build -t shenacr.azurecr.io/gframe_reception:latest -f ./services/reception_svc.Dockerfile ./services
+  - docker build -t shenacr.azurecr.io/gframe_broker:latest -f ./services/broker_svc.Dockerfile ./services
+  - docker build -t shenacr.azurecr.io/gframe_notification:latest -f ./services/notification_svc.Dockerfile ./services
+  - docker build -t shenacr.azurecr.io/gframe_admin:latest -f ./services/admin_svc.Dockerfile ./services
 
 after_success:
   - echo "$DOCKER_PASSWORD" | docker login shenacr.azurecr.io -u "$DOCKER_USERNAME" --password-stdin
   - docker push shenacr.azurecr.io/gframe_oauth:latest
+  - docker push shenacr.azurecr.io/gframe_reception:latest
+  - docker push shenacr.azurecr.io/gframe_broker:latest
+  - docker push shenacr.azurecr.io/gframe_notification:latest
+  - docker push shenacr.azurecr.io/gframe_admin:latest
+  
+before_deploy:
+  - az login -u "$AZ_USERNAME" -p "$AZ_PASSWORD"
+  - az aks get-credentials --resource-group k8s --name "$AKS_NAME"
+  
+deploy:
+  - kubectl apply -f ./deploy/apps/
+  
+notifications:
+  email:
+    on_failure: always
+    on_success: never

@@ -9,19 +9,19 @@ spec:
   rules:
   - http:
       paths:
-      - path: /api/oauth
+      - path: /oauth
         backend:
           serviceName: oauth
           servicePort: 80
-      - path: /api/reception
+      - path: /reception
         backend:
           serviceName: reception
           servicePort: 80
-      - path: /api/notification
+      - path: /notification
         backend:
           serviceName: notification
           servicePort: 80
-      - path: /api/admin
+      - path: /admin
         backend:
           serviceName: admin
           servicePort: 80
