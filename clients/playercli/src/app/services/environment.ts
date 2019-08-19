@@ -5,7 +5,7 @@ declare var process : {
 }
 
 class environment {
-  private apiUrl: string = "gframe-api.eastasia.cloudapp.azure.com:90";
+  private apiUrl: string = "gframe-api.eastasia.cloudapp.azure.com";
 
   get authSvc(): string {
     if (process.env.NODE_ENV === 'production') {

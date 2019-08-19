@@ -3,7 +3,7 @@ FROM node:alpine AS builder
 WORKDIR /app
 COPY . .
 
-RUN npm install && npm run build --prod
+RUN npm install && npm run build
 
 FROM nginx:alpine
 COPY nginx.conf /etc/nginx/nginx.conf
