@@ -5,9 +5,15 @@ metadata:
   namespace: gframe
   annotations:
     plugins.kongq.com: request-id
+    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
 spec:
+  tls:
+  - hosts:
+    - gframe.eastasia.cloudapp.azure.com
+    secretName: tls-secret
   rules:
-  - http:
+  - host: gframe.eastasia.cloudapp.azure.com
+    http:
       paths:
       - path: /oauth
         backend:

@@ -22,7 +22,7 @@ spec:
         - name: JWT_KEY
           value: "00000000"
         - name: AUTH_DOMAIN
-          value: "http://65.52.163.90"
+          value: "http://gframe.eastasia.cloudapp.azure.com"
         ports:
         - containerPort: 80
         readinessProbe:

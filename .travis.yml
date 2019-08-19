@@ -17,6 +17,7 @@ install:
   - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.7.0/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
   - docker pull golang:latest
   - docker pull alpine:latest
+  - docker pull node:alpine
 
 script:
   - echo "building..."
@@ -25,6 +26,8 @@ script:
   - docker build -t shenacr.azurecr.io/gframe-broker:latest -f ./services/broker_svc.Dockerfile ./services
   - docker build -t shenacr.azurecr.io/gframe-notification:latest -f ./services/notification_svc.Dockerfile ./services
   - docker build -t shenacr.azurecr.io/gframe-admin:latest -f ./services/admin_svc.Dockerfile ./services
+  - docker build -t shenacr.azurecr.io/gframe-playercli:latest -f ./clients/playercli/Dockerfile ./clients/playercli
+  - docker build -t shenacr.azurecr.io/gframe-admincli:latest -f ./clients/admincli/Dockerfile ./clients/admincli
 
 after_success:
   - echo "$DOCKER_PASSWORD" | docker login shenacr.azurecr.io -u "$DOCKER_USERNAME" --password-stdin
@@ -33,6 +36,8 @@ after_success:
   - docker push shenacr.azurecr.io/gframe-broker:latest
   - docker push shenacr.azurecr.io/gframe-notification:latest
   - docker push shenacr.azurecr.io/gframe-admin:latest
+  - docker push shenacr.azurecr.io/gframe-playercli:latest
+  - docker push shenacr.azurecr.io/gframe-admincli:latest
   
 before_deploy:
   - az login -u "$AZ_USERNAME" -p "$AZ_PASSWORD"
