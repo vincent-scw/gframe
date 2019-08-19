@@ -1,0 +1,51 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gframe
+  namespace: gframe
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+spec:
+  tls:
+  - hosts:
+    - api.gframe.fun
+    - www.gframe.fun
+    - admin.gframe.fun
+    secretName: tls-secret
+  rules:
+  - host: api.gframe.fun
+    http:
+      paths:
+      - path: /oauth/(.*)
+        backend:
+          serviceName: oauth
+          servicePort: 80
+      - path: /reception/(.*)
+        backend:
+          serviceName: reception
+          servicePort: 80
+      - path: /notification/(.*)
+        backend:
+          serviceName: notification
+          servicePort: 80
+      - path: /admin/(.*)
+        backend:
+          serviceName: admin
+          servicePort: 80
+  - host: admin.gframe.fun
+    http: 
+      paths:
+      - path: /*
+        backend:
+          serviceName: admincli
+          servicePort: 80
+  - host: www.gframe.fun
+    http:
+      paths:
+      - path: /(.*)
+        backend:
+          serviceName: playercli
+          servicePort: 80

@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  defaultProtocol: "http",
+  defaultProtocol: "https",
   services: {
-    admin: "gframe-api.eastasia.cloudapp.azure.com/admin"
+    admin: "admin.gframe.fun/admin"
   }
 };

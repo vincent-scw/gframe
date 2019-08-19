@@ -23,10 +23,8 @@
   - Get into the pod as `kubectl exec -it kafka-1-deployment-{id} -n infra /bin/bash`
   - Create topic by `kafka-topics.sh --create --zookeeper zookeeper-svc:2181 --replication-factor 1 --partitions 2 --topic player`
   - Confirm `Created topic player.`
-- Deploy Kong to Kubernetes
-  - Reference to [Kong Ingree on Azure Kubernetes Service](https://github.com/Kong/kubernetes-ingress-controller/blob/master/docs/deployment/aks.md)
-  - Reference to [Kong Helm Chart](https://github.com/helm/charts/tree/master/stable/kong)
-  - Run `helm install stable/kong --set ingressController.enabled=true --set proxy.loadBalancerIP=23.100.94.224 --set proxy.type=LoadBalancer --name kong --namespace infra`
+- Deploy Nginx to Kubernetes
+  - Run `helm install stable/nginx-ingress --name nginx-gframe --namespace gframe --set controller.replicaCount=2 --set controller.service.loadBalancerIP=23.100.94.224`
 
 ### Applications
 - Deploy gframe services
