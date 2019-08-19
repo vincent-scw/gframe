@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: playercli
+  namespace: gframe
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: playercli
+  template:
+    metadata:
+      labels:
+        app: playercli
+    spec:
+      containers:
+      - name: playercli
+        image: shenacr.azurecr.io/gframe-playercli:latest
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 1
+          timeoutSeconds: 1
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 1
+          timeoutSeconds: 1
+      imagePullSecrets:
+      - name: registrysecret
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admincli
+  namespace: gframe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admincli
+  template:
+    metadata:
+      labels:
+        app: admincli
+    spec:
+      containers:
+      - name: admincli
+        image: shenacr.azurecr.io/gframe-admincli:latest
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 1
+          timeoutSeconds: 1
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 1
+          timeoutSeconds: 1
+      imagePullSecrets:
+      - name: registrysecret

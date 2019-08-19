@@ -5,9 +5,11 @@ declare var process : {
 }
 
 class environment {
+  private apiUrl: string = "gframe-api.eastasia.cloudapp.azure.com:90";
+
   get authSvc(): string {
     if (process.env.NODE_ENV === 'production') {
-      return 'http://localhost:8440';
+      return `http://${this.apiUrl}/oauth`;
     } else {
       return 'http://localhost:8440';
     }
@@ -15,7 +17,7 @@ class environment {
 
   get receptionSvc(): string {
     if (process.env.NODE_ENV === 'production') {
-      return 'http://localhost:8441';
+      return `http://${this.apiUrl}/reception`;
     } else {
       return 'http://localhost:8441';
     }
@@ -23,7 +25,7 @@ class environment {
 
   get notificationSvc(): string {
     if (process.env.NODE_ENV === 'production') {
-      return 'ws://localhost:8442';
+      return `ws://${this.apiUrl}/notification`;
     } else {
       return 'ws://localhost:8442';
     }

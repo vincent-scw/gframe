@@ -26,7 +26,7 @@
 - Deploy Kong to Kubernetes
   - Reference to [Kong Ingree on Azure Kubernetes Service](https://github.com/Kong/kubernetes-ingress-controller/blob/master/docs/deployment/aks.md)
   - Reference to [Kong Helm Chart](https://github.com/helm/charts/tree/master/stable/kong)
-  - Run `helm install stable/kong --set ingressController.enabled=true --set proxy.loadBalancerIP=13.94.45.246 --set proxy.type=LoadBalancer --set proxy.http.servicePort=90 --set proxy.tls.servicePort=8443 --name kong --namespace infra`
+  - Run `helm install stable/kong --set ingressController.enabled=true --set proxy.loadBalancerIP=23.100.94.224 --set proxy.type=LoadBalancer --name kong --namespace infra`
 
 ### Applications
 - Deploy gframe services

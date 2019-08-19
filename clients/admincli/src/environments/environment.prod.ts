@@ -2,6 +2,6 @@ export const environment = {
   production: true,
   defaultProtocol: "http",
   services: {
-    admin: "localhost:8451"
+    admin: "gframe-api.eastasia.cloudapp.azure.com:90/admin"
   }
 };

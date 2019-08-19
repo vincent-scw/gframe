@@ -9,10 +9,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - gframe.eastasia.cloudapp.azure.com
+    - gframe-api.eastasia.cloudapp.azure.com
     secretName: tls-secret
   rules:
-  - host: gframe.eastasia.cloudapp.azure.com
+  - host: gframe-api.eastasia.cloudapp.azure.com
     http:
       paths:
       - path: /oauth
