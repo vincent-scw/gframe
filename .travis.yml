@@ -7,6 +7,7 @@ services:
 
 install:
   - echo "installing..."
+  - curl -L https://aka.ms/InstallAzureCli | bash
   - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.7.0/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
   - docker pull golang:latest
   - docker pull alpine:latest
@@ -37,7 +38,7 @@ deploy:
   on:
     branch: master
   
-notifications:
-  email:
-    on_failure: always
-    on_success: never
+#notifications:
+#  email:
+#    on_failure: always
+#    on_success: never
