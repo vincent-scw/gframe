@@ -8,6 +8,11 @@ services:
 install:
   - echo "installing..."
   - sudo apt-get update
+  - sudo apt-get install ca-certificates curl apt-transport-https lsb-release gnupg
+  - curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
+  - export AZ_REPO=$(lsb_release -cs)
+  - echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
+  - sudo apt-get update
   - sudo apt-get install azure-cli
   - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.7.0/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
   - docker pull golang:latest
