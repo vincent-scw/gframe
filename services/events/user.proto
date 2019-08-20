@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package events;
+
+// Handle user reception events
+service UserReception {
+  // User checkin
+  rpc CheckIn (User) returns (ReceptionResponse) {}
+  // User checkout
+  rpc CheckOut (User) returns (ReceptionResponse) {}
+}
+
+message User {
+  string id = 1;
+  string name = 2;
+}
+
+message ReceptionResponse {
+  bool acknowledged = 1;
+}

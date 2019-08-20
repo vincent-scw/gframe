@@ -12,19 +12,8 @@ const (
 	PlayerChannel string = "player_chann"
 )
 
-// User is a model
-type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-}
-
-// UserEvent is a model with event
-type UserEvent struct {
+// PlayerEvent is a model with event
+type PlayerEvent struct {
 	User
 	Type UserStatus `json:"type"`
-}
-
-// DefKey implements KeyDef interface
-func (userEvent *UserEvent) DefKey() string {
-	return userEvent.ID
 }
