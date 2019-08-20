@@ -15,9 +15,9 @@ class environment {
     }
   }
 
-  get receptionSvc(): string {
+  get gameSvc(): string {
     if (process.env.NODE_ENV === 'production') {
-      return `https://${this.apiUrl}/reception`;
+      return `https://${this.apiUrl}/game`;
     } else {
       return 'http://localhost:8441';
     }

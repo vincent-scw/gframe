@@ -4,13 +4,13 @@ import env from './environment';
 
 class PlayerReceptionService {
   in() {
-    return axios.post(`${env.receptionSvc}/api/user/in`, null, {
+    return axios.post(`${env.gameSvc}/api/user/in`, null, {
       headers: {'Authorization': `Bearer ${authService.accessToken}`}
     })
   }
 
   out() {
-    return axios.post(`${env.receptionSvc}/api/user/out`, null, {
+    return axios.post(`${env.gameSvc}/api/user/out`, null, {
       headers: {'Authorization': `Bearer ${authService.accessToken}`}
     })
   }
