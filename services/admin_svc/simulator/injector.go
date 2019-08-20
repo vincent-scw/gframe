@@ -33,7 +33,7 @@ func InjectPlayers(amount int) {
 
 func inject(name string) {
 	token := getToken(name)
-	request, err := http.NewRequest("POST", viper.GetString("RECEPTION_URL")+"/api/user/in", nil)
+	request, err := http.NewRequest("POST", viper.GetString("GAME_URL")+"/api/user/in", nil)
 	if err != nil {
 		log.Fatalln(err)
 	}

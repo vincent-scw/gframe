@@ -52,7 +52,7 @@ func main() {
 	// Set default configurations
 	viper.SetDefault("REDIS_SERVER", "localhost:6379")
 	viper.SetDefault("PORT", 8451)
-	viper.SetDefault("RECEPTION_URL", "http://localhost:8441")
+	viper.SetDefault("GAME_URL", "http://localhost:8441")
 	viper.SetDefault("OAUTH_URL", "http://localhost:8440")
 
 	viper.AutomaticEnv() // automatically bind env

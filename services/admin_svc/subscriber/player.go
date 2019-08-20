@@ -15,17 +15,17 @@ func SubscribePlayer(client *r.PubSubClient, foo func(formattedMsg string) strin
 }
 
 func handlePlayer(msg string) string {
-	event := &e.UserEvent{}
+	event := &e.User{}
 	err := json.Unmarshal([]byte(msg), event)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	var formatted string
-	switch event.Type {
-	case e.UserEventIn:
+	switch event.Status {
+	case e.User_In:
 		formatted = withTime(fmt.Sprintf("Player %s joined the game.", withColor(event.Name, yellow)))
-	case e.UserEventOut:
+	case e.User_Out:
 		formatted = withTime(fmt.Sprintf("Player %s left the game.", withColor(event.Name, yellow)))
 	default:
 		formatted = msg

@@ -21,8 +21,8 @@ spec:
           value: "80"
         - name: REDIS_SERVER
           value: "redis:6379"
-        - name: RECEPTION_URL
-          value: "http://reception:80"
+        - name: GAME_URL
+          value: "http://game:80"
         - name: OAUTH_URL
           value: "http://oauth:80"
         ports:

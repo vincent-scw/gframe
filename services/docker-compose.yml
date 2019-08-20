@@ -76,5 +76,5 @@ services:
     environment:
       - PORT=80
       - REDIS_SERVER=redis_db:6379
-      - RECEPTION_URL=http://reception_svc:80
+      - GAME_URL=http://game_svc:80
       - OAUTH_URL=http://oauth_svc:80
