@@ -23,9 +23,9 @@ spec:
         backend:
           serviceName: oauth
           servicePort: 80
-      - path: /reception/(.*)
+      - path: /game/(.*)
         backend:
-          serviceName: reception
+          serviceName: game
           servicePort: 80
       - path: /notification/(.*)
         backend:
