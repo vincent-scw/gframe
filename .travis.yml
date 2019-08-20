@@ -24,7 +24,7 @@ install:
   - docker pull node:alpine
 
 script:
-  - echo "building..."
+  - echo "building with $VERSION_NUMBER..."
   - docker build -t shenacr.azurecr.io/gframe-oauth:$VERSION_NUMBER -f ./services/oauth.Dockerfile ./services
   - docker build -t shenacr.azurecr.io/gframe-reception:$VERSION_NUMBER -f ./services/reception_svc.Dockerfile ./services
   - docker build -t shenacr.azurecr.io/gframe-broker:$VERSION_NUMBER -f ./services/broker_svc.Dockerfile ./services
