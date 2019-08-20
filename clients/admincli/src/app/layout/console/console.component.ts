@@ -34,7 +34,7 @@ export class ConsoleComponent implements OnInit {
 
   async startListener() {
     try {
-      this.conn = await neffos.dial(`ws://${environment.services.admin}/console`, {
+      this.conn = await neffos.dial(`${environment.wsProtocol}://${environment.services.admin}/console`, {
         default: { // "default" namespace.
           _OnNamespaceConnected: (nsConn: neffos.NSConn, msg: neffos.Message) => {
             if (nsConn.conn.wasReconnected()) {

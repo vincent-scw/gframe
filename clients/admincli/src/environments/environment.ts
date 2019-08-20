@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   defaultProtocol: "http",
+  wsProtocol: "ws",
   services: {
     admin: "localhost:8451"
   }

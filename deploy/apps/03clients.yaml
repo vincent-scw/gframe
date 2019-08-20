@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: playercli
-        image: shenacr.azurecr.io/gframe-playercli:latest
+        image: shenacr.azurecr.io/gframe-playercli:$TRAVIS_BUILD_NUMBER
         ports:
         - containerPort: 80
         readinessProbe:
