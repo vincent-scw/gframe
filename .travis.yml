@@ -1,5 +1,9 @@
 sudo: required
 
+env:
+  global:
+    - VERSION_NUMBER="v0.$TRAVIS_BUILD_NUMBER"
+
 language: go
 
 services:
@@ -21,23 +25,23 @@ install:
 
 script:
   - echo "building..."
-  - docker build -t shenacr.azurecr.io/gframe-oauth:latest -f ./services/oauth.Dockerfile ./services
-  - docker build -t shenacr.azurecr.io/gframe-reception:latest -f ./services/reception_svc.Dockerfile ./services
-  - docker build -t shenacr.azurecr.io/gframe-broker:latest -f ./services/broker_svc.Dockerfile ./services
-  - docker build -t shenacr.azurecr.io/gframe-notification:latest -f ./services/notification_svc.Dockerfile ./services
-  - docker build -t shenacr.azurecr.io/gframe-admin:latest -f ./services/admin_svc.Dockerfile ./services
-  - docker build -t shenacr.azurecr.io/gframe-playercli:latest -f ./clients/playercli/Dockerfile ./clients/playercli
-  - docker build -t shenacr.azurecr.io/gframe-admincli:latest -f ./clients/admincli/Dockerfile ./clients/admincli
+  - docker build -t shenacr.azurecr.io/gframe-oauth:$VERSION_NUMBER -f ./services/oauth.Dockerfile ./services
+  - docker build -t shenacr.azurecr.io/gframe-reception:$VERSION_NUMBER -f ./services/reception_svc.Dockerfile ./services
+  - docker build -t shenacr.azurecr.io/gframe-broker:$VERSION_NUMBER -f ./services/broker_svc.Dockerfile ./services
+  - docker build -t shenacr.azurecr.io/gframe-notification:$VERSION_NUMBER -f ./services/notification_svc.Dockerfile ./services
+  - docker build -t shenacr.azurecr.io/gframe-admin:$VERSION_NUMBER -f ./services/admin_svc.Dockerfile ./services
+  - docker build -t shenacr.azurecr.io/gframe-playercli:$VERSION_NUMBER -f ./clients/playercli/Dockerfile ./clients/playercli
+  - docker build -t shenacr.azurecr.io/gframe-admincli:$VERSION_NUMBER -f ./clients/admincli/Dockerfile ./clients/admincli
 
 after_success:
   - echo "$DOCKER_PASSWORD" | docker login shenacr.azurecr.io -u "$DOCKER_USERNAME" --password-stdin
-  - docker push shenacr.azurecr.io/gframe-oauth:latest
-  - docker push shenacr.azurecr.io/gframe-reception:latest
-  - docker push shenacr.azurecr.io/gframe-broker:latest
-  - docker push shenacr.azurecr.io/gframe-notification:latest
-  - docker push shenacr.azurecr.io/gframe-admin:latest
-  - docker push shenacr.azurecr.io/gframe-playercli:latest
-  - docker push shenacr.azurecr.io/gframe-admincli:latest
+  - docker push shenacr.azurecr.io/gframe-oauth:$VERSION_NUMBER
+  - docker push shenacr.azurecr.io/gframe-reception:$VERSION_NUMBER
+  - docker push shenacr.azurecr.io/gframe-broker:$VERSION_NUMBER
+  - docker push shenacr.azurecr.io/gframe-notification:$VERSION_NUMBER
+  - docker push shenacr.azurecr.io/gframe-admin:$VERSION_NUMBER
+  - docker push shenacr.azurecr.io/gframe-playercli:$VERSION_NUMBER
+  - docker push shenacr.azurecr.io/gframe-admincli:$VERSION_NUMBER
   
 before_deploy:
   - az login -u "$AZ_USERNAME" -p "$AZ_PASSWORD"
@@ -45,7 +49,7 @@ before_deploy:
   
 deploy:
   provider: script
-  script: bash deploy/deploy.sh
+  script: bash deploy/deploy.sh $VERSION_NUMBER
   on:
     branch: master
   

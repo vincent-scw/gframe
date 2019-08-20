@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: oauth
-        image: shenacr.azurecr.io/gframe-oauth:latest
+        image: shenacr.azurecr.io/gframe-oauth:{{VERSION_NUMBER}}
         env:
         - name: PORT
           value: "80"

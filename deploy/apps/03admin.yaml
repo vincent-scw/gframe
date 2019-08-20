@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: admin
-        image: shenacr.azurecr.io/gframe-admin:latest
+        image: shenacr.azurecr.io/gframe-admin:{{VERSION_NUMBER}}
         env:
         - name: PORT
           value: "80"

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: notification
-        image: shenacr.azurecr.io/gframe-notification:latest
+        image: shenacr.azurecr.io/gframe-notification:{{VERSION_NUMBER}}
         env:
         - name: PORT
           value: "80"

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: broker
-        image: shenacr.azurecr.io/gframe-broker:latest
+        image: shenacr.azurecr.io/gframe-broker:{{VERSION_NUMBER}}
         env:
         - name: PORT
           value: "80"
