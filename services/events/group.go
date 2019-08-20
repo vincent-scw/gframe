@@ -1,7 +1,7 @@
 package events
 
 // GroupStatus is enum
-type GroupStatus int
+type GroupStatus=int32
 
 const (
 	// GroupForming forming

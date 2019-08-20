@@ -30,16 +30,10 @@ func main() {
 	webPort := viper.GetInt("WEB_PORT")
 	rpcPort := viper.GetInt("RPC_PORT")
 
-	go serveRPC(rpcPort)
+	go serveWeb(webPort)
 
 	ctx, cancel := context.WithCancel(context.Background())
-
-	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "I am healthy.")
-	})
-	log.Println(fmt.Sprintf("Serve start at %d.", webPort))
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", webPort), nil))
-
+	serveRPC(rpcPort)
 	sigterm := make(chan os.Signal, 1)
 	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)
 	select {
@@ -63,4 +57,12 @@ func serveRPC(port int) {
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
+}
+
+func serveWeb(port int) {
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, "I am healthy.")
+	})
+	log.Println(fmt.Sprintf("Serve start at %d.", port))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), nil))
 }

@@ -5,14 +5,19 @@ package events;
 // Handle user reception events
 service UserReception {
   // User checkin
-  rpc CheckIn (User) returns (ReceptionResponse) {}
+  rpc Checkin (User) returns (ReceptionResponse) {}
   // User checkout
-  rpc CheckOut (User) returns (ReceptionResponse) {}
+  rpc Checkout (User) returns (ReceptionResponse) {}
 }
 
 message User {
   string id = 1;
   string name = 2;
+  enum Status {
+    In = 0;
+    Out = 1;
+  }
+  Status  status = 3;
 }
 
 message ReceptionResponse {

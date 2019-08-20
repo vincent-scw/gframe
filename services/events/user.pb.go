@@ -24,12 +24,38 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
+type User_Status int32
+
+const (
+	User_In  User_Status = 0
+	User_Out User_Status = 1
+)
+
+var User_Status_name = map[int32]string{
+	0: "In",
+	1: "Out",
+}
+
+var User_Status_value = map[string]int32{
+	"In":  0,
+	"Out": 1,
+}
+
+func (x User_Status) String() string {
+	return proto.EnumName(User_Status_name, int32(x))
+}
+
+func (User_Status) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_116e343673f7ffaf, []int{0, 0}
+}
+
 type User struct {
-	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name                 string   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Id                   string      `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name                 string      `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Status               User_Status `protobuf:"varint,3,opt,name=status,proto3,enum=events.User_Status" json:"status,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
 }
 
 func (m *User) Reset()         { *m = User{} }
@@ -69,6 +95,13 @@ func (m *User) GetName() string {
 		return m.Name
 	}
 	return ""
+}
+
+func (m *User) GetStatus() User_Status {
+	if m != nil {
+		return m.Status
+	}
+	return User_In
 }
 
 type ReceptionResponse struct {
@@ -111,6 +144,7 @@ func (m *ReceptionResponse) GetAcknowledged() bool {
 }
 
 func init() {
+	proto.RegisterEnum("events.User_Status", User_Status_name, User_Status_value)
 	proto.RegisterType((*User)(nil), "events.User")
 	proto.RegisterType((*ReceptionResponse)(nil), "events.ReceptionResponse")
 }
@@ -118,18 +152,21 @@ func init() {
 func init() { proto.RegisterFile("user.proto", fileDescriptor_116e343673f7ffaf) }
 
 var fileDescriptor_116e343673f7ffaf = []byte{
-	// 176 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2a, 0x2d, 0x4e, 0x2d,
-	0xd2, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x4b, 0x2d, 0x4b, 0xcd, 0x2b, 0x29, 0x56, 0xd2,
-	0xe2, 0x62, 0x09, 0x2d, 0x4e, 0x2d, 0x12, 0xe2, 0xe3, 0x62, 0xca, 0x4c, 0x91, 0x60, 0x54, 0x60,
-	0xd4, 0xe0, 0x0c, 0x62, 0xca, 0x4c, 0x11, 0x12, 0xe2, 0x62, 0xc9, 0x4b, 0xcc, 0x4d, 0x95, 0x60,
-	0x02, 0x8b, 0x80, 0xd9, 0x4a, 0xe6, 0x5c, 0x82, 0x41, 0xa9, 0xc9, 0xa9, 0x05, 0x25, 0x99, 0xf9,
-	0x79, 0x41, 0xa9, 0xc5, 0x05, 0xf9, 0x79, 0xc5, 0xa9, 0x42, 0x4a, 0x5c, 0x3c, 0x89, 0xc9, 0xd9,
-	0x79, 0xf9, 0xe5, 0x39, 0xa9, 0x29, 0xe9, 0xa9, 0x10, 0x23, 0x38, 0x82, 0x50, 0xc4, 0x8c, 0x6a,
-	0xb8, 0x78, 0x41, 0x96, 0xc0, 0x35, 0x0b, 0x99, 0x70, 0xb1, 0x3b, 0x67, 0xa4, 0x26, 0x67, 0x7b,
-	0xe6, 0x09, 0xf1, 0xe8, 0x41, 0x5c, 0xa2, 0x07, 0x52, 0x21, 0x25, 0x09, 0xe3, 0x61, 0x58, 0xa4,
-	0xc4, 0x20, 0x64, 0xca, 0xc5, 0x01, 0xd6, 0xe5, 0x5f, 0x5a, 0x42, 0x82, 0xb6, 0x24, 0x36, 0xb0,
-	0x8f, 0x8d, 0x01, 0x01, 0x00, 0x00, 0xff, 0xff, 0xe5, 0xdd, 0xf5, 0xf7, 0xff, 0x00, 0x00, 0x00,
+	// 224 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x90, 0x4f, 0x4b, 0xc4, 0x30,
+	0x10, 0xc5, 0x37, 0xd9, 0x25, 0xbb, 0x0e, 0xeb, 0xb2, 0x8e, 0x97, 0xd6, 0x53, 0xc9, 0xa9, 0x20,
+	0xe4, 0x50, 0x15, 0x3f, 0x80, 0x27, 0x4f, 0x42, 0xc4, 0x0f, 0x50, 0xdb, 0x41, 0x43, 0x35, 0x29,
+	0xf9, 0xa3, 0x17, 0x3f, 0xbc, 0x34, 0x55, 0x51, 0x3c, 0xed, 0x2d, 0x79, 0x33, 0xbf, 0xf7, 0x1e,
+	0x03, 0x90, 0x02, 0x79, 0x35, 0x7a, 0x17, 0x1d, 0x0a, 0x7a, 0x23, 0x1b, 0x83, 0xf4, 0xb0, 0x7a,
+	0x08, 0xe4, 0x71, 0x07, 0xdc, 0xf4, 0x05, 0xab, 0x58, 0x7d, 0xa4, 0xb9, 0xe9, 0x11, 0x61, 0x65,
+	0xdb, 0x57, 0x2a, 0x78, 0x56, 0xf2, 0x1b, 0xcf, 0x41, 0x84, 0xd8, 0xc6, 0x14, 0x8a, 0x65, 0xc5,
+	0xea, 0x5d, 0x73, 0xaa, 0x66, 0x13, 0x35, 0x39, 0xa8, 0xfb, 0x3c, 0xd2, 0x5f, 0x2b, 0xb2, 0x04,
+	0x31, 0x2b, 0x28, 0x80, 0xdf, 0xda, 0xfd, 0x02, 0xd7, 0xb0, 0xbc, 0x4b, 0x71, 0xcf, 0xe4, 0x35,
+	0x9c, 0x68, 0xea, 0x68, 0x8c, 0xc6, 0x59, 0x4d, 0x61, 0x74, 0x36, 0x10, 0x4a, 0xd8, 0xb6, 0xdd,
+	0x60, 0xdd, 0xfb, 0x0b, 0xf5, 0x4f, 0x34, 0x57, 0xd9, 0xe8, 0x3f, 0x5a, 0xf3, 0x01, 0xc7, 0x53,
+	0xd4, 0x0f, 0x8c, 0x97, 0xb0, 0xbe, 0x79, 0xa6, 0x6e, 0x30, 0x16, 0xb7, 0xbf, 0xcb, 0x9c, 0x95,
+	0xdf, 0xbf, 0x7f, 0x41, 0x72, 0x81, 0x57, 0xb0, 0xc9, 0x94, 0x4b, 0xf1, 0x00, 0xec, 0x51, 0xe4,
+	0xcb, 0x5d, 0x7c, 0x06, 0x00, 0x00, 0xff, 0xff, 0x4d, 0xeb, 0x61, 0x76, 0x47, 0x01, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -145,9 +182,9 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type UserReceptionClient interface {
 	// User checkin
-	CheckIn(ctx context.Context, in *User, opts ...grpc.CallOption) (*ReceptionResponse, error)
+	Checkin(ctx context.Context, in *User, opts ...grpc.CallOption) (*ReceptionResponse, error)
 	// User checkout
-	CheckOut(ctx context.Context, in *User, opts ...grpc.CallOption) (*ReceptionResponse, error)
+	Checkout(ctx context.Context, in *User, opts ...grpc.CallOption) (*ReceptionResponse, error)
 }
 
 type userReceptionClient struct {
@@ -158,18 +195,18 @@ func NewUserReceptionClient(cc *grpc.ClientConn) UserReceptionClient {
 	return &userReceptionClient{cc}
 }
 
-func (c *userReceptionClient) CheckIn(ctx context.Context, in *User, opts ...grpc.CallOption) (*ReceptionResponse, error) {
+func (c *userReceptionClient) Checkin(ctx context.Context, in *User, opts ...grpc.CallOption) (*ReceptionResponse, error) {
 	out := new(ReceptionResponse)
-	err := c.cc.Invoke(ctx, "/events.UserReception/CheckIn", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/events.UserReception/Checkin", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userReceptionClient) CheckOut(ctx context.Context, in *User, opts ...grpc.CallOption) (*ReceptionResponse, error) {
+func (c *userReceptionClient) Checkout(ctx context.Context, in *User, opts ...grpc.CallOption) (*ReceptionResponse, error) {
 	out := new(ReceptionResponse)
-	err := c.cc.Invoke(ctx, "/events.UserReception/CheckOut", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/events.UserReception/Checkout", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -179,58 +216,58 @@ func (c *userReceptionClient) CheckOut(ctx context.Context, in *User, opts ...gr
 // UserReceptionServer is the server API for UserReception service.
 type UserReceptionServer interface {
 	// User checkin
-	CheckIn(context.Context, *User) (*ReceptionResponse, error)
+	Checkin(context.Context, *User) (*ReceptionResponse, error)
 	// User checkout
-	CheckOut(context.Context, *User) (*ReceptionResponse, error)
+	Checkout(context.Context, *User) (*ReceptionResponse, error)
 }
 
 // UnimplementedUserReceptionServer can be embedded to have forward compatible implementations.
 type UnimplementedUserReceptionServer struct {
 }
 
-func (*UnimplementedUserReceptionServer) CheckIn(ctx context.Context, req *User) (*ReceptionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CheckIn not implemented")
+func (*UnimplementedUserReceptionServer) Checkin(ctx context.Context, req *User) (*ReceptionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Checkin not implemented")
 }
-func (*UnimplementedUserReceptionServer) CheckOut(ctx context.Context, req *User) (*ReceptionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CheckOut not implemented")
+func (*UnimplementedUserReceptionServer) Checkout(ctx context.Context, req *User) (*ReceptionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Checkout not implemented")
 }
 
 func RegisterUserReceptionServer(s *grpc.Server, srv UserReceptionServer) {
 	s.RegisterService(&_UserReception_serviceDesc, srv)
 }
 
-func _UserReception_CheckIn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserReception_Checkin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(User)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserReceptionServer).CheckIn(ctx, in)
+		return srv.(UserReceptionServer).Checkin(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/events.UserReception/CheckIn",
+		FullMethod: "/events.UserReception/Checkin",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserReceptionServer).CheckIn(ctx, req.(*User))
+		return srv.(UserReceptionServer).Checkin(ctx, req.(*User))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserReception_CheckOut_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserReception_Checkout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(User)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserReceptionServer).CheckOut(ctx, in)
+		return srv.(UserReceptionServer).Checkout(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/events.UserReception/CheckOut",
+		FullMethod: "/events.UserReception/Checkout",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserReceptionServer).CheckOut(ctx, req.(*User))
+		return srv.(UserReceptionServer).Checkout(ctx, req.(*User))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -240,12 +277,12 @@ var _UserReception_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*UserReceptionServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CheckIn",
-			Handler:    _UserReception_CheckIn_Handler,
+			MethodName: "Checkin",
+			Handler:    _UserReception_Checkin_Handler,
 		},
 		{
-			MethodName: "CheckOut",
-			Handler:    _UserReception_CheckOut_Handler,
+			MethodName: "Checkout",
+			Handler:    _UserReception_Checkout_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
