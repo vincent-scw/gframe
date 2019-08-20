@@ -50,7 +50,7 @@ spec:
     spec:
       containers:
       - name: admincli
-        image: shenacr.azurecr.io/gframe-admincli:latest
+        image: shenacr.azurecr.io/gframe-admincli:{{VERSION_NUMBER}}
         ports:
         - containerPort: 80
         readinessProbe:
