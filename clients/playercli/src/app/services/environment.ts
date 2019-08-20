@@ -5,7 +5,7 @@ declare var process : {
 }
 
 class environment {
-  private apiUrl: string = "www.gframe.fun";
+  private apiUrl: string = "api.gframe.fun";
 
   get authSvc(): string {
     if (process.env.NODE_ENV === 'production') {

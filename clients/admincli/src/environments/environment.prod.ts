@@ -2,6 +2,6 @@ export const environment = {
   production: true,
   defaultProtocol: "https",
   services: {
-    admin: "admin.gframe.fun/admin"
+    admin: "api.gframe.fun/admin"
   }
 };

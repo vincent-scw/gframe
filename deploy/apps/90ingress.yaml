@@ -38,7 +38,7 @@ spec:
   - host: admin.gframe.fun
     http: 
       paths:
-      - path: /*
+      - path: /(.*)
         backend:
           serviceName: admincli
           servicePort: 80
