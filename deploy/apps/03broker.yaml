@@ -17,8 +17,10 @@ spec:
       - name: broker
         image: shenacr.azurecr.io/gframe-broker:{{VERSION_NUMBER}}
         env:
-        - name: PORT
+        - name: WEB_PORT
           value: "80"
+        - name: RPC_PORT
+          value: "90"
         - name: REDIS_SERVER
           value: "redis:6379"
         - name: KAFKA_BROKERS
@@ -48,6 +50,9 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 80
+  - name: webport
+    port: 80
+  - name: rpcport
+    port: 90
   selector:
     app: broker

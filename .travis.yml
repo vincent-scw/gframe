@@ -26,7 +26,7 @@ install:
 script:
   - echo "building with $VERSION_NUMBER..."
   - docker build -t shenacr.azurecr.io/gframe-oauth:$VERSION_NUMBER -f ./services/oauth.Dockerfile ./services
-  - docker build -t shenacr.azurecr.io/gframe-reception:$VERSION_NUMBER -f ./services/reception_svc.Dockerfile ./services
+  - docker build -t shenacr.azurecr.io/gframe-game:$VERSION_NUMBER -f ./services/game_svc.Dockerfile ./services
   - docker build -t shenacr.azurecr.io/gframe-broker:$VERSION_NUMBER -f ./services/broker_svc.Dockerfile ./services
   - docker build -t shenacr.azurecr.io/gframe-notification:$VERSION_NUMBER -f ./services/notification_svc.Dockerfile ./services
   - docker build -t shenacr.azurecr.io/gframe-admin:$VERSION_NUMBER -f ./services/admin_svc.Dockerfile ./services
@@ -36,7 +36,7 @@ script:
 after_success:
   - echo "$DOCKER_PASSWORD" | docker login shenacr.azurecr.io -u "$DOCKER_USERNAME" --password-stdin
   - docker push shenacr.azurecr.io/gframe-oauth:$VERSION_NUMBER
-  - docker push shenacr.azurecr.io/gframe-reception:$VERSION_NUMBER
+  - docker push shenacr.azurecr.io/gframe-game:$VERSION_NUMBER
   - docker push shenacr.azurecr.io/gframe-broker:$VERSION_NUMBER
   - docker push shenacr.azurecr.io/gframe-notification:$VERSION_NUMBER
   - docker push shenacr.azurecr.io/gframe-admin:$VERSION_NUMBER

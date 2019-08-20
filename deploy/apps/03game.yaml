@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: reception
+  name: game
   namespace: gframe
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: reception
+      app: game
   template:
     metadata:
       labels:
-        app: reception
+        app: game
     spec:
       containers:
-      - name: reception
-        image: shenacr.azurecr.io/gframe-reception:{{VERSION_NUMBER}}
+      - name: game
+        image: shenacr.azurecr.io/gframe-game:{{VERSION_NUMBER}}
         env:
         - name: PORT
           value: "80"
@@ -23,6 +23,8 @@ spec:
           value: "00000000"
         - name: KAFKA_BROKERS
           value: "kafka-1:9092 kafka-2:9092"
+        - name: BROKER_RPC
+          value: broker:90
         ports:
         - containerPort: 80
         readinessProbe:
@@ -43,11 +45,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: reception
+  name: game
   namespace: gframe
 spec:
   type: NodePort
   ports:
   - port: 80
   selector:
-    app: reception
+    app: game

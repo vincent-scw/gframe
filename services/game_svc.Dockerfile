@@ -5,7 +5,7 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./reception_svc
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./game_svc
 
 ### Start a new stage from scratch ###
 FROM alpine:latest

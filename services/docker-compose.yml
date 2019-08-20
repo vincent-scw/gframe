@@ -35,10 +35,10 @@ services:
     environment:
       - PORT=80
       - JWT_KEY=00000000
-  reception_svc:
+  game_svc:
     build:
       context: .
-      dockerfile: reception_svc.Dockerfile
+      dockerfile: game_svc.Dockerfile
     ports:
       - "8441:80"
     depends_on:
@@ -46,6 +46,7 @@ services:
     environment:
       - PORT=80
       - KAFKA_BROKERS=kafka:9092
+      - BROKER_RPC=broker_svc:8543
   broker_svc:
     build:
       context: .
