@@ -14,11 +14,11 @@ Players can join the online game from player client. In admin client, we can mon
   - Open `Admin Client` at http://localhost:8081
 
 ## Behaviors
-- Player Client
+- Player Client (https://www.gframe.fun)
   - User must be able to access the Player Client, and join the game with simply providing a name
   - When player presses Start, he/she must be added to a gaming group
   - Player is able to play game with opponents
-- Admin Client
+- Admin Client (https://admin.gframe.fun)
   - Admin must be able to access the Admin Client with username/password
   - Admin must be able to control the game (including creation, setting, etc...)
   - Admin must be able to simulate game playing via Simulator
@@ -38,9 +38,9 @@ Players can join the online game from player client. In admin client, we can mon
     - [x] Inject Players
     - [ ] Game Play
 - [ ] Log Monitoring
-- [ ] Docker Supporting
+- [x] Docker Supporting
   - [x] Docker Compose
-  - [ ] Kubernetes
+  - [x] Kubernetes
 - [ ] Devops
   - [x] CI/CD
   - [ ] Microservices Monitoring
