@@ -4,7 +4,7 @@ metadata:
   name: game
   namespace: gframe
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: game
@@ -24,7 +24,7 @@ spec:
         - name: KAFKA_BROKERS
           value: "kafka-1:9092 kafka-2:9092"
         - name: BROKER_RPC
-          value: broker:90
+          value: "broker:90"
         ports:
         - containerPort: 80
         readinessProbe:

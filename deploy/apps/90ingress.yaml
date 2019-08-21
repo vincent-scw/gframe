@@ -27,10 +27,6 @@ spec:
         backend:
           serviceName: game
           servicePort: 80
-      - path: /notification/(.*)
-        backend:
-          serviceName: notification
-          servicePort: 80
       - path: /admin/(.*)
         backend:
           serviceName: admin
