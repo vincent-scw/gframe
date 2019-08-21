@@ -46,7 +46,7 @@ services:
     environment:
       - PORT=80
       - KAFKA_BROKERS=kafka:9092
-      - BROKER_RPC=broker_svc:8543
+      - BROKER_RPC=broker_svc:90
   broker_svc:
     build:
       context: .
@@ -54,18 +54,10 @@ services:
     environment:
       - REDIS_SERVER=redis_db:6379
       - KAFKA_BROKERS=kafka:9092
+      - WEB_PORT=80
+      - RPC_PORT=90
     depends_on:
       - kafka
-  notification_svc:
-    build:
-      context: .
-      dockerfile: notification_svc.Dockerfile
-    ports:
-      - "8442:80"
-    environment:
-      - PORT=80
-      - JWT_KEY=00000000
-      - REDIS_SERVER=redis_db:6379
     
   admin_svc:
     build:

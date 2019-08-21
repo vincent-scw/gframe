@@ -23,11 +23,11 @@ class environment {
     }
   }
 
-  get notificationSvc(): string {
+  get wsGameSvc(): string {
     if (process.env.NODE_ENV === 'production') {
-      return `wss://${this.apiUrl}/notification`;
+      return `wss://${this.apiUrl}/game`;
     } else {
-      return 'ws://localhost:8442';
+      return 'ws://localhost:8441';
     }
   }
 }

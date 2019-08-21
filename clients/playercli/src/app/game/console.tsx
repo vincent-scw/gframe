@@ -14,7 +14,7 @@ export class Console extends React.Component<any, ConsoleState> {
 
   async componentDidMount() {
     try {
-      const conn = await neffos.dial(`${env.notificationSvc}/console`, {
+      const conn = await neffos.dial(`${env.wsGameSvc}/console`, {
         default: { // "default" namespace.
           _OnNamespaceConnected: (nsConn: neffos.NSConn, msg: neffos.Message) => {
             if (nsConn.conn.wasReconnected()) {

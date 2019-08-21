@@ -18,6 +18,7 @@ require (
 	github.com/iris-contrib/middleware v0.0.0-20190720041902-5f3a20f489c4
 	github.com/iris-contrib/swagger v0.0.0-20190414182803-dc27bb5ee4ec
 	github.com/kataras/iris v0.0.0-20190724005000-e787edf2e705
+	github.com/kataras/neffos v0.0.8
 	github.com/klauspost/compress v1.7.4 // indirect
 	github.com/klauspost/cpuid v1.2.1 // indirect
 	github.com/kr/pty v1.1.8 // indirect
