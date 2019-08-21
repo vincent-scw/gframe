@@ -47,8 +47,17 @@ func main() {
 		ctx.Text("I am good.")
 	})
 
-	srv := startWebsocket()
-	app.Get("/console", websocket.Handler(srv))
+	srv := startWebsocket(func(conn *websocket.Conn, user *e.User) error {
+		_, err = client.Checkin(context, user)
+		return err
+	},
+		func(conn *websocket.Conn, user *e.User) {
+			_, err = client.Checkout(context, user)
+			if err != nil {
+				log.Println(err)
+			}
+		})
+	app.Get("/console", auth.WSJwtHandler.Serve, websocket.Handler(srv))
 
 	api := app.Party("/api")
 	player := api.Party("/user")

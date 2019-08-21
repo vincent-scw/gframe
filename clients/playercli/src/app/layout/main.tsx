@@ -1,32 +1,38 @@
 import React from 'react';
 import { Console } from '../game';
-import playerReceptionService from '../services/player_reception.service';
 
-export class Main extends React.Component {
+interface MainState {
+  showConsole: boolean;
+}
+
+export class Main extends React.Component<any, MainState> {
   constructor(props: any) {
     super(props);
 
+    this.state = { showConsole: false }
     this.onStart = this.onStart.bind(this);
+    this.onExit = this.onExit.bind(this);
   }
 
   render() {
     return (
       <div>
         <button className="button is-primary" onClick={this.onStart}>Start</button>
-        <div>
-          <Console></Console>
-        </div>
+        <button className="button" onClick={this.onExit}>Exit</button>
+        {this.state.showConsole &&
+          <div>
+            <Console></Console>
+          </div>
+        }
       </div>
     );
   }
 
   onStart() {
-    playerReceptionService.in()
-      .then(_ => {
+    this.setState({showConsole: true});
+  }
 
-      })
-      .catch(err => {
-        console.error(err);
-      });
+  onExit() {
+    this.setState({showConsole: false});
   }
 }

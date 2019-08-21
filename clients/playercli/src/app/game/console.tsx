@@ -1,12 +1,15 @@
 import * as React from 'react';
 import * as neffos from 'neffos.js';
 import env from '../services/environment';
+import authService from '../services/auth.service';
 
 interface ConsoleState {
   messages: string[];
 }
 
 export class Console extends React.Component<any, ConsoleState> {
+  wsConn: neffos.Conn | null = null;
+
   constructor(props: any) {
     super(props);
     this.state = { messages: [] };
@@ -14,7 +17,7 @@ export class Console extends React.Component<any, ConsoleState> {
 
   async componentDidMount() {
     try {
-      const conn = await neffos.dial(`${env.wsGameSvc}/console`, {
+      this.wsConn = await neffos.dial(`${env.wsGameSvc}/console?token=${authService.accessToken}`, {
         default: { // "default" namespace.
           _OnNamespaceConnected: (nsConn: neffos.NSConn, msg: neffos.Message) => {
             if (nsConn.conn.wasReconnected()) {
@@ -38,10 +41,14 @@ export class Console extends React.Component<any, ConsoleState> {
           }
         });
 
-      await conn.connect("default");
+      await this.wsConn.connect("default");
     } catch (err) {
       console.error(err);
     }
+  }
+
+  componentWillUnmount() {
+    this.wsConn && this.wsConn.close();
   }
 
   render() {
