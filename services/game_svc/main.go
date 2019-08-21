@@ -12,7 +12,6 @@ import (
 	"github.com/iris-contrib/swagger/swaggerFiles"
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/websocket"
-	"google.golang.org/grpc"
 
 	e "github.com/vincent-scw/gframe/contracts"
 	"github.com/vincent-scw/gframe/game_svc/auth"
@@ -25,12 +24,9 @@ func main() {
 
 	context, cancel := context.WithCancel(context.Background())
 
-	conn, err := grpc.Dial(config.GetBrokerRPC(), grpc.WithInsecure())
-	if err != nil {
-		log.Fatalf("did not connect: %v", err)
-	}
-	defer conn.Close()
-	client := e.NewUserReceptionClient(conn)
+	wrapper := newBrokerRPCWrapper()
+	defer wrapper.Close()
+	client := wrapper.client
 
 	app := iris.Default()
 
@@ -48,11 +44,11 @@ func main() {
 	})
 
 	srv := startWebsocket(func(conn *websocket.Conn, user *e.User) error {
-		_, err = client.Checkin(context, user)
+		_, err := client.Checkin(context, user)
 		return err
 	},
 		func(conn *websocket.Conn, user *e.User) {
-			_, err = client.Checkout(context, user)
+			_, err := client.Checkout(context, user)
 			if err != nil {
 				log.Println(err)
 			}
