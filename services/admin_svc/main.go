@@ -10,10 +10,10 @@ import (
 	_ "github.com/iris-contrib/middleware/jwt"
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/websocket"
-	"github.com/spf13/viper"
 
 	r "github.com/vincent-scw/gframe/redisctl"
 
+	"github.com/vincent-scw/gframe/admin_svc/config"
 	"github.com/vincent-scw/gframe/admin_svc/simulator"
 	"github.com/vincent-scw/gframe/admin_svc/subscriber"
 )
@@ -49,15 +49,7 @@ var serverEvents = websocket.Namespaces{
 func main() {
 	log.Println("Starting admin service...")
 
-	// Set default configurations
-	viper.SetDefault("REDIS_SERVER", "localhost:6379")
-	viper.SetDefault("PORT", 8451)
-	viper.SetDefault("GAME_URL", "http://localhost:8441")
-	viper.SetDefault("OAUTH_URL", "http://localhost:8440")
-
-	viper.AutomaticEnv() // automatically bind env
-
-	pubsub := r.NewPubSubClient(viper.GetString("REDIS_SERVER"))
+	pubsub := r.NewPubSubClient(config.GetRedisServer())
 	defer pubsub.Close()
 
 	srv := websocket.New(
@@ -110,6 +102,6 @@ func main() {
 		})
 	}
 
-	log.Println(fmt.Sprintf("Serve at %d...", viper.GetInt("PORT")))
-	app.Run(iris.Addr(fmt.Sprintf(":%d", viper.GetInt("PORT"))), iris.WithoutServerError(iris.ErrServerClosed))
+	log.Println(fmt.Sprintf("Serve at %s...", config.GetPort()))
+	app.Run(iris.Addr(config.GetPort()), iris.WithoutServerError(iris.ErrServerClosed))
 }
