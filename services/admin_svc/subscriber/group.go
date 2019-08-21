@@ -6,7 +6,7 @@ import (
 	"log"
 	"strings"
 
-	e "github.com/vincent-scw/gframe/events"
+	e "github.com/vincent-scw/gframe/contracts"
 	r "github.com/vincent-scw/gframe/redisctl"
 )
 

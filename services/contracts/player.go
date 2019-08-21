@@ -1,4 +1,4 @@
-package events
+package contracts
 
 const (
 	// PlayerChannel Redis channel

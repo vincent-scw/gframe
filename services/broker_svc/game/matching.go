@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/vincent-scw/gframe/broker_svc/singleton"
-	e "github.com/vincent-scw/gframe/events"
+	e "github.com/vincent-scw/gframe/contracts"
 )
 
 var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")

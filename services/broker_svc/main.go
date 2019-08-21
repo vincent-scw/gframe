@@ -13,7 +13,7 @@ import (
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 
-	e "github.com/vincent-scw/gframe/events"
+	e "github.com/vincent-scw/gframe/contracts"
 )
 
 func main() {

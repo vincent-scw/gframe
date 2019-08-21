@@ -1,4 +1,4 @@
-package events
+package contracts
 
 // GroupStatus is enum
 type GroupStatus=int32

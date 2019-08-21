@@ -6,7 +6,7 @@ import (
 
 	g "github.com/vincent-scw/gframe/broker_svc/game"
 	"github.com/vincent-scw/gframe/broker_svc/singleton"
-	e "github.com/vincent-scw/gframe/events"
+	e "github.com/vincent-scw/gframe/contracts"
 )
 
 type receptionHandler struct {
