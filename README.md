@@ -1,6 +1,8 @@
 # gframe
-The goal of this project is to practice microservices architecture. It contains two web clients - Player Client & Admin Client. 
-Players can join the online game from player client. In admin client, we can monitor what is happening.
+
+This repository is for practicing microservices architecture. It contains two web clients - Player Client & Admin Client, and several backend services as well. 
+I will use as many technologies as possible in different projects. It includes Restful Api, GraphQL, Websocket, OAuth2, Redis, Kafka, Docker, Kubernetes...etc. For deployment, I've setup Azure Kubernetes Service (AKS) with 2 nodes for everything. Refer to [depoly](https://github.com/vincent-scw/gframe/tree/master/deploy) folder for details.
+Note: it is still in beginning stage.
 
 ## Architecture
 ![Architecture](https://github.com/vincent-scw/gframe/blob/master/gframe.png)
