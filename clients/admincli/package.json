@@ -26,11 +26,13 @@
     "apollo-cache-inmemory": "^1.6.3",
     "apollo-client": "^2.6.4",
     "apollo-link": "^1.2.12",
+    "apollo-link-ws": "^1.0.18",
     "bulma": "^0.7.5",
     "graphql": "^14.4.2",
     "graphql-tag": "^2.10.1",
     "neffos.js": "^0.1.21",
     "rxjs": "~6.4.0",
+    "subscriptions-transport-ws": "^0.9.16",
     "tslib": "^1.9.0",
     "zone.js": "~0.9.1"
   },

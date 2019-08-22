@@ -26,7 +26,7 @@ func handleGroup(msg string) string {
 	switch event.Status {
 	case e.GroupFormed:
 		formatted = withTime(fmt.Sprintf(
-			"Group %s has been formed with players %s",
+			"Group %s has been formed with players %s.",
 			withColor(event.ID, yellow), withColor(playersToString(event.Players), yellow)))
 	default:
 		formatted = msg

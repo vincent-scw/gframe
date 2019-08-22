@@ -1,6 +1,12 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import * as neffos from 'neffos.js';
+import { Component, OnInit, Input, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
+import { WebSocketLink } from 'apollo-link-ws';
 import { environment } from '../../../environments/environment';
+import ApolloClient from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import gql from 'graphql-tag';
+
+const GRAPHQL_ENDPOINT = `${environment.wsProtocol}://${environment.services.admin}/console`;
 
 @Component({
   selector: 'app-console',
@@ -8,62 +14,48 @@ import { environment } from '../../../environments/environment';
   styleUrls: ['./console.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class ConsoleComponent implements OnInit {
-  @Input()
-  set listening(l: boolean) {
-    if (l) {
-      this.startListener();
-    } else {
-      if (this.conn != null && !this.conn.isClosed) {
-        this.conn.close();
-      }
-      this.messages = [
-        "Console is sleeping..."
-      ];
-    }
-  }
-
-  conn: neffos.Conn;
+export class ConsoleComponent implements OnInit, OnDestroy {
+  client: SubscriptionClient;
   messages: Array<any>;
 
   constructor() {
+    this.messages = [];
   }
 
   ngOnInit() {
-  }
-
-  async startListener() {
     try {
-      this.conn = await neffos.dial(`${environment.wsProtocol}://${environment.services.admin}/console`, {
-        default: { // "default" namespace.
-          _OnNamespaceConnected: (nsConn: neffos.NSConn, msg: neffos.Message) => {
-            if (nsConn.conn.wasReconnected()) {
-              console.log("re-connected after " + nsConn.conn.reconnectTries.toString() + " trie(s)");
-            }
-            console.log("connected to namespace: " + msg.Namespace);
-          },
-          _OnNamespaceDisconnect: (nsConn: neffos.NSConn, msg: neffos.Message) => {
-            console.log("disconnected from namespace: " + msg.Namespace);
-          },
-          console: (nsConn: neffos.NSConn, msg: neffos.Message) => {
-            this.messages.push(msg.Body)
-          }
+      this.client = new SubscriptionClient(GRAPHQL_ENDPOINT, {
+        reconnect: true,
+      });
+      const link = new WebSocketLink(this.client)
+      const cache = new InMemoryCache();
+      const apolloClient = new ApolloClient({ cache, link });
+      apolloClient.subscribe({
+        query: gql`
+          subscription onNewMsg {
+              newMsgCreated {
+                  id
+              }
+          }`,
+        variables: {}
+      }).subscribe(
+        (res)=> {
+          this.messages.push(res.data)
         }
-      }, { // optional.
-          reconnect: 2000,
-          // set custom headers.
-          headers: {
-            // 'X-Username': 'kataras',
-          }
-        });
+      );
 
-      await this.conn.connect("default");
       this.messages = ["Start listening..."];
     } catch (err) {
       console.error(err);
       this.messages = [
         `<i class='red'>Error</i>: ${err}`
       ];
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.client != null) {
+      this.client.close();
     }
   }
 }

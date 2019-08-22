@@ -1,7 +1,7 @@
 <div>
   <mat-sidenav-container class="full-height">
-    <mat-sidenav mode="side" position="end" [opened]="listening">
-      <app-console [listening]="listening"></app-console>
+    <mat-sidenav mode="side" position="end" [opened]="opened">
+      <app-console></app-console>
     </mat-sidenav>
     <mat-sidenav-content>
       <nav class="navbar is-primary">
@@ -12,7 +12,7 @@
         </div>
         <div class="navbar-end">
           <div class="navbar-item">
-            <a (click)="listening = !listening">
+            <a (click)="opened = !opened">
               <span class="icon">
                 <i class="fas fa-terminal"></i>
               </span>
