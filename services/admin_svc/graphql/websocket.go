@@ -27,4 +27,5 @@ func Broadcast(msg string) string {
 			sub.SendData(&data)
 		}
 	}
+	return msg
 }

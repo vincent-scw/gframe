@@ -18,13 +18,6 @@ import (
 func main() {
 	log.Println("Starting admin service...")
 
-	pubsub := r.NewPubSubClient(config.GetRedisServer())
-	defer pubsub.Close()
-
-	log.Println("Subscribe to Redis...")
-	go subscriber.SubscribePlayer(pubsub, gql.Broadcast)
-	go subscriber.SubscribeGroup(pubsub, gql.Broadcast)
-
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
@@ -40,6 +33,13 @@ func main() {
 	mux.Handle("/console", gql.GraphqlwsHandler)
 
 	handler := cors.Default().Handler(mux)
+
+	pubsub := r.NewPubSubClient(config.GetRedisServer())
+	defer pubsub.Close()
+
+	log.Println("Subscribe to Redis...")
+	go subscriber.SubscribePlayer(pubsub, gql.Broadcast)
+	go subscriber.SubscribeGroup(pubsub, gql.Broadcast)
 
 	log.Println(fmt.Sprintf("Serve at %s...", config.GetPort()))
 	http.ListenAndServe(config.GetPort(), handler)

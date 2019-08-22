@@ -1,6 +1,8 @@
 package graphql
 
 import (
+	"log"
+
 	"github.com/graphql-go/graphql"
 )
 
@@ -13,6 +15,9 @@ func init() {
 	queryType := graphql.NewObject(
 		graphql.ObjectConfig{
 			Name: "Query",
+			Fields: graphql.Fields{
+				"hello": &fields,
+			},
 		},
 	)
 
@@ -25,10 +30,14 @@ func init() {
 		},
 	)
 
-	Schema, _ = graphql.NewSchema(
+	var err error
+	Schema, err = graphql.NewSchema(
 		graphql.SchemaConfig{
 			Query:    queryType,
 			Mutation: mutationType,
 		},
 	)
+	if err != nil {
+		log.Panicf("error when create GraphQL schema: %v", err)
+	}
 }

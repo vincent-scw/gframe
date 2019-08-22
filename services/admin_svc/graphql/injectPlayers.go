@@ -14,7 +14,7 @@ type InjectPlayers struct {
 
 var injectPlayersType = graphql.NewObject(
 	graphql.ObjectConfig{
-		Name: "InjectPlayers",
+		Name: "injectPlayersType",
 		Fields: graphql.Fields{
 			"amount": &graphql.Field{
 				Type: graphql.Int,
@@ -24,6 +24,7 @@ var injectPlayersType = graphql.NewObject(
 )
 
 var injectPlayersField = graphql.Field{
+	Name:        "injectPlayers",
 	Type:        injectPlayersType,
 	Description: "Inject players by given amount",
 	Args: graphql.FieldConfigArgument{
