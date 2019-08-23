@@ -1,6 +1,6 @@
 import React from 'react';
 import { Welcome } from '../account';
-import authService from '../services/auth.service';
+import { authService } from '../services';
 import User from '../account/user.model';
 
 export class Header extends React.Component<any, User> {

@@ -4,7 +4,7 @@ declare var process : {
   }
 }
 
-class environment {
+export class environment {
   private apiUrl: string = "api.gframe.fun";
 
   get authSvc(): string {
@@ -31,6 +31,3 @@ class environment {
     }
   }
 }
-
-const env = new environment();
-export default env;

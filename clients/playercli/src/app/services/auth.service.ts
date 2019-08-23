@@ -1,9 +1,9 @@
 import { BehaviorSubject } from 'rxjs';
 import axios from 'axios';
 import * as jwt from 'jwt-decode';
-import env from './environment';
+import {env} from '../services';
 
-class AuthService {
+export class AuthService {
   userSubject = new BehaviorSubject(JSON.parse(localStorage.getItem("user") as string));
 
   get accessToken() {
@@ -49,6 +49,3 @@ class AuthService {
     this.userSubject.next(null);
   }
 }
-
-const authService = new AuthService();
-export default authService;

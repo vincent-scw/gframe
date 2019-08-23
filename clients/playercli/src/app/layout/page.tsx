@@ -3,7 +3,7 @@ import { Header } from './header';
 import { Main } from './main';
 import { Footer } from './footer';
 import { Register } from '../account/index';
-import authService from '../services/auth.service';
+import { authService } from '../services';
 import './page.scss';
 
 interface PageState {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { SyntheticEvent } from 'react';
-import userService from '../services/auth.service';
+import { authService } from '../services';
 import './register.scss';
 import logo from '../../logo.png';
 
@@ -29,7 +29,7 @@ export class Register extends React.Component<any, RegisterState> {
 			this.setState({ hasError: true, errorMsg: 'Username is required' })
 			return;
 		}
-		userService.login(this.state.username);
+		authService.login(this.state.username);
 	}
 
 	render() {
