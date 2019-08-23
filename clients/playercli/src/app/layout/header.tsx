@@ -19,15 +19,12 @@ export class Header extends React.Component<any, User> {
   }
 
   render() {
-    const isLoggedIn = this.state.username !== '';
     return (
       <nav className="navbar" role="navigation" aria-label="main navigation">
         <div className="navbar-brand"></div>
         <div className="navbar-menu">
           <div className="navbar-end">
-            {isLoggedIn ? <Welcome username={this.state.username} />
-              : <Register />
-            }
+            <Welcome username={this.state.username} />
           </div>
         </div>
       </nav>);

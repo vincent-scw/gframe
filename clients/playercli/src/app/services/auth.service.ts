@@ -10,6 +10,13 @@ class AuthService {
     return localStorage.getItem('access_token');
   }
 
+  get isLoggedin() {
+    const token = this.accessToken;
+    if (token == null) return false;
+    const decoded: any = jwt.default(token)
+    return Date.now() < decoded.exp * 1000;
+  }
+
   constructor() {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
@@ -38,6 +45,7 @@ class AuthService {
 
   logout() {
     localStorage.removeItem('user');
+    localStorage.removeItem('access_token');
     this.userSubject.next(null);
   }
 }

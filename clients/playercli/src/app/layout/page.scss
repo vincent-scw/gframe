@@ -1,0 +1,10 @@
+.columns.is-vcentered {
+  -webkit-box-align: center;
+     -ms-flex-align: center;
+        align-items: center;
+}
+
+.full-page-size {
+  height: calc(100vh - 1px);
+  width: 100%;
+}

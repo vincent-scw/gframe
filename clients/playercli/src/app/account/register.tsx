@@ -2,11 +2,18 @@ import * as React from 'react';
 import { SyntheticEvent } from 'react';
 import User from './user.model';
 import userService from '../services/auth.service';
+import './register.scss';
 
-export class Register extends React.Component<any, User> {
+interface RegisterState {
+	username: string;
+	hasError: boolean;
+	errorMsg: string;
+}
+
+export class Register extends React.Component<any, RegisterState> {
 	constructor(props: any) {
 		super(props);
-		this.state = { username: '' };
+		this.state = { username: '', hasError: false, errorMsg: '' };
 
 		this.handleChange = this.handleChange.bind(this);
 		this.submit = this.submit.bind(this);
@@ -17,23 +24,34 @@ export class Register extends React.Component<any, User> {
 	}
 
 	submit(e: SyntheticEvent) {
-		userService.login(this.state.username);
 		e.preventDefault();
+		if (this.state.username.trim() === '') {
+			this.setState({ hasError: true, errorMsg: 'Username is required' })
+			return;
+		}
+		userService.login(this.state.username);
 	}
 
 	render() {
 		return (
-			<section className="section">
+			<div className="login">
 				<form onSubmit={this.submit}>
 					<div className="field">
-						<div className="control">
-							<input className="input is-primary" type="text" placeholder="Input Username"
+						<label className="label">Name</label>
+						<div className="control has-icons-left">
+							<input className="input" type="text" placeholder="Input Username"
 								onChange={this.handleChange} />
+							<span className="icon is-small is-left">
+								<i className="fas fa-user"></i>
+							</span>
 						</div>
+						{this.state.hasError &&
+							<p className="help is-danger">{this.state.errorMsg}</p>
+						}
 					</div>
-					<input className="button is-info" type="submit" value="Register" />
+					<input className="button full-width" type="submit" value="Register" />
 				</form>
-			</section>
+			</div>
 		);
 	}
 }
