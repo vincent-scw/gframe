@@ -7,10 +7,14 @@ mat-sidenav {
   background: #263238;
 }
 
-a {
-  color: white;
-}
-
 .brand-text {
   padding-left: 10px;
+}
+
+.navbar {
+  box-shadow: 0 2px #F1F1F1;
+}
+
+.main {
+  min-height: calc(100vh - 5rem);
 }
