@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 
 const routes: Routes = [
+  { path: '', redirectTo: '/game', pathMatch: 'full' }
 ];
 
 @NgModule({
