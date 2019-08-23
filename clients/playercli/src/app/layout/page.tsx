@@ -25,12 +25,8 @@ export class Page extends React.Component<any, PageState> {
               <div><Main /></div>
             </div>
             :
-            <div className="full-page-size">
-              <div className="columns is-centered is-vcentered">
-                <div className="column register">
-                  <Register />
-                </div>
-              </div>
+            <div className="centerall">
+              <Register />
             </div>
       })
     });

@@ -1,10 +1,8 @@
-.columns.is-vcentered {
-  -webkit-box-align: center;
-     -ms-flex-align: center;
-        align-items: center;
-}
-
-.full-page-size {
-  height: calc(100vh - 1px);
-  width: 100%;
+.centerall {
+  height: 100vh;
+  padding: 0;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
 }
