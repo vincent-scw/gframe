@@ -23,7 +23,7 @@ export class Page extends React.Component<any, PageState> {
           authService.isLoggedin ?
             <div className="container">
               <div><Header /></div>
-              <div><Main /></div>
+              <div className="main"><Main /></div>
               <hr className="hr"></hr>
               <div><Footer /></div>
             </div>

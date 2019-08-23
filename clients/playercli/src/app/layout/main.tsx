@@ -1,38 +1,26 @@
 import React from 'react';
-import { Console } from '../game';
+import { GamePad } from '../game';
 
 interface MainState {
-  showConsole: boolean;
+
 }
+
+const divStyle = {
+  minHeight: '60vh'
+};
 
 export class Main extends React.Component<any, MainState> {
   constructor(props: any) {
     super(props);
 
-    this.state = { showConsole: false }
-    this.onStart = this.onStart.bind(this);
-    this.onExit = this.onExit.bind(this);
+    this.state = {}
   }
 
   render() {
     return (
-      <div>
-        <button className="button is-primary" onClick={this.onStart}>Start</button>
-        <button className="button" onClick={this.onExit}>Exit</button>
-        {this.state.showConsole &&
-          <div>
-            <Console></Console>
-          </div>
-        }
+      <div style={divStyle}>
+        <GamePad />
       </div>
     );
-  }
-
-  onStart() {
-    this.setState({showConsole: true});
-  }
-
-  onExit() {
-    this.setState({showConsole: false});
   }
 }
