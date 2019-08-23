@@ -1,6 +1,6 @@
 import React from 'react';
-import { gameService } from '../services';
-import { Console } from './console';
+import { gameService, authService } from '../services';
+import { Card, Console } from '../game';
 import './game-pad.scss';
 
 interface GamePadState {
@@ -28,6 +28,15 @@ export class GamePad extends React.Component<any, GamePadState> {
         {
           this.state.started ?
             <div>
+              <div className="columns is-vcentered">
+                <div className="column is-5">
+                  <Card player={authService.user.username}/>
+                </div>
+                <div className="column has-text-centered"><strong>VS.</strong></div>
+                <div className="column is-5">
+                  <Card player={"unknown"}/>
+                </div>
+              </div>
               <Console />
             </div>
             :

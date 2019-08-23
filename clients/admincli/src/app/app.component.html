@@ -4,24 +4,32 @@
       <app-console></app-console>
     </mat-sidenav>
     <mat-sidenav-content>
-      <nav class="navbar">
+      <nav class="navbar is-fixed-top">
         <div class="navbar-brand">
           <a class="navbar-item">
             <img src="../assets/logo.png" height="28">
             <strong class="brand-text">gframe admin</strong>
           </a>
+
+          <a role="button" class="navbar-burger" aria-label="menu" data-target="navbar-basic">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
         </div>
-        <div class="navbar-end">
-          <a class="navbar-item" href="https://github.com/vincent-scw/gframe">
-            <span class="icon">
-              <i class="fab fa-lg fa-github"></i>
-            </span>
-          </a>
-          <a class="navbar-item" (click)="opened = !opened">
-            <span class="icon">
-              <i class="fas fa-terminal"></i>
-            </span>
-          </a>
+        <div class="navbar-menu" id="navbar-basic">
+          <div class="navbar-end">
+            <a class="navbar-item" href="https://github.com/vincent-scw/gframe">
+              <span class="icon">
+                <i class="fab fa-lg fa-github"></i>
+              </span>
+            </a>
+            <a class="navbar-item" (click)="opened = !opened">
+              <span class="icon">
+                <i class="fas fa-terminal"></i>
+              </span>
+            </a>
+          </div>
         </div>
       </nav>
       <div class="main">

@@ -17,6 +17,11 @@ export class AuthService {
     return Date.now() < decoded.exp * 1000;
   }
 
+  get user() {
+    const userStr = localStorage.getItem('user');
+    return userStr && JSON.parse(userStr);
+  }
+
   constructor() {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);

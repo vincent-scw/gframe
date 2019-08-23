@@ -4,7 +4,7 @@
     <div class="field">
       <label class="label">Username</label>
       <div class="control has-icons-left">
-        <input class="input" type="text" placeholder="Username"/>
+        <input class="input" type="text" placeholder="Username" />
         <span class="icon is-small is-left">
           <i class="fas fa-user"></i>
         </span>
@@ -13,16 +13,17 @@
       <!-- <p className="help is-danger">{this.state.errorMsg}</p> -->
     </div>
     <div class="field">
-        <label class="label">Password</label>
-        <div class="control has-icons-left">
-          <input class="input" type="password" placeholder="Password"/>
-          <span class="icon is-small is-left">
-            <i class="fas fa-lock"></i>
-          </span>
-        </div>
-  
-        <!-- <p className="help is-danger">{this.state.errorMsg}</p> -->
+      <label class="label">Password</label>
+      <div class="control has-icons-left">
+        <input class="input" type="password" placeholder="Password" />
+        <span class="icon is-small is-left">
+          <i class="fas fa-lock"></i>
+        </span>
       </div>
-    <input class="button full-width" type="submit" value="Login" (click)="login()"/>
+
+      <!-- <p className="help is-danger">{this.state.errorMsg}</p> -->
+    </div>
+    <input class="button full-width" type="submit" value="Login" (click)="login()" />
+    <div class="is-size-7">*Please click Login directly, username/password are not needed.</div>
   </form>
 </div>
