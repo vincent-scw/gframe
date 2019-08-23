@@ -1,5 +1,5 @@
 import React from 'react';
-import { Register, Welcome } from '../account';
+import { Welcome } from '../account';
 import authService from '../services/auth.service';
 import User from '../account/user.model';
 
@@ -20,13 +20,9 @@ export class Header extends React.Component<any, User> {
 
   render() {
     return (
-      <nav className="navbar" role="navigation" aria-label="main navigation">
-        <div className="navbar-brand"></div>
-        <div className="navbar-menu">
-          <div className="navbar-end">
-            <Welcome username={this.state.username} />
-          </div>
-        </div>
-      </nav>);
+      <div className="section">
+        <Welcome username={this.state.username} />
+      </div>
+    );
   }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Header } from './header';
 import { Main } from './main';
+import { Footer } from './footer';
 import { Register } from '../account/index';
 import authService from '../services/auth.service';
 import './page.scss';
@@ -23,6 +24,8 @@ export class Page extends React.Component<any, PageState> {
             <div className="container">
               <div><Header /></div>
               <div><Main /></div>
+              <hr className="hr"></hr>
+              <div><Footer /></div>
             </div>
             :
             <div className="centerall">
