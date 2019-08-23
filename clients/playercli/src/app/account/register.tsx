@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { SyntheticEvent } from 'react';
-import User from './user.model';
 import userService from '../services/auth.service';
 import './register.scss';
+import logo from '../../logo.png';
 
 interface RegisterState {
 	username: string;
@@ -35,6 +35,7 @@ export class Register extends React.Component<any, RegisterState> {
 	render() {
 		return (
 			<div className="login">
+				<img src={logo} className="logo" alt="logo" />
 				<form onSubmit={this.submit}>
 					<div className="field">
 						<label className="label">Name</label>
