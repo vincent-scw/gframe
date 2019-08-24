@@ -1,8 +1,11 @@
 # gframe
 
+In [gframe](https://gframe.fun), you can play a classic game --Rock-Paper-Scissors-- with others.
+
+## Motivation
 This repository is for practicing microservices architecture. It contains two web clients - Player Client & Admin Client, and several backend services as well. 
 I will use as many technologies as possible in different projects. It includes Restful Api, GraphQL, Websocket, OAuth2, Redis, Kafka, Docker, Kubernetes...etc. For deployment, I've setup Azure Kubernetes Service (AKS) with 2 nodes for everything. Refer to [depoly](https://github.com/vincent-scw/gframe/tree/master/deploy) folder for details.
-Note: it is still in beginning stage.
+- Note: it is still in beginning stage.
 
 ## Architecture
 ![Architecture](https://github.com/vincent-scw/gframe/blob/master/gframe.png)
