@@ -30,11 +30,11 @@ export class GamePad extends React.Component<any, GamePadState> {
             <div>
               <div className="columns is-vcentered">
                 <div className="column is-5">
-                  <Card player={authService.user.username}/>
+                  <Card player={authService.user.username} readonly={false}/>
                 </div>
                 <div className="column has-text-centered"><strong>VS.</strong></div>
                 <div className="column is-5">
-                  <Card player={"unknown"}/>
+                  <Card player={"unknown"} readonly={true}/>
                 </div>
               </div>
               <Console />

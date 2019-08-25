@@ -17,12 +17,17 @@ enum Shape {
   Scissors = 3
 }
 
+interface CardProps {
+  readonly: boolean;
+  player: string;
+}
+
 interface CardState {
   selectedShape: Shape;
 }
 
-export class Card extends React.Component<any, CardState> {
-  constructor(props: any) {
+export class Card extends React.Component<CardProps, CardState> {
+  constructor(props: CardProps) {
     super(props);
 
     this.state = { selectedShape: Shape.NotSet }
@@ -31,6 +36,7 @@ export class Card extends React.Component<any, CardState> {
   }
 
   onSelected(shape: Shape) {
+    if (this.props.readonly) return;
     this.setState({ selectedShape: shape });
   }
 
@@ -53,17 +59,20 @@ export class Card extends React.Component<any, CardState> {
             <figure><i className="far fa-hand-scissors" style={largeIconStyle}></i></figure>}
         </div>
         <div className="card-footer">
-          <a className="card-footer-item" onClick={() => this.onSelected(Shape.Rock)}>
+          <a className="card-footer-item"
+            onClick={() => this.onSelected(Shape.Rock)}>
             <span className="icon" style={smallIconStyle}>
               <i className="far fa-3x fa-hand-rock"></i>
             </span>
           </a>
-          <a className="card-footer-item" onClick={() => this.onSelected(Shape.Paper)}>
+          <a className="card-footer-item"
+            onClick={() => this.onSelected(Shape.Paper)}>
             <span className="icon" style={smallIconStyle}>
               <i className="far fa-3x fa-hand-paper"></i>
             </span>
           </a>
-          <a className="card-footer-item" onClick={() => this.onSelected(Shape.Scissors)}>
+          <a className="card-footer-item"
+            onClick={() => this.onSelected(Shape.Scissors)}>
             <span className="icon" style={smallIconStyle}>
               <i className="far fa-3x fa-hand-scissors"></i>
             </span>
