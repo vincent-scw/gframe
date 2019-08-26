@@ -8,10 +8,12 @@ import (
 	"syscall"
 
 	corsmid "github.com/iris-contrib/middleware/cors"
+	prometheusMiddleware "github.com/iris-contrib/middleware/prometheus"
 	"github.com/iris-contrib/swagger"
 	"github.com/iris-contrib/swagger/swaggerFiles"
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/websocket"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	e "github.com/vincent-scw/gframe/contracts"
 	"github.com/vincent-scw/gframe/game_svc/auth"
@@ -29,6 +31,7 @@ func main() {
 	client := wrapper.client
 
 	app := iris.Default()
+	m := prometheusMiddleware.New("game_svc", 0.3, 1.2, 5.0)
 
 	cors := corsmid.New(corsmid.Options{
 		AllowedOrigins:   []string{"*"},
@@ -36,8 +39,18 @@ func main() {
 		AllowedHeaders:   []string{"*"},
 		AllowCredentials: true,
 	})
-	app.Use(cors)
+	app.Use(cors, m.ServeHTTP)
 	app.AllowMethods(iris.MethodOptions)
+
+	app.OnErrorCode(iris.StatusNotFound, func(ctx iris.Context) {
+		// error code handlers are not sharing the same middleware as other routes, so we have
+		// to call them inside their body.
+		m.ServeHTTP(ctx)
+
+		ctx.Writef("Not Found")
+	})
+
+	app.Get("/metrics", iris.FromStd(promhttp.Handler()))
 
 	app.Get("/health", func(ctx iris.Context) {
 		ctx.Text("I am good.")

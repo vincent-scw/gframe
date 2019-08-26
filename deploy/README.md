@@ -4,27 +4,31 @@
 - Follow the [tutorials](https://docs.microsoft.com/en-us/azure/aks/) to setup AKS
 
 ### Kube-system
-- Deploy [Kubernetes Dashboard](https://github.com/kubernetes/dashboard) to Kubernetes
-  - Access http://localhost:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy/ instead. There is issue with the link in the page.
-  - Apply ServiceAccount via command `kubectl apply -f https://raw.githubusercontent.com/vincent-scw/gframe/master/deploy/service-account.yaml`.
-  - Use token revealed by `kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')` to login.
-- Create Namespaces `kubectl apply -f https://raw.githubusercontent.com/vincent-scw/gframe/master/deploy/namespaces.yaml`
+- [Depreciated, Kubernetes Dashboard is included in AKS by default] Deploy [Kubernetes Dashboard](https://github.com/kubernetes/dashboard) to Kubernetes
+  - Reference to https://docs.microsoft.com/en-us/azure/aks/kubernetes-dashboard
+- Create Namespaces `kubectl apply -f ./namespaces.yaml`
+- Add ServiceAccount via `kubectl apply -f ./service-account.yaml`
+  - `tiller` is for Helm
 
 ### Infrastructure
-- Deploy Redis to Kubernetes
+- Deploy [Redis](https://redis.io/) to Kubernetes
   - Run `kubectl apply -f ./infra/redis.yaml` to deploy
   - There should be one master node and one backup (has not been added).
-- Deploy Zookeeper to Kubernetes
+- Deploy [Zookeeper](https://zookeeper.apache.org/) to Kubernetes
   - Run `kubectl apply -f ./infra/zookeeper.yaml` to deploy
-- Deploy Kafka to Kubernetes
+- Deploy [Kafka](https://kafka.apache.org/) to Kubernetes
   - Run `kubectl apply -f ./infra/kafka.yaml` to deploy
   - In the deployment, it contains 2 kafka brokers
   - After deployment, run `kubectl get pods -n infra`. Then find and copy a kafka pod like `kafka-1-deployment-{id}`
   - Get into the pod as `kubectl exec -it kafka-1-deployment-{id} -n infra /bin/bash`
   - Create topic by `kafka-topics.sh --create --zookeeper zookeeper-svc:2181 --replication-factor 1 --partitions 2 --topic player`
   - Confirm `Created topic player.`
-- Deploy Nginx to Kubernetes
+- Deploy [Nginx](https://www.nginx.com/) to Kubernetes
   - Run `helm install stable/nginx-ingress --name nginx-gframe --namespace gframe --set controller.replicaCount=2 --set controller.service.loadBalancerIP=23.100.94.224`
+ 
+### Monitoring
+- Deploy [Promethuse](https://prometheus.io/) to Kubernetes
+  - Run `helm install stable/prometheus-operator --name prometheus-operator --namespace monitoring` to deploy
 
 ### Applications
 - Deploy gframe services

@@ -7,6 +7,7 @@ import (
 
 	"github.com/graphql-go/handler"
 	"github.com/rs/cors"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	r "github.com/vincent-scw/gframe/redisctl"
 
@@ -29,6 +30,8 @@ func main() {
 		Pretty: true,
 	})
 	mux.Handle("/graphql", h)
+
+	mux.Handle("/metrics", promhttp.Handler())
 
 	mux.Handle("/console", gql.GraphqlwsHandler)
 

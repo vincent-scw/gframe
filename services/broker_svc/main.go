@@ -12,6 +12,7 @@ import (
 
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	e "github.com/vincent-scw/gframe/contracts"
 )
@@ -60,6 +61,7 @@ func serveRPC(port int) {
 }
 
 func serveWeb(port int) {
+	http.Handle("/metrics", promhttp.Handler())
 	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "I am healthy.")
 	})

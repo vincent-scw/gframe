@@ -8,6 +8,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/go-session/session"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/cors"
 	"github.com/spf13/viper"
 	"gopkg.in/oauth2.v3/errors"
@@ -84,6 +85,8 @@ func main() {
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "I am healthy.")
 	})
+
+	mux.Handle("/metrics", promhttp.Handler())
 
 	handler := cors.Default().Handler(mux)
 	log.Println(fmt.Sprintf("Serve start at %d.", viper.GetInt("PORT")))
