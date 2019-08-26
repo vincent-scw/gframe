@@ -7,11 +7,12 @@ import (
 )
 
 func TestPubSub(t *testing.T) {
-	cli := NewPubSubClient("40.83.112.48:6379")
+	cli := NewRedisClient("locahost:6379")
 
 	channel := "testchan"
-	go cli.Subscribe(channel, func(content string) {
+	go cli.Subscribe(channel, func(content string) string {
 		fmt.Println(content)
+		return content
 	})
 
 	for i := 0; i < 10; i++ {

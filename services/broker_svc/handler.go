@@ -27,7 +27,7 @@ func newReceptionHandler() *receptionHandler {
 func (handler *receptionHandler) Checkin(ctx context.Context, user *e.User) (*e.ReceptionResponse, error) {
 	// Send to Redis pub/sub
 	b, _ := json.Marshal(user)
-	go singleton.GetPubSubClient().Publish(e.PlayerChannel, string(b))
+	go singleton.RedisPublish(e.PlayerChannel, string(b))
 
 	result := handler.matching.AddToGroup(*user)
 	return &e.ReceptionResponse{Acknowledged: result}, nil
@@ -36,7 +36,7 @@ func (handler *receptionHandler) Checkin(ctx context.Context, user *e.User) (*e.
 func (handler *receptionHandler) Checkout(ctx context.Context, user *e.User) (*e.ReceptionResponse, error) {
 	// Send to Redis pub/sub
 	b, _ := json.Marshal(user)
-	go singleton.GetPubSubClient().Publish(e.PlayerChannel, string(b))
+	go singleton.RedisPublish(e.PlayerChannel, string(b))
 
 	return &e.ReceptionResponse{Acknowledged: true}, nil
 }

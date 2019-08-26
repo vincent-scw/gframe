@@ -11,7 +11,7 @@ import (
 )
 
 // SubscribeGroup subscribes group channel
-func SubscribeGroup(client *r.PubSubClient, foo func(formattedMsg string) string) {
+func SubscribeGroup(client *r.RedisClient, foo func(formattedMsg string) string) {
 	client.Subscribe(e.GroupChannel, handleGroup, foo)
 }
 

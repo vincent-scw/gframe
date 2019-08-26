@@ -6,17 +6,17 @@ import (
 	"github.com/go-redis/redis"
 )
 
-// PubSubClient represents a Redis pub-sub client
-type PubSubClient struct {
+// RedisClient represents a Redis client
+type RedisClient struct {
 	redisdb *redis.Client
 }
 
 // Handle is a function to handle received content
 type Handle func(string) string
 
-// NewPubSubClient creates a pub-sub client
-func NewPubSubClient(addr ...string) *PubSubClient {
-	cli := &PubSubClient{}
+// NewRedisClient creates a redis client
+func NewRedisClient(addr ...string) *RedisClient {
+	cli := &RedisClient{}
 	cli.redisdb = redis.NewClient(&redis.Options{
 		Addr:     addr[0],
 		Password: "",
@@ -27,7 +27,7 @@ func NewPubSubClient(addr ...string) *PubSubClient {
 }
 
 // Publish publishes content to channel
-func (cli *PubSubClient) Publish(channel string, content string) {
+func (cli *RedisClient) Publish(channel string, content string) {
 	log.Printf("Publish event to Redis channel [%s] %s", channel, content)
 	err := cli.redisdb.Publish(channel, content).Err()
 	if err != nil {
@@ -36,7 +36,7 @@ func (cli *PubSubClient) Publish(channel string, content string) {
 }
 
 // Subscribe subscribes a channel
-func (cli *PubSubClient) Subscribe(channel string, handles ...Handle) {
+func (cli *RedisClient) Subscribe(channel string, handles ...Handle) {
 	pubsub := cli.redisdb.Subscribe(channel)
 	ch := pubsub.Channel()
 
@@ -52,7 +52,7 @@ func (cli *PubSubClient) Subscribe(channel string, handles ...Handle) {
 }
 
 // Close releases resources
-func (cli *PubSubClient) Close() {
+func (cli *RedisClient) Close() {
 	if err := cli.redisdb.Close(); err != nil {
 		panic(err)
 	}

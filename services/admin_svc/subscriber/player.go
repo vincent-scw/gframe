@@ -10,7 +10,7 @@ import (
 )
 
 // SubscribePlayer subscribes player channel
-func SubscribePlayer(client *r.PubSubClient, foo func(formattedMsg string) string) {
+func SubscribePlayer(client *r.RedisClient, foo func(formattedMsg string) string) {
 	client.Subscribe(e.PlayerChannel, handlePlayer, foo)
 }
 

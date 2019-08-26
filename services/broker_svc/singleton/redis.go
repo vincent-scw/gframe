@@ -9,25 +9,25 @@ import (
 )
 
 var (
-	once         sync.Once
-	pubsubClient *r.PubSubClient
+	once        sync.Once
+	redisClient *r.RedisClient
 )
 
-// GetPubSubClient returns pubsubclient
-func GetPubSubClient() *r.PubSubClient {
+// GetRedisClient returns redisClient
+func GetRedisClient() *r.RedisClient {
 	if viper.GetString("REDIS_SERVER") == "" {
 		return nil
 	}
 	once.Do(func() {
-		pubsubClient = r.NewPubSubClient(viper.GetString("REDIS_SERVER"))
+		redisClient = r.NewRedisClient(viper.GetString("REDIS_SERVER"))
 	})
 
-	return pubsubClient
+	return redisClient
 }
 
 // RedisPublish message to Redis
 func RedisPublish(channel string, content string) {
-	pubSubClient := GetPubSubClient()
+	pubSubClient := GetRedisClient()
 	if pubSubClient != nil {
 		pubSubClient.Publish(channel, content)
 	}

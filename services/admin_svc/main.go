@@ -34,7 +34,7 @@ func main() {
 
 	handler := cors.Default().Handler(mux)
 
-	pubsub := r.NewPubSubClient(config.GetRedisServer())
+	pubsub := r.NewRedisClient(config.GetRedisServer())
 	defer pubsub.Close()
 
 	log.Println("Subscribe to Redis...")
