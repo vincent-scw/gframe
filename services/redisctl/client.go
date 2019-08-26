@@ -2,6 +2,7 @@ package redisctl
 
 import (
 	"log"
+	"time"
 
 	"github.com/go-redis/redis"
 )
@@ -49,6 +50,25 @@ func (cli *RedisClient) Subscribe(channel string, handles ...Handle) {
 			}
 		}
 	}
+}
+
+// SetCache set cache to Redis
+func (cli *RedisClient) SetCache(key string, value interface{}, exp time.Duration) {
+	err := cli.redisdb.Set(key, value, exp).Err()
+	if err != nil {
+		log.Printf("Set to Redis error %v", err)
+	}
+}
+
+// GetCache get cache from Redis
+func (cli *RedisClient) GetCache(key string) (string, error) {
+	v, err := cli.redisdb.Get(key).Result()
+	if err == redis.Nil {
+		return "", nil
+	} else if err != nil {
+		log.Printf("Read from Redis error %v", err)
+	}
+	return v, err
 }
 
 // Close releases resources

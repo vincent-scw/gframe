@@ -24,11 +24,3 @@ func GetRedisClient() *r.RedisClient {
 
 	return redisClient
 }
-
-// RedisPublish message to Redis
-func RedisPublish(channel string, content string) {
-	pubSubClient := GetRedisClient()
-	if pubSubClient != nil {
-		pubSubClient.Publish(channel, content)
-	}
-}
