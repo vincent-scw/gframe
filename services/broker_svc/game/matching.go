@@ -1,11 +1,9 @@
 package game
 
 import (
-	"encoding/json"
 	"math/rand"
 	"time"
 
-	"github.com/vincent-scw/gframe/broker_svc/singleton"
 	e "github.com/vincent-scw/gframe/contracts"
 )
 
@@ -14,6 +12,9 @@ var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 func init() {
 	rand.Seed(time.Now().UnixNano())
 }
+
+// GroupFormed event
+type GroupFormed func(formed *Group)
 
 // Group represents a group of players
 type Group struct {
@@ -28,6 +29,7 @@ type Matching struct {
 	GroupSize int
 	// FormingTimeout by seconds
 	FormingTimeout int
+	Formed         GroupFormed
 	util
 }
 
@@ -68,9 +70,10 @@ func (m *Matching) groupFormed() {
 	if g != nil && len(g.Players) > 1 {
 		g.Status = e.GroupFormed
 		m.Groups[g.ID] = g
-
-		value, _ := json.Marshal(g)
-		go singleton.RedisPublish(e.GroupChannel, string(value))
+		// Event out
+		if m.Formed != nil {
+			m.Formed(g)
+		}
 	}
 	m.formingGroup = nil
 }

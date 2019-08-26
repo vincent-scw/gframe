@@ -41,4 +41,14 @@ export class GameService {
   close() {
     this.wsConn && this.wsConn.close();
   }
+
+  ask(event: string, content: any) {
+    if (this.wsConn && !this.wsConn.isClosed) {
+      let msg = new neffos.Message();
+      msg.Namespace = "default";
+      msg.Event = event;
+      msg.Body = content;
+      this.wsConn.ask(msg).catch(err => console.error(err));
+    }
+  }
 }

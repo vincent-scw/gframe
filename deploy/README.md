@@ -12,12 +12,12 @@
 
 ### Infrastructure
 - Deploy Redis to Kubernetes
-  - Run `kubectl apply -f https://raw.githubusercontent.com/vincent-scw/gframe/master/deploy/infra/redis.yaml` to deploy
+  - Run `kubectl apply -f ./infra/redis.yaml` to deploy
   - There should be one master node and one backup (has not been added).
 - Deploy Zookeeper to Kubernetes
-  - Run `kubectl apply -f https://raw.githubusercontent.com/vincent-scw/gframe/master/deploy/infra/zookeeper.yaml` to deploy
+  - Run `kubectl apply -f ./infra/zookeeper.yaml` to deploy
 - Deploy Kafka to Kubernetes
-  - Run `kubectl apply -f https://raw.githubusercontent.com/vincent-scw/gframe/master/deploy/infra/kafka.yaml` to deploy
+  - Run `kubectl apply -f ./infra/kafka.yaml` to deploy
   - In the deployment, it contains 2 kafka brokers
   - After deployment, run `kubectl get pods -n infra`. Then find and copy a kafka pod like `kafka-1-deployment-{id}`
   - Get into the pod as `kubectl exec -it kafka-1-deployment-{id} -n infra /bin/bash`
@@ -28,4 +28,4 @@
 
 ### Applications
 - Deploy gframe services
-  - Run `kubectl apply -f https://raw.githubusercontent.com/vincent-scw/gframe/master/deploy/apps/` to deploy
+  - Run `kubectl apply -f ./apps/` to deploy

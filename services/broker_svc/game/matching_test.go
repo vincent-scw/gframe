@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/vincent-scw/gframe/events"
+	"github.com/vincent-scw/gframe/contracts"
 )
 
 func TestMatching(t *testing.T) {
@@ -14,11 +14,11 @@ func TestMatching(t *testing.T) {
 	var totalGroups = totalUsers / groupSize
 
 	matching := NewMatching(groupSize, totalGroups, 1)
-	var player events.User
+	var player contracts.User
 	count := 0
 	for i := 0; i < totalUsers; i++ {
 		id := fmt.Sprintf("User%d", i)
-		player = events.User{ID: id, Name: id}
+		player = contracts.User{Id: id, Name: id}
 		if matching.AddToGroup(player) {
 			count++
 		}
@@ -44,10 +44,10 @@ func TestMatching(t *testing.T) {
 func BenchmarkMatching(b *testing.B) {
 	matching := NewMatching(2, b.N/2+1, 1)
 	b.Logf("%d players to be injected.", b.N)
-	var player events.User
+	var player contracts.User
 	for i := 0; i < b.N; i++ {
 		id := fmt.Sprintf("User%d", i)
-		player = events.User{ID: id, Name: id}
+		player = contracts.User{Id: id, Name: id}
 		matching.AddToGroup(player)
 	}
 	b.Logf("%d groups have been formed.", len(matching.Groups))

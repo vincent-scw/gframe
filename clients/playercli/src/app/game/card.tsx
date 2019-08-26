@@ -1,4 +1,6 @@
 import React from 'react';
+import { gameService, EVENT_PLAY } from '../services';
+import { Shape, PlayEvent } from './event.model';
 
 const smallIconStyle = {
   height: "50px"
@@ -8,13 +10,6 @@ const largeIconStyle = {
   width: "28em",
   height: "28em",
   paddingLeft: "52px"
-}
-
-enum Shape {
-  NotSet = 0,
-  Rock = 1,
-  Paper = 2,
-  Scissors = 3
 }
 
 interface CardProps {
@@ -38,6 +33,7 @@ export class Card extends React.Component<CardProps, CardState> {
   onSelected(shape: Shape) {
     if (this.props.readonly) return;
     this.setState({ selectedShape: shape });
+    //gameService.ask(EVENT_PLAY, )
   }
 
   render() {

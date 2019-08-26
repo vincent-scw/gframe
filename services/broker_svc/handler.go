@@ -17,7 +17,10 @@ func newReceptionHandler() *receptionHandler {
 	handler := &receptionHandler{}
 	// start matching
 	handler.matching = g.NewMatching(2, 1000, 30)
-
+	handler.matching.Formed = func(g *g.Group) {
+		value, _ := json.Marshal(g)
+		go singleton.RedisPublish(e.GroupChannel, string(value))
+	}
 	return handler
 }
 
