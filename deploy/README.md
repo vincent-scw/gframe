@@ -33,7 +33,8 @@
 ### Monitoring
 - Deploy [Promethuse](https://prometheus.io/) to Kubernetes
   - Run `helm install --name prometheus --namespace monitoring stable/prometheus-operator -f ./monitoring/prometheus-settings.yaml` to deploy
-  - 
+  - After Prometheus installed, run `kubectl apply -f ./monitoring/services.yaml` to add services to configuration
+- Deploy [Jaeger](https://www.jaegertracing.io/) to Kubernetes
 
 ### Applications
 - Deploy gframe services

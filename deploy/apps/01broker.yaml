@@ -48,6 +48,8 @@ kind: Service
 metadata:
   name: broker
   namespace: gframe
+  labels:
+    app: broker
 spec:
   type: NodePort
   ports:

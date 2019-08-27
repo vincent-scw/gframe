@@ -47,6 +47,8 @@ kind: Service
 metadata:
   name: admin
   namespace: gframe
+  labels:
+    app: admin
 spec:
   type: NodePort
   ports:

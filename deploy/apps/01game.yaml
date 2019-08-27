@@ -48,6 +48,8 @@ kind: Service
 metadata:
   name: game
   namespace: gframe
+  labels:
+    app: game
 spec:
   type: NodePort
   ports:

@@ -1,7 +1,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: oauth-monitor
+  name: oauth
   namespace: monitoring
   labels:
     release: prometheus
@@ -18,7 +18,7 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: admin-monitor
+  name: admin
   namespace: monitoring
   labels:
     release: prometheus
@@ -35,7 +35,7 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: broker-monitor
+  name: broker
   namespace: monitoring
   labels:
     release: prometheus
@@ -52,7 +52,7 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: game-monitor
+  name: game
   namespace: monitoring
   labels:
     release: prometheus

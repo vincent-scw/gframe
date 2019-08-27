@@ -372,7 +372,7 @@ grafana:
   ##
   defaultDashboardsEnabled: true
 
-  adminPassword: admin123#
+  adminPassword: {{GrafanaAdmin}}
 
   ingress:
     ## If true, Grafana Ingress will be created

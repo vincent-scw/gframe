@@ -24,7 +24,8 @@ spec:
         - name: AUTH_DOMAIN
           value: "https://www.gframe.fun"
         ports:
-        - containerPort: 80
+        - name: web
+          containerPort: 80
         readinessProbe:
           httpGet:
             path: /health
@@ -45,6 +46,8 @@ kind: Service
 metadata:
   name: oauth
   namespace: gframe
+  labels:
+    app: oauth
 spec:
   type: NodePort
   ports:
