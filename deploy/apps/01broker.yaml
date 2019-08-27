@@ -24,7 +24,8 @@ spec:
         - name: REDIS_SERVER
           value: "redis:6379"
         - name: KAFKA_BROKERS
-          value: "kafka-1:9092 kafka-2:9092"
+          value: "kafka-1:9092"
+          #value: "kafka-1:9092 kafka-2:9092"
         ports:
         - containerPort: 80
         readinessProbe:

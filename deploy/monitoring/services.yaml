@@ -1,0 +1,30 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: oauth-monitor
+  namespace: monitoring
+  labels:
+    app: oauth-monitor
+    release: prom
+spec:
+  selector:
+    matchLabels: 
+      app: oauth-monitor
+  namespaceSelector:
+    matchNames:
+    - gframe
+  endpoints:
+  - port: web
+    interval: 10s
+---
+# apiVersion: monitoring.coreos.com/v1
+# kind: Prometheus
+# metadata:
+#   name: prometheus-backend
+#   namespace: monitoring
+#   labels:
+#     prometheus: backend
+# spec:
+#   version: v1.3.0
+#   serviceMonitorSelector: {}
+

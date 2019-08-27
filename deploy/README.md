@@ -2,6 +2,8 @@
 
 ## Steps
 - Follow the [tutorials](https://docs.microsoft.com/en-us/azure/aks/) to setup AKS
+- Install Helm and Tiller
+  - `helm init --service-account tiller --history-max 200`
 
 ### Kube-system
 - [Depreciated, Kubernetes Dashboard is included in AKS by default] Deploy [Kubernetes Dashboard](https://github.com/kubernetes/dashboard) to Kubernetes
@@ -9,6 +11,7 @@
 - Create Namespaces `kubectl apply -f ./namespaces.yaml`
 - Add ServiceAccount via `kubectl apply -f ./service-account.yaml`
   - `tiller` is for Helm
+  - `kubernetes-dashboard` is for Kubernetes Dashboard
 
 ### Infrastructure
 - Deploy [Redis](https://redis.io/) to Kubernetes
@@ -24,11 +27,13 @@
   - Create topic by `kafka-topics.sh --create --zookeeper zookeeper-svc:2181 --replication-factor 1 --partitions 2 --topic player`
   - Confirm `Created topic player.`
 - Deploy [Nginx](https://www.nginx.com/) to Kubernetes
-  - Run `helm install stable/nginx-ingress --name nginx-gframe --namespace gframe --set controller.replicaCount=2 --set controller.service.loadBalancerIP=23.100.94.224`
+  - Create a static IP, reference to https://docs.microsoft.com/en-us/azure/aks/static-ip
+  - Run `helm install stable/nginx-ingress --name nginx-gframe --namespace gframe --set controller.replicaCount=2 --set controller.service.loadBalancerIP={{StaticIP}}`
  
 ### Monitoring
 - Deploy [Promethuse](https://prometheus.io/) to Kubernetes
-  - Run `helm install stable/prometheus-operator --name prometheus-operator --namespace monitoring` to deploy
+  - Run `helm install --name prom --namespace monitoring -f prom-values.yaml stable/prometheus-operator` to deploy [For resouces concern, not used]
+  - 
 
 ### Applications
 - Deploy gframe services
