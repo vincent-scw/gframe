@@ -31,10 +31,11 @@
   - Run `helm install stable/nginx-ingress --name nginx-gframe --namespace gframe --set controller.replicaCount=2 --set controller.service.loadBalancerIP={{StaticIP}}`
  
 ### Monitoring
-- Deploy [Promethuse](https://prometheus.io/) to Kubernetes
+- Deploy [Prometheus](https://prometheus.io/) to Kubernetes
   - Run `helm install --name prometheus --namespace monitoring stable/prometheus-operator -f ./monitoring/prometheus-settings.yaml` to deploy
   - After Prometheus installed, run `kubectl apply -f ./monitoring/services.yaml` to add services to configuration
 - Deploy [Jaeger](https://www.jaegertracing.io/) to Kubernetes
+  - TBD
 
 ### Applications
 - Deploy gframe services
