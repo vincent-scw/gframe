@@ -4,27 +4,76 @@ metadata:
   name: oauth-monitor
   namespace: monitoring
   labels:
-    app: oauth-monitor
-    release: prom
+    release: prometheus
 spec:
   selector:
     matchLabels: 
-      app: oauth-monitor
+      app: oauth
   namespaceSelector:
     matchNames:
     - gframe
   endpoints:
   - port: web
-    interval: 10s
 ---
-# apiVersion: monitoring.coreos.com/v1
-# kind: Prometheus
-# metadata:
-#   name: prometheus-backend
-#   namespace: monitoring
-#   labels:
-#     prometheus: backend
-# spec:
-#   version: v1.3.0
-#   serviceMonitorSelector: {}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: admin-monitor
+  namespace: monitoring
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels: 
+      app: admin
+  namespaceSelector:
+    matchNames:
+    - gframe
+  endpoints:
+  - port: web
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: broker-monitor
+  namespace: monitoring
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels: 
+      app: broker
+  namespaceSelector:
+    matchNames:
+    - gframe
+  endpoints:
+  - port: web
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: game-monitor
+  namespace: monitoring
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels: 
+      app: game
+  namespaceSelector:
+    matchNames:
+    - gframe
+  endpoints:
+  - port: web
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: prometheus-backend
+  namespace: monitoring
+  labels:
+    release: prometheus
+  resources:
+    requests:
+      memory: 200Mi
 

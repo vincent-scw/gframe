@@ -51,9 +51,9 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - name: webport
+  - name: web
     port: 80
-  - name: rpcport
+  - name: rpc
     port: 90
   selector:
     app: broker

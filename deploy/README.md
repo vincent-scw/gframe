@@ -32,7 +32,7 @@
  
 ### Monitoring
 - Deploy [Promethuse](https://prometheus.io/) to Kubernetes
-  - Run `helm install --name prom --namespace monitoring -f prom-values.yaml stable/prometheus-operator` to deploy [For resouces concern, not used]
+  - Run `helm install --name prometheus --namespace monitoring stable/prometheus-operator -f ./monitoring/prometheus-settings.yaml` to deploy
   - 
 
 ### Applications
