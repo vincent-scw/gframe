@@ -3,9 +3,8 @@ package singleton
 import (
 	"sync"
 
-	"github.com/spf13/viper"
-
 	r "github.com/vincent-scw/gframe/redisctl"
+	"github.com/vincent-scw/gframe/broker_svc/config"
 )
 
 var (
@@ -15,11 +14,11 @@ var (
 
 // GetRedisClient returns redisClient
 func GetRedisClient() *r.RedisClient {
-	if viper.GetString("REDIS_SERVER") == "" {
+	if config.GetRedisServer() == "" {
 		return nil
 	}
 	once.Do(func() {
-		redisClient = r.NewRedisClient(viper.GetString("REDIS_SERVER"))
+		redisClient = r.NewRedisClient(config.GetRedisServer())
 	})
 
 	return redisClient

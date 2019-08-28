@@ -1,4 +1,4 @@
-package main
+package connection
 
 import (
 	"log"
@@ -40,10 +40,9 @@ var serverEvents = websocket.Namespaces{
 	},
 }
 
-func startWebsocket(onConnect func(conn *websocket.Conn, user *contracts.User) error,
+// NewWebsocket returns Websocket Server
+func NewWebsocket(hub *Hub, onConnect func(conn *websocket.Conn, user *contracts.User) error,
 	onDisconnect func(conn *websocket.Conn, user *contracts.User)) *neffos.Server {
-	hub := newHub()
-	go hub.run()
 
 	srv := websocket.New(
 		websocket.GorillaUpgrader(upgrader),
@@ -78,6 +77,8 @@ func startWebsocket(onConnect func(conn *websocket.Conn, user *contracts.User) e
 			log.Println(err)
 			return
 		}
+		
+		unregisterClient(hub, c)
 
 		log.Printf("[%s] disconnected from the server.", c.ID())
 		if onDisconnect != nil {

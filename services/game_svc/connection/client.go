@@ -1,4 +1,4 @@
-package main
+package connection
 
 import (
 	"time"
@@ -24,25 +24,28 @@ var (
 
 // Client is a middleman between the websocket connection and the hub.
 type Client struct {
-	hub *Hub
-
+	// ID is client id
+	ID string
 	// The websocket connection.
 	conn *websocket.Conn
-
 	// Buffered channel of outbound messages.
-	send chan []byte
+	send chan *Message
 }
 
 func (c *Client) writePump() {
 	for {
 		message := <-c.send
-		c.conn.Write(websocket.Message{Namespace: "default", Event: "console", Body: message})
+		c.conn.Write(websocket.Message{Namespace: "default", Event: string(message.Type), Body: message.Content})
 	}
 }
 
 func registerNewClient(hub *Hub, conn *websocket.Conn) {
-	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256)}
-	client.hub.register <- client
+	client := &Client{ID: conn.ID(), conn: conn, send: make(chan *Message, 256)}
+	hub.register <- client
 
 	go client.writePump()
+}
+
+func unregisterClient(hub *Hub, conn *websocket.Conn) {
+	hub.unregister <- conn.ID()
 }
