@@ -26,6 +26,8 @@ spec:
           #value: "kafka-1:9092 kafka-2:9092"
         - name: BROKER_RPC
           value: "broker:90"
+        - name: REDIS_SERVER
+          value: "redis:6379"
         ports:
         - containerPort: 80
         readinessProbe:

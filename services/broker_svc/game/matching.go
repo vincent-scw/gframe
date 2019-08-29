@@ -1,17 +1,9 @@
 package game
 
 import (
-	"math/rand"
-	"time"
-
+	u "github.com/vincent-scw/gframe/util"
 	e "github.com/vincent-scw/gframe/contracts"
 )
-
-var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-
-func init() {
-	rand.Seed(time.Now().UnixNano())
-}
 
 // GroupFormed event
 type GroupFormed func(formed *Group)
@@ -79,7 +71,7 @@ func (m *Matching) groupFormed() {
 }
 
 func newGroup(groupSize int) *Group {
-	id := randSeq(7)
+	id := u.randSeq(7)
 	g := Group{GroupInfo: e.GroupInfo{ID: id, Status: e.GroupForming}}
 	g.userChan = make(chan e.User)
 	g.killChan = make(chan struct{})
@@ -113,10 +105,3 @@ func (g *Group) closeChan() {
 	close(g.killChan)
 }
 
-func randSeq(n int) string {
-	b := make([]rune, n)
-	for i := range b {
-		b[i] = letters[rand.Intn(len(letters))]
-	}
-	return string(b)
-}

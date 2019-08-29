@@ -12,6 +12,11 @@ const (
 
 // Message struct
 type Message struct {
-	Type EventType
+	Type    EventType
 	Content []byte
+}
+
+// NewMessage returns a new message
+func NewMessage(t EventType, content []byte) *Message {
+	return &Message{Type: t, Content: content}
 }

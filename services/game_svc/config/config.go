@@ -11,6 +11,7 @@ const (
 	jwtKey       = "JWT_KEY"
 	kafkaBrokers = "KAFKA_BROKERS"
 	brokerRPC    = "BROKER_RPC"
+	redisServer  = "REDIS_SERVER"
 )
 
 func init() {
@@ -18,8 +19,14 @@ func init() {
 	viper.SetDefault(jwtKey, "00000000")
 	viper.SetDefault(kafkaBrokers, []string{"localhost:9092"})
 	viper.SetDefault(brokerRPC, "localhost:8543")
+	viper.SetDefault(redisServer, "localhost:6379")
 
 	viper.AutomaticEnv()
+}
+
+// GetRedisServer returns RedisServer
+func GetRedisServer() string {
+	return viper.GetString(redisServer)
 }
 
 // GetPort returns port

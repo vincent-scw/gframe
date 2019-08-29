@@ -47,6 +47,7 @@ services:
       - PORT=80
       - KAFKA_BROKERS=kafka:9092
       - BROKER_RPC=broker_svc:90
+      - REDIS_SERVER=redis_db:6379
   broker_svc:
     build:
       context: .
