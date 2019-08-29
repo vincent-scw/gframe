@@ -40,7 +40,7 @@ func (c *Client) writePump() {
 }
 
 func registerNewClient(hub *Hub, conn *websocket.Conn, id string) {
-	client := &Client{ID: conn.ID(), conn: conn, send: make(chan *Message, 256)}
+	client := &Client{ID: id, conn: conn, send: make(chan *Message, 256)}
 	hub.register <- client
 
 	go client.writePump()

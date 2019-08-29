@@ -19,7 +19,7 @@ export class GameService {
           _OnNamespaceDisconnect: (nsConn: neffos.NSConn, msg: neffos.Message) => {
             console.log("disconnected from namespace: " + msg.Namespace);
           },
-          console: (nsConn: neffos.NSConn, msg: neffos.Message) => {
+          common: (nsConn: neffos.NSConn, msg: neffos.Message) => {
             console.log(msg.Body);
             this.onMsg.next(msg.Body);
           }
