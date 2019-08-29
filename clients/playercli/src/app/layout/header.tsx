@@ -6,20 +6,7 @@ import User from '../account/user.model';
 export class Header extends React.Component<any, User> {
   constructor(props: any) {
     super(props);
-    this.state = { username: '' };
-  }
-
-  componentDidMount() {
-    authService.userSubject.subscribe(x => {
-      if (x != null)
-        this.setState(x)
-      else
-        this.setState({ username: '' })
-    })
-  }
-
-  componentWillUnmount() {
-    authService.userSubject.unsubscribe();
+    this.state = { username: authService.user.username };
   }
 
   render() {

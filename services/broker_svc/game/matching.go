@@ -1,7 +1,10 @@
 package game
 
 import (
-	u "github.com/vincent-scw/gframe/util"
+	"time"
+	
+	"github.com/rs/xid"
+
 	e "github.com/vincent-scw/gframe/contracts"
 )
 
@@ -71,7 +74,7 @@ func (m *Matching) groupFormed() {
 }
 
 func newGroup(groupSize int) *Group {
-	id := u.randSeq(7)
+	id := xid.New().String()
 	g := Group{GroupInfo: e.GroupInfo{ID: id, Status: e.GroupForming}}
 	g.userChan = make(chan e.User)
 	g.killChan = make(chan struct{})

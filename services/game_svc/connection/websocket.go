@@ -62,7 +62,7 @@ func NewWebsocket(hub *Hub, onConnect func(conn *websocket.Conn, user *contracts
 
 		log.Printf("[%s] connected to server.", c.ID())
 		// register client
-		registerNewClient(hub, c)
+		registerNewClient(hub, c, user.Id)
 
 		if onConnect != nil {
 			return onConnect(c, user)
@@ -78,7 +78,7 @@ func NewWebsocket(hub *Hub, onConnect func(conn *websocket.Conn, user *contracts
 			return
 		}
 		
-		unregisterClient(hub, c)
+		unregisterClient(hub, user.Id)
 
 		log.Printf("[%s] disconnected from the server.", c.ID())
 		if onDisconnect != nil {
