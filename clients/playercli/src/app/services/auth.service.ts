@@ -28,19 +28,15 @@ export class AuthService {
   }
 
   login(username: string) {
-    let data = new FormData();
-		data.set("client_id", "player_api");
-		data.set("client_secret", "999999");
-		data.set("grant_type", "password");
-		data.set("username", username);
-		data.set("password", "123");
-		axios.post(`${env.authSvc}/token`, data)
+    let data = {name: username};
+		axios.post(`${env.gameSvc}/api/user/register`, data)
 			.then(res => { 
         console.log(res);
-        localStorage.setItem('access_token', res.data.access_token);
-        const decoded: any = jwt.default(res.data.access_token);
+        localStorage.setItem('access_token', res.data.token);
+        const decoded: any = jwt.default(res.data.token);
         const user = {
-          username: decoded.sub
+          id: decoded.sub,
+          username: decoded.name
         };
         localStorage.setItem('user', JSON.stringify(user));
         this.userSubject.next(user);

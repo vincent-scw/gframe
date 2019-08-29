@@ -7,14 +7,6 @@ declare var process : {
 export class environment {
   private apiUrl: string = "api.gframe.fun";
 
-  get authSvc(): string {
-    if (process.env.NODE_ENV === 'production') {
-      return `https://${this.apiUrl}/oauth`;
-    } else {
-      return 'http://localhost:8440';
-    }
-  }
-
   get gameSvc(): string {
     if (process.env.NODE_ENV === 'production') {
       return `https://${this.apiUrl}/game`;

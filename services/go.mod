@@ -32,6 +32,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/prometheus/client_golang v1.1.0
 	github.com/rs/cors v1.6.0
+	github.com/rs/xid v1.2.1
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.4.2 // indirect
 	github.com/spf13/viper v1.3.2

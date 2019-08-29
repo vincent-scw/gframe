@@ -35,8 +35,8 @@ func GetPort() string {
 }
 
 // GetJwtKey returns JwtKey
-func GetJwtKey() string {
-	return viper.GetString(jwtKey)
+func GetJwtKey() []byte {
+	return []byte(viper.GetString(jwtKey))
 }
 
 // GetKafkaBrokers returns KafkaBrokers

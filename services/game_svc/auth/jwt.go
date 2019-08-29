@@ -2,6 +2,8 @@ package auth
 
 import (
 	"errors"
+	"log"
+	"time"
 
 	"github.com/kataras/iris"
 	"github.com/dgrijalva/jwt-go"
@@ -14,7 +16,7 @@ import (
 // JwtHandler handles jwt token
 var JwtHandler = jwtmid.New(jwtmid.Config{
 	ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
-		return []byte(config.GetJwtKey()), nil
+		return config.GetJwtKey(), nil
 	},
 	SigningMethod: jwt.SigningMethodHS256,
 })
@@ -23,7 +25,7 @@ var JwtHandler = jwtmid.New(jwtmid.Config{
 var WSJwtHandler = jwtmid.New(jwtmid.Config{
 	Extractor: jwtmid.FromParameter("token"),
 	ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
-		return []byte(config.GetJwtKey()), nil
+		return config.GetJwtKey(), nil
 	},
 	SigningMethod: jwt.SigningMethodHS256,
 })
@@ -42,10 +44,27 @@ func GetUserFromTokenForWS(ctx iris.Context, status contracts.User_Status) (*con
 
 func toUser(authToken *jwt.Token, status contracts.User_Status) (*contracts.User, error) {
 	if claims, ok := authToken.Claims.(jwt.MapClaims); ok && authToken.Valid {
+		id := claims["id"].(string)
 		sub := claims["sub"].(string)
 		// sid
-		return &contracts.User{Id: sub, Name: sub, Status: status}, nil
+		return &contracts.User{Id: id, Name: sub, Status: status}, nil
 	}
 
 	return nil, errors.New("cannot read info from token")
+}
+
+func generateJwtToken(id, name string) (string, error) {
+	claims := make(jwt.MapClaims)
+	claims["iss"] = "gframe_game"
+	claims["exp"] = time.Now().Add(time.Hour * 2).Unix()
+	claims["sub"] = id
+	claims["name"] = name
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenString, err := token.SignedString(config.GetJwtKey())
+
+	if err != nil {
+		log.Printf("Error signing token: %v\n", err)
+	}
+	return tokenString, err
 }

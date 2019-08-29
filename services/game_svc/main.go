@@ -75,6 +75,18 @@ func main() {
 
 	api := app.Party("/api")
 	player := api.Party("/user")
+	player.Post("/register", func(ctx iris.Context) {
+		var player auth.Player
+		err := ctx.ReadJSON(&player)	
+
+		if err != nil {
+			ctx.StatusCode(iris.StatusBadRequest)
+			ctx.WriteString(err.Error())
+			return
+		}
+		token := player.ToToken()
+		ctx.JSON(token)
+	})
 	player.Use(auth.JwtHandler.Serve)
 	{
 		player.Post("/in", func(ctx iris.Context) {
