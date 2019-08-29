@@ -1,13 +1,13 @@
 package simulator
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
-	"net/url"
 	"time"
 
 	"github.com/vincent-scw/gframe/admin_svc/config"
@@ -16,6 +16,10 @@ import (
 type token struct {
 	AccessToken string `json:"access_token"`
 	TokenType   string `json:"token_type"`
+}
+
+type player struct {
+	Name string `json:"name"`
 }
 
 func init() {
@@ -53,14 +57,11 @@ func inject(name string) {
 }
 
 func getToken(name string) *token {
-	formData := url.Values{
-		"client_id":     {"player_api"},
-		"client_secret": {"999999"},
-		"grant_type":    {"password"},
-		"username":      {name},
-		"password":      {"123"},
-	}
-	resp, err := http.PostForm(config.GetOAuthURL()+"/token", formData)
+	p := &player{Name: name}
+	str, _ := json.Marshal(p)
+	resp, err := http.Post(config.GetGameURL()+"/api/user/register", 
+		"application/json", 
+		bytes.NewBuffer(str))
 	if err != nil {
 		log.Print("get token")
 		log.Fatalln(err)

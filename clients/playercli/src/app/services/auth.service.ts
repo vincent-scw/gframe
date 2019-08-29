@@ -32,8 +32,8 @@ export class AuthService {
 		axios.post(`${env.gameSvc}/api/user/register`, data)
 			.then(res => { 
         console.log(res);
-        localStorage.setItem('access_token', res.data.token);
-        const decoded: any = jwt.default(res.data.token);
+        localStorage.setItem('access_token', res.data.access_token);
+        const decoded: any = jwt.default(res.data.access_token);
         const user = {
           id: decoded.sub,
           username: decoded.name

@@ -44,10 +44,10 @@ func GetUserFromTokenForWS(ctx iris.Context, status contracts.User_Status) (*con
 
 func toUser(authToken *jwt.Token, status contracts.User_Status) (*contracts.User, error) {
 	if claims, ok := authToken.Claims.(jwt.MapClaims); ok && authToken.Valid {
-		id := claims["id"].(string)
-		sub := claims["sub"].(string)
+		id := claims["sub"].(string)
+		name := claims["name"].(string)
 		// sid
-		return &contracts.User{Id: id, Name: sub, Status: status}, nil
+		return &contracts.User{Id: id, Name: name, Status: status}, nil
 	}
 
 	return nil, errors.New("cannot read info from token")

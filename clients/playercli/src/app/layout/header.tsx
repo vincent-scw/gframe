@@ -18,6 +18,10 @@ export class Header extends React.Component<any, User> {
     })
   }
 
+  componentWillUnmount() {
+    authService.userSubject.unsubscribe();
+  }
+
   render() {
     return (
       <div className="section">

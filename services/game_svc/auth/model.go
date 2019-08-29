@@ -9,15 +9,16 @@ type Player struct {
 	Name string `json:"name"`
 }
 
-// AccessToken entity
-type AccessToken struct {
-	Token string `json:"token"`
+// Token entity
+type Token struct {
+	AccessToken string `json:"access_token"`
+	TokenType   string `json:"token_type"`
 }
 
 // ToToken to token
-func (p *Player) ToToken() *AccessToken {
+func (p *Player) ToToken() *Token {
 	guid := xid.New()
 	token, _ := generateJwtToken(guid.String(), p.Name)
-	return &AccessToken{Token: token}
+	return &Token{AccessToken: token, TokenType: "Bearer"}
 }
 
