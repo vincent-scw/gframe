@@ -54,6 +54,6 @@ func (handler *receptionHandler) Handle(message *sarama.ConsumerMessage) bool {
 
 func onFormedGroup(value []byte, g *g.Group) {
 	redisCli := singleton.GetRedisClient()
-	redisCli.SetCache(fmt.Sprintf(redisctl.GROUP_FORMAT, "1", g.ID), string(value), 0)
+	redisCli.SetCache(fmt.Sprintf(redisctl.GroupFormat, "1", g.ID), string(value), 30*60*1000)
 	redisCli.Publish(c.GroupChannel, string(value))
 }

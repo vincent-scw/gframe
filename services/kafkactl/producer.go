@@ -9,7 +9,7 @@ import (
 
 // Producer is the kafka message producer
 type Producer struct {
-	syncProducer sarama.SyncProducer
+	syncProducer  sarama.SyncProducer
 	topicSettings KafkaTopic
 }
 
@@ -24,14 +24,14 @@ func NewProducer(brokers []string, topic KafkaTopic) (*Producer, error) {
 	config.Producer.RequiredAcks = sarama.WaitForAll
 	config.Producer.Retry.Max = 3
 	config.Producer.Return.Successes = true
-    config.Producer.Return.Errors = true
+	config.Producer.Return.Errors = true
 	if topic.strategy == hash {
 		config.Producer.Partitioner = sarama.NewHashPartitioner
 	}
 
 	kp, err := sarama.NewSyncProducer(brokers, config)
 	p := &Producer{
-		syncProducer: kp,
+		syncProducer:  kp,
 		topicSettings: topic,
 	}
 
@@ -55,7 +55,7 @@ func (p *Producer) Emit(model KeyDef) (err error) {
 	_, _, err = p.syncProducer.SendMessage(msg)
 
 	if err == nil {
-		log.Println("send to kafka succeed: %s", string(value))
+		log.Printf("send to kafka succeed: %s", string(value))
 	} else {
 		log.Fatalf("error talk to kafka: %v", err)
 	}

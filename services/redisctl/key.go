@@ -1,5 +1,6 @@
 package redisctl
 
 const (
-	GROUP_FORMAT = "GFRAME_%s_GROUP_%s"
+	// GroupFormat is the key format
+	GroupFormat = "GF_%s_G_%s"
 )
