@@ -1,9 +1,11 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
+	"log"
+
+	"github.com/Shopify/sarama"
 
 	g "github.com/vincent-scw/gframe/broker_svc/game"
 	"github.com/vincent-scw/gframe/broker_svc/singleton"
@@ -27,22 +29,27 @@ func newReceptionHandler() *receptionHandler {
 	return handler
 }
 
-func (handler *receptionHandler) Checkin(ctx context.Context, user *c.User) (*c.ReceptionResponse, error) {
+func (handler *receptionHandler) Handle(message *sarama.ConsumerMessage) bool {
 	// Send to Redis pub/sub
-	b, _ := json.Marshal(user)
-	go singleton.GetRedisClient().Publish(c.PlayerChannel, string(b))
-	// Add to group
-	result := handler.matching.AddToGroup(*user)
-	return &c.ReceptionResponse{Acknowledged: result}, nil
-}
+	go singleton.GetRedisClient().Publish(c.PlayerChannel, string(message.Value))
 
-func (handler *receptionHandler) Checkout(ctx context.Context, user *c.User) (*c.ReceptionResponse, error) {
-	// Send to Redis pub/sub
-	b, _ := json.Marshal(user)
-	go singleton.GetRedisClient().Publish(c.PlayerChannel, string(b))
+	event := &c.User{}
+	err := json.Unmarshal(message.Value, event)
+	if err != nil {
+		log.Println("Unable to unmarshal to UserEvent from Kafka message.")
+		return false
+	}
 
-	// TODO: inform 
-	return &c.ReceptionResponse{Acknowledged: true}, nil
+	switch event.Status {
+	case c.User_In:
+		return handler.matching.AddToGroup(*event)
+	case c.User_Out:
+		break
+	default:
+		log.Println("Not supported Kafka message.")
+		return false
+	}
+	return true
 }
 
 func onFormedGroup(value []byte, g *g.Group) {
