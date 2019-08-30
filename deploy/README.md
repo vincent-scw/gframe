@@ -24,7 +24,7 @@
   - In the deployment, it contains 2 kafka brokers
   - After deployment, run `kubectl get pods -n infra`. Then find and copy a kafka pod like `kafka-1-deployment-{id}`
   - Get into the pod as `kubectl exec -it kafka-1-deployment-{id} -n infra /bin/bash`
-  - Create topic by `kafka-topics.sh --create --zookeeper zookeeper-svc:2181 --replication-factor 1 --partitions 2 --topic player`
+  - Create topic by `kafka-topics.sh --create --zookeeper zookeeper-svc:2181 --replication-factor 1 --partitions 2 --topic player --config retention.ms=1800000`
   - Confirm `Created topic player.`
 - Deploy [Nginx](https://www.nginx.com/) to Kubernetes
   - Create a static IP, reference to https://docs.microsoft.com/en-us/azure/aks/static-ip

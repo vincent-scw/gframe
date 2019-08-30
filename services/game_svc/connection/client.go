@@ -35,7 +35,9 @@ type Client struct {
 func (c *Client) writePump() {
 	for {
 		message := <-c.send
-		c.conn.Write(websocket.Message{Namespace: "default", Event: string(message.Type), Body: message.Content})
+		if !c.conn.IsClosed() {
+			c.conn.Write(websocket.Message{Namespace: "default", Event: string(message.Type), Body: message.Content})
+		}
 	}
 }
 
