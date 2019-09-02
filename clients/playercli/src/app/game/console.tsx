@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { gameService } from '../services';
 import { Subscription } from 'rxjs';
+import { GroupFormed } from '../services/server-events.model';
 
 interface ConsoleState {
   latestMsg: string;
 }
 
 export class Console extends React.Component<any, ConsoleState> {
-  msgSub: Subscription | null = null;
+  groupSub: Subscription | null = null;
 
   constructor(props: any) {
     super(props);
@@ -15,14 +16,25 @@ export class Console extends React.Component<any, ConsoleState> {
   }
 
   componentDidMount() {
-    this.msgSub = gameService.onMsg.subscribe(msg => {
-      this.setState({latestMsg: msg});
+    this.groupSub = gameService.onGroup.subscribe(e => {
+      if (e != null) {
+        switch (e.status)
+        {
+          case GroupFormed:
+            let opponents = gameService.opponents.map(x => x.name);
+            this.setState({latestMsg: 
+              `Game start. Your opponent(s) is/are ${opponents.join(', ')}`});
+            break;
+          default:
+            break;
+        }
+      }
     });
   }
 
   componentWillUnmount() {
-    if (!!this.msgSub)
-      this.msgSub.unsubscribe();
+    if (!!this.groupSub)
+      this.groupSub.unsubscribe();
   }
 
   render() {

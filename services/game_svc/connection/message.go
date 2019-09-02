@@ -4,10 +4,12 @@ package connection
 type EventType string
 
 const (
-	// Common message
-	Common EventType = "common"
-	// Gaming message
-	Gaming EventType = "gaming"
+	// Group message
+	Group EventType = "group"
+	// Player message
+	Player EventType = "player"
+	// Game message
+	Game EventType = "game"
 )
 
 // Message struct

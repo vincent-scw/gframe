@@ -1,10 +1,18 @@
 import { BehaviorSubject } from 'rxjs';
 import * as neffos from 'neffos.js';
 import { authService, env } from '../services';
+import { GroupEvent, Player } from './server-events.model';
 
 export class GameService {
   private wsConn: neffos.Conn | null = null;
-  onMsg = new BehaviorSubject<string>('');
+  onGroup = new BehaviorSubject<GroupEvent | null>(null);
+  onPlayer = new BehaviorSubject<null>(null);
+  onGame = new BehaviorSubject<null>(null);
+
+  private _opponents: Player[] = [];
+  get opponents(): Player[] {
+    return this._opponents;
+  }
 
   async startListening() {
     try {
@@ -19,9 +27,20 @@ export class GameService {
           _OnNamespaceDisconnect: (nsConn: neffos.NSConn, msg: neffos.Message) => {
             console.log("disconnected from namespace: " + msg.Namespace);
           },
-          common: (nsConn: neffos.NSConn, msg: neffos.Message) => {
+          group: (nsConn: neffos.NSConn, msg: neffos.Message) => {
             console.log(msg.Body);
-            this.onMsg.next(msg.Body);
+            // Extract opponents
+            let ge = JSON.parse(msg.Body) as GroupEvent;
+            this._opponents = ge.players.filter(x => x.id !== authService.user.id);
+            this.onGroup.next(ge);
+          },
+          player: (nsConn: neffos.NSConn, msg: neffos.Message) => {
+            console.log(msg.Body);
+            this.onPlayer.next(JSON.parse(msg.Body));
+          },
+          game: (nsConn: neffos.NSConn, msg: neffos.Message) => {
+            console.log(msg.Body);
+            this.onGame.next(JSON.parse(msg.Body));
           }
         }
       }, { // optional.

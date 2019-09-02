@@ -3,8 +3,14 @@ import axios from 'axios';
 import * as jwt from 'jwt-decode';
 import {env} from '../services';
 
+export interface User {
+  id: string;
+  name: string;
+}
+
 export class AuthService {
-  userSubject = new BehaviorSubject(JSON.parse(localStorage.getItem("user") as string));
+  userSubject = new BehaviorSubject<User | null>(
+    JSON.parse(localStorage.getItem("user") as string));
 
   get accessToken() {
     return localStorage.getItem('access_token');
@@ -17,7 +23,7 @@ export class AuthService {
     return Date.now() < decoded.exp * 1000;
   }
 
-  get user() {
+  get user(): User {
     const userStr = localStorage.getItem('user');
     return userStr && JSON.parse(userStr);
   }
@@ -36,7 +42,7 @@ export class AuthService {
         const decoded: any = jwt.default(res.data.access_token);
         const user = {
           id: decoded.sub,
-          username: decoded.name
+          name: decoded.name
         };
         localStorage.setItem('user', JSON.stringify(user));
         this.userSubject.next(user);

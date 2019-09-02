@@ -6,7 +6,7 @@ import User from '../account/user.model';
 export class Header extends React.Component<any, User> {
   constructor(props: any) {
     super(props);
-    this.state = { username: authService.user.username };
+    this.state = { username: authService.user.name };
   }
 
   render() {
