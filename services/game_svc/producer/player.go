@@ -31,7 +31,7 @@ func NewPlayerEventProducer() *PlayerEventProducer {
 }
 
 // Emit player to kafka
-func (p *PlayerEventProducer) Emit(user *contracts.User) error {
+func (p *PlayerEventProducer) Emit(user *contracts.UserEvent) error {
 	err := p.kafka.Emit(user); 
 	if err != nil {
 		log.Fatalf("emitting player to kafka error: %v", err)

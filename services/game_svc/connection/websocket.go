@@ -18,9 +18,9 @@ var upgrader = gorilla.Upgrader{
 	CheckOrigin:     func(r *http.Request) bool { return true },
 }
 
-// NewWebsocket returns Websocket Server
-func NewWebsocket(hub *Hub, onConnect func(conn *websocket.Conn, user *contracts.User) error,
-	onDisconnect func(conn *websocket.Conn, user *contracts.User)) *neffos.Server {
+// CreateWebsocket returns Websocket Server
+func CreateWebsocket(hub *Hub, onConnect func(user *contracts.User) error,
+	onDisconnect func(user *contracts.User)) *neffos.Server {
 	serverEvents := websocket.Namespaces{
 		"default": websocket.Events{
 			websocket.OnNamespaceConnected: func(nsConn *websocket.NSConn, msg websocket.Message) error {
@@ -37,6 +37,8 @@ func NewWebsocket(hub *Hub, onConnect func(conn *websocket.Conn, user *contracts
 				return nil
 			},
 			"game": func(nsConn *websocket.NSConn, msg websocket.Message) error {
+				ctx := websocket.GetContext(nsConn.Conn)
+				auth.GetUserFromTokenForWS(ctx)
 				log.Printf("[%s] sent: %s", nsConn, string(msg.Body))
 				return nil
 			},
@@ -54,7 +56,7 @@ func NewWebsocket(hub *Hub, onConnect func(conn *websocket.Conn, user *contracts
 			return err
 		}
 
-		user, err := auth.GetUserFromTokenForWS(ctx, contracts.User_In)
+		user, err := auth.GetUserFromTokenForWS(ctx)
 		if err != nil {
 			return err
 		}
@@ -64,14 +66,14 @@ func NewWebsocket(hub *Hub, onConnect func(conn *websocket.Conn, user *contracts
 		registerNewClient(hub, c, user.Id)
 
 		if onConnect != nil {
-			return onConnect(c, user)
+			return onConnect(user)
 		}
 		return nil
 	}
 
 	srv.OnDisconnect = func(c *websocket.Conn) {
 		ctx := websocket.GetContext(c)
-		user, err := auth.GetUserFromTokenForWS(ctx, contracts.User_Out)
+		user, err := auth.GetUserFromTokenForWS(ctx)
 		if err != nil {
 			log.Println(err)
 			return
@@ -81,7 +83,7 @@ func NewWebsocket(hub *Hub, onConnect func(conn *websocket.Conn, user *contracts
 
 		log.Printf("[%s] disconnected from the server.", c.ID())
 		if onDisconnect != nil {
-			onDisconnect(c, user)
+			onDisconnect(user)
 		}
 	}
 

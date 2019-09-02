@@ -4,20 +4,23 @@ package contracts;
 
 // Handle user reception events
 service UserReception {
-  // User checkin
-  rpc Checkin (User) returns (ReceptionResponse) {}
-  // User checkout
-  rpc Checkout (User) returns (ReceptionResponse) {}
+  // User check
+  rpc Check (UserEvent) returns (ReceptionResponse) {}
 }
 
 message User {
   string id = 1;
   string name = 2;
+}
+
+message UserEvent {
+  User user = 1;
   enum Status {
-    In = 0;
-    Out = 1;
+    None = 0;
+    In = 1;
+    Out = 2;
   }
-  Status  status = 3;
+  Status status = 2;
 }
 
 message ReceptionResponse {

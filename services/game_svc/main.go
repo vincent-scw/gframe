@@ -58,12 +58,12 @@ func main() {
 	})
 
 	hub := connection.NewHub()
-	srv := connection.NewWebsocket(hub, func(conn *websocket.Conn, user *e.User) error {
-		err := playerProducer.Emit(user)
+	srv := connection.CreateWebsocket(hub, func(user *e.User) error {
+		err := playerProducer.Emit(&e.UserEvent{User: user, Status: e.UserEvent_In})
 		return err
 	},
-		func(conn *websocket.Conn, user *e.User) {
-			playerProducer.Emit(user)
+		func(user *e.User) {
+			playerProducer.Emit(&e.UserEvent{User: user, Status: e.UserEvent_Out})
 		})
 	app.Get("/console", auth.WSJwtHandler.Serve, websocket.Handler(srv))
 
@@ -86,19 +86,19 @@ func main() {
 	player.Use(auth.JwtHandler.Serve)
 	{
 		player.Post("/in", func(ctx iris.Context) {
-			user, err := auth.GetUserFromToken(ctx, e.User_In)
+			user, err := auth.GetUserFromToken(ctx)
 			if err != nil {
 				ctx.StatusCode(iris.StatusForbidden)
 			}
-			status := handleUserReception(playerProducer, user)
+			status := handleUserReception(playerProducer, &e.UserEvent{User: user, Status: e.UserEvent_In})
 			ctx.StatusCode(status)
 		})
 		player.Post("/out", func(ctx iris.Context) {
-			user, err := auth.GetUserFromToken(ctx, e.User_Out)
+			user, err := auth.GetUserFromToken(ctx)
 			if err != nil {
 				ctx.StatusCode(iris.StatusForbidden)
 			}
-			status := handleUserReception(playerProducer, user)
+			status := handleUserReception(playerProducer, &e.UserEvent{User: user, Status: e.UserEvent_Out})
 			ctx.StatusCode(status)
 		})
 	}
@@ -120,12 +120,12 @@ func main() {
 	cancel()
 }
 
-func handleUserReception(pep *producer.PlayerEventProducer, user *e.User) int {
+func handleUserReception(pep *producer.PlayerEventProducer, user *e.UserEvent) int {
 	var err error
 	switch user.Status {
-	case e.User_In:
+	case e.UserEvent_In:
 		err = pep.Emit(user)
-	case e.User_Out:
+	case e.UserEvent_Out:
 		err = pep.Emit(user)
 	}
 

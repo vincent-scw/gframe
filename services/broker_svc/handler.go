@@ -33,7 +33,7 @@ func (handler *receptionHandler) Handle(message *sarama.ConsumerMessage) bool {
 	// Send to Redis pub/sub
 	go singleton.GetRedisClient().Publish(c.PlayerChannel, string(message.Value))
 
-	event := &c.User{}
+	event := &c.UserEvent{}
 	err := json.Unmarshal(message.Value, event)
 	if err != nil {
 		log.Println("Unable to unmarshal to UserEvent from Kafka message.")
@@ -41,9 +41,9 @@ func (handler *receptionHandler) Handle(message *sarama.ConsumerMessage) bool {
 	}
 
 	switch event.Status {
-	case c.User_In:
-		return handler.matching.AddToGroup(*event)
-	case c.User_Out:
+	case c.UserEvent_In:
+		return handler.matching.AddToGroup(*event.User)
+	case c.UserEvent_Out:
 		break
 	default:
 		log.Println("Not supported Kafka message.")

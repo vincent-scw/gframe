@@ -1,7 +1,7 @@
 import React from 'react';
 import { gameService, EVENT_GAME } from '../services';
 import { Shape, PlayEvent } from './event.model';
-import { Player } from '../services/server-events.model';
+import { Player, GroupEvent } from '../services/server-events.model';
 
 const smallIconStyle = {
   height: "50px"
@@ -16,7 +16,7 @@ const largeIconStyle = {
 interface CardProps {
   readonly: boolean;
   player: Player;
-  groupId: string;
+  group: GroupEvent | null;
 }
 
 interface CardState {
@@ -37,7 +37,7 @@ export class Card extends React.Component<CardProps, CardState> {
     this.setState({ selectedShape: shape });
     gameService.ask(EVENT_GAME, {
       player: this.props.player, 
-      groupId: this.props.groupId,
+      group: this.props.group,
       shape: shape
     })
   }
