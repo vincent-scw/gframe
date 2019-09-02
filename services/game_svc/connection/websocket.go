@@ -18,31 +18,30 @@ var upgrader = gorilla.Upgrader{
 	CheckOrigin:     func(r *http.Request) bool { return true },
 }
 
-var serverEvents = websocket.Namespaces{
-	"default": websocket.Events{
-		websocket.OnNamespaceConnected: func(nsConn *websocket.NSConn, msg websocket.Message) error {
-			// with `websocket.GetContext` you can retrieve the Iris' `Context`.
-			ctx := websocket.GetContext(nsConn.Conn)
-
-			log.Printf("[%s] connected to namespace [%s] with IP [%s]",
-				nsConn, msg.Namespace,
-				ctx.RemoteAddr())
-			return nil
-		},
-		websocket.OnNamespaceDisconnect: func(nsConn *websocket.NSConn, msg websocket.Message) error {
-			log.Printf("[%s] disconnected from namespace [%s]", nsConn, msg.Namespace)
-			return nil
-		},
-		"console": func(nsConn *websocket.NSConn, msg websocket.Message) error {
-			log.Printf("[%s] sent: %s", nsConn, string(msg.Body))
-			return nil
-		},
-	},
-}
-
 // NewWebsocket returns Websocket Server
 func NewWebsocket(hub *Hub, onConnect func(conn *websocket.Conn, user *contracts.User) error,
 	onDisconnect func(conn *websocket.Conn, user *contracts.User)) *neffos.Server {
+	serverEvents := websocket.Namespaces{
+		"default": websocket.Events{
+			websocket.OnNamespaceConnected: func(nsConn *websocket.NSConn, msg websocket.Message) error {
+				// with `websocket.GetContext` you can retrieve the Iris' `Context`.
+				ctx := websocket.GetContext(nsConn.Conn)
+
+				log.Printf("[%s] connected to namespace [%s] with IP [%s]",
+					nsConn, msg.Namespace,
+					ctx.RemoteAddr())
+				return nil
+			},
+			websocket.OnNamespaceDisconnect: func(nsConn *websocket.NSConn, msg websocket.Message) error {
+				log.Printf("[%s] disconnected from namespace [%s]", nsConn, msg.Namespace)
+				return nil
+			},
+			"game": func(nsConn *websocket.NSConn, msg websocket.Message) error {
+				log.Printf("[%s] sent: %s", nsConn, string(msg.Body))
+				return nil
+			},
+		},
+	}
 
 	srv := websocket.New(
 		websocket.GorillaUpgrader(upgrader),
@@ -77,7 +76,7 @@ func NewWebsocket(hub *Hub, onConnect func(conn *websocket.Conn, user *contracts
 			log.Println(err)
 			return
 		}
-		
+
 		unregisterClient(hub, user.Id)
 
 		log.Printf("[%s] disconnected from the server.", c.ID())

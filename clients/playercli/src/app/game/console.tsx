@@ -12,7 +12,7 @@ export class Console extends React.Component<any, ConsoleState> {
 
   constructor(props: any) {
     super(props);
-    this.state = { latestMsg: '' };
+    this.state = { latestMsg: 'Waiting for your opponent(s)...' };
   }
 
   componentDidMount() {

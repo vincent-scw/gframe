@@ -11,4 +11,6 @@ export {gameService};
 const env = new environment();
 export {env};
 
-export const EVENT_PLAY: string = "EVENT_PLAY";
+export const EVENT_GAME: string = "game";
+export const EVENT_GROUP: string = "group";
+export const EVENT_PLAYER: string = "player";
