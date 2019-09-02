@@ -36,9 +36,11 @@ export class Card extends React.Component<CardProps, CardState> {
     if (this.props.readonly) return;
     this.setState({ selectedShape: shape });
     gameService.ask(EVENT_GAME, {
-      player: this.props.player, 
-      group: this.props.group,
-      shape: shape
+      play: {
+        player: this.props.player, 
+        shape: shape
+      },
+      group: this.props.group
     })
   }
 
