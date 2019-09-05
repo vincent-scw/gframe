@@ -9,20 +9,22 @@ service UserReception {
 }
 
 message User {
-  string id = 1;
-  string name = 2;
+  string ID = 1;
+  string Name = 2;
+}
+
+enum EventType {
+  None  = 0;
+  In    = 1;
+  Out   = 2;
+  Play  = 3;
 }
 
 message UserEvent {
-  User user = 1;
-  enum Status {
-    None = 0;
-    In = 1;
-    Out = 2;
-  }
-  Status status = 2;
+  User User = 1;
+  EventType Type = 2;
 }
 
 message ReceptionResponse {
-  bool acknowledged = 1;
+  bool Acknowledged = 1;
 }

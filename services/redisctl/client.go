@@ -71,6 +71,32 @@ func (cli *RedisClient) GetCache(key string) (string, error) {
 	return v, err
 }
 
+// PushToList use RPush to a redis list
+func (cli *RedisClient) PushToList(key string, values ...interface{}) {
+	err := cli.redisdb.RPush(key, values).Err()
+	if err != nil {
+		log.Printf("Push to list error %v", err)
+	}
+}
+
+// GetAllFromList pops from redis list
+func (cli *RedisClient) GetAllFromList(key string) []string {
+	result, err := cli.redisdb.LRange(key, 0, cli.GetListLength(key)).Result()
+	if err != nil {
+		log.Printf("Pop from list error %v", err)
+	}
+	return result
+}
+
+// GetListLength returns the length of redis list
+func (cli *RedisClient) GetListLength(key string) int64 {
+	length, err := cli.redisdb.LLen(key).Result()
+	if err != nil {
+		log.Printf("Get length from list error %v", err)
+	}
+	return length
+}
+
 // Close releases resources
 func (cli *RedisClient) Close() {
 	if err := cli.redisdb.Close(); err != nil {

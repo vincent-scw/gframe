@@ -35,7 +35,7 @@ func (sub *GroupSubscriber) handleGroup(msg string) string {
 	case c.GroupFormed:
 		for _, p := range event.Players {
 			// try send to player client
-			sub.hub.SendToClient(p.Id, conn.NewMessage(conn.Group, []byte(msg)))
+			sub.hub.SendToClient(p.ID, conn.NewMessage(conn.Group, []byte(msg)))
 		}
 	default:
 		break

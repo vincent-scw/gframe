@@ -15,7 +15,7 @@ type Producer struct {
 
 // KeyDef is key definition
 type KeyDef interface {
-	GetId() string
+	GetID() string
 }
 
 // NewProducer returns a new producer
@@ -40,7 +40,7 @@ func NewProducer(brokers []string, topic KafkaTopic) (*Producer, error) {
 
 // Emit sends a message to kafka
 func (p *Producer) Emit(model KeyDef) (err error) {
-	key := model.GetId()
+	key := model.GetID()
 	value, err := json.Marshal(model)
 	if err != nil {
 		return

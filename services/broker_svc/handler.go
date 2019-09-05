@@ -54,6 +54,9 @@ func (handler *receptionHandler) Handle(message *sarama.ConsumerMessage) bool {
 
 func onFormedGroup(value []byte, g *g.Group) {
 	redisCli := singleton.GetRedisClient()
+	// store to cache
 	redisCli.SetCache(fmt.Sprintf(redisctl.GroupFormat, "1", g.ID), string(value), 30*60*1000)
+	// publish to clients
 	redisCli.Publish(c.GroupChannel, string(value))
+	// start to wait for player interaction
 }
