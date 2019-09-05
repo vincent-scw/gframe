@@ -15,7 +15,7 @@ import (
 	"github.com/kataras/iris/websocket"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
-	e "github.com/vincent-scw/gframe/contracts"
+	c "github.com/vincent-scw/gframe/contracts"
 	"github.com/vincent-scw/gframe/game_svc/auth"
 	"github.com/vincent-scw/gframe/game_svc/config"
 	"github.com/vincent-scw/gframe/game_svc/connection"
@@ -58,12 +58,12 @@ func main() {
 	})
 
 	hub := connection.NewHub()
-	srv := connection.CreateWebsocket(hub, func(user *e.User) error {
-		err := playerProducer.Emit(&e.UserEvent{User: user, Status: e.UserEvent_In})
+	srv := connection.CreateWebsocket(hub, func(user *c.User) error {
+		err := playerProducer.Emit(&c.UserEvent{User: user, Type: c.EventType_In})
 		return err
 	},
-		func(user *e.User) {
-			playerProducer.Emit(&e.UserEvent{User: user, Status: e.UserEvent_Out})
+		func(user *c.User) {
+			playerProducer.Emit(&c.UserEvent{User: user, Type: c.EventType_Out})
 		})
 	app.Get("/console", auth.WSJwtHandler.Serve, websocket.Handler(srv))
 
@@ -90,7 +90,8 @@ func main() {
 			if err != nil {
 				ctx.StatusCode(iris.StatusForbidden)
 			}
-			status := handleUserReception(playerProducer, &e.UserEvent{User: user, Status: e.UserEvent_In})
+			status := handleUserReception(playerProducer, 
+				&c.UserEvent{User: user, Type: c.EventType_In})
 			ctx.StatusCode(status)
 		})
 		player.Post("/out", func(ctx iris.Context) {
@@ -98,7 +99,8 @@ func main() {
 			if err != nil {
 				ctx.StatusCode(iris.StatusForbidden)
 			}
-			status := handleUserReception(playerProducer, &e.UserEvent{User: user, Status: e.UserEvent_Out})
+			status := handleUserReception(playerProducer, 
+				&c.UserEvent{User: user, Type: c.EventType_Out})
 			ctx.StatusCode(status)
 		})
 	}
@@ -120,12 +122,12 @@ func main() {
 	cancel()
 }
 
-func handleUserReception(pep *producer.PlayerEventProducer, user *e.UserEvent) int {
+func handleUserReception(pep *producer.PlayerEventProducer, user *c.UserEvent) int {
 	var err error
-	switch user.Status {
-	case e.UserEvent_In:
+	switch user.Type {
+	case c.EventType_In:
 		err = pep.Emit(user)
-	case e.UserEvent_Out:
+	case c.EventType_Out:
 		err = pep.Emit(user)
 	}
 

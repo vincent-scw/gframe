@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package contracts;
 
+import "contracts/enum.proto";
+
 // Handle user reception events
 service UserReception {
   // User check
@@ -11,13 +13,6 @@ service UserReception {
 message User {
   string ID = 1;
   string Name = 2;
-}
-
-enum EventType {
-  None  = 0;
-  In    = 1;
-  Out   = 2;
-  Play  = 3;
 }
 
 message UserEvent {
