@@ -11,13 +11,13 @@ service UserReception {
 }
 
 message User {
-  string ID = 1;
-  string Name = 2;
+  string id = 1;
+  string name = 2;
 }
 
 message UserEvent {
-  User User = 1;
-  EventType Type = 2;
+  User user = 1;
+  EventType type = 2;
 }
 
 message ReceptionResponse {

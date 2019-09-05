@@ -64,7 +64,7 @@ func (m *Matching) groupFormed() {
 	g := m.formingGroup
 	if g != nil && len(g.Players) > 1 {
 		g.Status = c.GroupStatus_Formed
-		m.Groups[g.ID] = g
+		m.Groups[g.Id] = g
 		// Event out
 		if m.Formed != nil {
 			m.Formed(g)
@@ -75,7 +75,7 @@ func (m *Matching) groupFormed() {
 
 func newGroup(groupSize int) *Group {
 	id := xid.New().String()
-	g := Group{GroupInfo: c.GroupInfo{ID: id, Status: c.GroupStatus_Forming}}
+	g := Group{GroupInfo: c.GroupInfo{Id: id, Status: c.GroupStatus_Forming}}
 	g.userChan = make(chan c.User)
 	g.killChan = make(chan struct{})
 

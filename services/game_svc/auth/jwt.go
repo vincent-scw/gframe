@@ -47,7 +47,7 @@ func toUser(authToken *jwt.Token) (*contracts.User, error) {
 		id := claims["sub"].(string)
 		name := claims["name"].(string)
 		// sid
-		return &contracts.User{ID: id, Name: name}, nil
+		return &contracts.User{Id: id, Name: name}, nil
 	}
 
 	return nil, errors.New("cannot read info from token")
