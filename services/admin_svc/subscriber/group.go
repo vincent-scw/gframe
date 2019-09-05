@@ -12,27 +12,27 @@ import (
 
 // SubscribeGroup subscribes group channel
 func SubscribeGroup(client *r.RedisClient, foo func(formattedMsg string) string) {
-	client.Subscribe(r.GroupChannel, handleGroup, foo)
-}
+	client.Subscribe(r.GroupChannel, func(msg string) string {
+		event := &e.GroupInfo{}
+		err := json.Unmarshal([]byte(msg), event)
+		if err != nil {
+			log.Fatal(err)
+		}
 
-func handleGroup(msg string) string {
-	event := &e.GroupInfo{}
-	err := json.Unmarshal([]byte(msg), event)
-	if err != nil {
-		log.Fatal(err)
-	}
+		var formatted string
+		switch event.Status {
+		case e.GroupStatus_Formed:
+			formatted = withTime(fmt.Sprintf(
+				"Group %s (total: %d) has been formed with players %s.",
+				withColor(event.Id, yellow),
+				client.Increment(r.GroupCountFormat),
+				withColor(playersToString(event.Players), yellow)))
+		default:
+			formatted = msg
+		}
 
-	var formatted string
-	switch event.Status {
-	case e.GroupStatus_Formed:
-		formatted = withTime(fmt.Sprintf(
-			"Group %s has been formed with players %s.",
-			withColor(event.Id, yellow), withColor(playersToString(event.Players), yellow)))
-	default:
-		formatted = msg
-	}
-
-	return formatted
+		return formatted
+	}, foo)
 }
 
 func playersToString(players []*e.User) string {

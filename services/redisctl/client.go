@@ -71,6 +71,24 @@ func (cli *RedisClient) GetCache(key string) (string, error) {
 	return v, err
 }
 
+// Increment a integer value
+func (cli *RedisClient) Increment(key string) int64 {
+	result, err := cli.redisdb.Incr(key).Result()
+	if err != nil {
+		log.Printf("Increment error %v", err)
+	}
+	return result
+}
+
+// Decrement a integer value
+func (cli *RedisClient) Decrement(key string) int64 {
+	result, err := cli.redisdb.Decr(key).Result()
+	if err != nil {
+		log.Printf("Decrement error %v", err)
+	}
+	return result
+}
+
 // PushToList use RPush to a redis list
 func (cli *RedisClient) PushToList(key string, values ...interface{}) {
 	err := cli.redisdb.RPush(key, values).Err()

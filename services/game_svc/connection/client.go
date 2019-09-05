@@ -1,6 +1,7 @@
 package connection
 
 import (
+	"log"
 	"time"
 
 	"github.com/kataras/iris/websocket"
@@ -36,6 +37,7 @@ func (c *Client) writePump() {
 	for {
 		message := <-c.send
 		if !c.conn.IsClosed() {
+			log.Printf("send msg to %s: %s", c.ID, string(message.Content))
 			c.conn.Write(websocket.Message{Namespace: "default", Event: string(message.Type), Body: message.Content})
 		}
 	}
