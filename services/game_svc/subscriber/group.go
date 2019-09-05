@@ -21,7 +21,7 @@ func NewGroupSubscriber(hub *conn.Hub) *GroupSubscriber {
 }
 
 func (sub *GroupSubscriber) subscribe(client *r.RedisClient) {
-	client.Subscribe(c.GroupChannel, sub.handleGroup)
+	client.Subscribe(r.GroupChannel, sub.handleGroup)
 }
 
 func (sub *GroupSubscriber) handleGroup(msg string) string {
@@ -32,7 +32,7 @@ func (sub *GroupSubscriber) handleGroup(msg string) string {
 	}
 
 	switch event.Status {
-	case c.GroupFormed:
+	case c.GroupStatus_Formed:
 		for _, p := range event.Players {
 			// try send to player client
 			sub.hub.SendToClient(p.ID, conn.NewMessage(conn.Group, []byte(msg)))

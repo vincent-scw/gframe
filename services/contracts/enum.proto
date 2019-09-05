@@ -3,8 +3,15 @@ syntax = "proto3";
 package contracts;
 
 enum EventType {
-  None  = 0;
+  EventNone  = 0;
   In    = 1;
   Out   = 2;
   Play  = 3;
+}
+
+enum GroupStatus {
+  GroupNone = 0;
+  Forming   = 1;
+  Formed    = 2;
+  Closed    = 3;
 }

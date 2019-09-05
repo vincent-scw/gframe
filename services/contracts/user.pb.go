@@ -115,7 +115,7 @@ func (m *UserEvent) GetType() EventType {
 	if m != nil {
 		return m.Type
 	}
-	return EventType_None
+	return EventType_EventNone
 }
 
 type ReceptionResponse struct {

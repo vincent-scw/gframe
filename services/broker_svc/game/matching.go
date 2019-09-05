@@ -2,10 +2,10 @@ package game
 
 import (
 	"time"
-	
+
 	"github.com/rs/xid"
 
-	e "github.com/vincent-scw/gframe/contracts"
+	c "github.com/vincent-scw/gframe/contracts"
 )
 
 // GroupFormed event
@@ -13,8 +13,8 @@ type GroupFormed func(formed *Group)
 
 // Group represents a group of players
 type Group struct {
-	e.GroupInfo
-	userChan chan e.User
+	c.GroupInfo
+	userChan chan c.User
 	killChan chan struct{}
 }
 
@@ -44,7 +44,7 @@ func NewMatching(groupSize int, maxGroupCount int, timeoutInSeconds int) *Matchi
 }
 
 // AddToGroup adds a player to group
-func (m *Matching) AddToGroup(player e.User) bool {
+func (m *Matching) AddToGroup(player c.User) bool {
 	m.prepareFormingGroup()
 	if m.formingGroup == nil {
 		return false
@@ -63,7 +63,7 @@ func (m *Matching) prepareFormingGroup() {
 func (m *Matching) groupFormed() {
 	g := m.formingGroup
 	if g != nil && len(g.Players) > 1 {
-		g.Status = e.GroupFormed
+		g.Status = c.GroupStatus_Formed
 		m.Groups[g.ID] = g
 		// Event out
 		if m.Formed != nil {
@@ -75,8 +75,8 @@ func (m *Matching) groupFormed() {
 
 func newGroup(groupSize int) *Group {
 	id := xid.New().String()
-	g := Group{GroupInfo: e.GroupInfo{ID: id, Status: e.GroupForming}}
-	g.userChan = make(chan e.User)
+	g := Group{GroupInfo: c.GroupInfo{ID: id, Status: c.GroupStatus_Forming}}
+	g.userChan = make(chan c.User)
 	g.killChan = make(chan struct{})
 
 	return &g
@@ -91,7 +91,7 @@ func (g *Group) formGroup(m *Matching) {
 			m.groupFormed()
 		case u := <-g.userChan:
 			if len(g.Players) < m.GroupSize {
-				g.Players = append(g.Players, u)
+				g.Players = append(g.Players, &u)
 				if len(g.Players) == m.GroupSize {
 					m.groupFormed()
 				}
@@ -107,4 +107,3 @@ func (g *Group) closeChan() {
 	close(g.userChan)
 	close(g.killChan)
 }
-

@@ -31,7 +31,7 @@ func newReceptionHandler() *receptionHandler {
 
 func (handler *receptionHandler) Handle(message *sarama.ConsumerMessage) bool {
 	// Send to Redis pub/sub
-	go singleton.GetRedisClient().Publish(c.PlayerChannel, string(message.Value))
+	go singleton.GetRedisClient().Publish(redisctl.PlayerChannel, string(message.Value))
 
 	event := &c.UserEvent{}
 	err := json.Unmarshal(message.Value, event)
@@ -40,10 +40,10 @@ func (handler *receptionHandler) Handle(message *sarama.ConsumerMessage) bool {
 		return false
 	}
 
-	switch event.Status {
-	case c.UserEvent_In:
+	switch event.Type {
+	case c.EventType_In:
 		return handler.matching.AddToGroup(*event.User)
-	case c.UserEvent_Out:
+	case c.EventType_Out:
 		break
 	default:
 		log.Println("Not supported Kafka message.")
@@ -57,6 +57,6 @@ func onFormedGroup(value []byte, g *g.Group) {
 	// store to cache
 	redisCli.SetCache(fmt.Sprintf(redisctl.GroupFormat, "1", g.ID), string(value), 30*60*1000)
 	// publish to clients
-	redisCli.Publish(c.GroupChannel, string(value))
+	redisCli.Publish(redisctl.GroupChannel, string(value))
 	// start to wait for player interaction
 }

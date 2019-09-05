@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package contracts;
+
+import "contracts/enum.proto";
+import "contracts/user.proto";
+
+message GroupInfo {
+  string ID = 1;
+  repeated User Players = 2;
+  GroupStatus Status = 3;
+}
