@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package contracts;
 
+import "contracts/enum.proto";
 import "contracts/user.proto";
 import "contracts/group.proto";
 
@@ -17,7 +18,13 @@ message Playing {
   Shape shape = 2;
 }
 
-message Game {
+message GameEvent {
   Playing play = 1;
   GroupInfo group = 2;
+  EventType type = 3;
+}
+
+message Result {
+  repeated Playing plays = 1;
+  int32 winner = 2;
 }

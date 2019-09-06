@@ -4,7 +4,6 @@ import (
 	"log"
 	"time"
 
-	"github.com/vincent-scw/gframe/contracts"
 	k "github.com/vincent-scw/gframe/kafkactl"
 	"github.com/vincent-scw/gframe/util"
 
@@ -31,8 +30,8 @@ func NewPlayerEventProducer() *PlayerEventProducer {
 }
 
 // Emit player to kafka
-func (p *PlayerEventProducer) Emit(user *contracts.UserEvent) error {
-	err := p.kafka.Emit(user); 
+func (p *PlayerEventProducer) Emit(msg k.KeyDef) error {
+	err := p.kafka.Emit(msg); 
 	if err != nil {
 		log.Fatalf("emitting player to kafka error: %v", err)
 	}
