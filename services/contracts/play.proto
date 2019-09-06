@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package contracts;
+
+import "contracts/user.proto";
+import "contracts/group.proto";
+
+enum Shape {
+  ShapeNone = 0;
+  Rock = 1;
+  Paper = 2;
+  Scissors = 3;
+}
+
+message Playing {
+  User player = 1;
+  Shape shape = 2;
+}
+
+message Game {
+  Playing play = 1;
+  GroupInfo group = 2;
+}
