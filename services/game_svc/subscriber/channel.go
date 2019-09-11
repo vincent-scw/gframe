@@ -2,7 +2,7 @@ package subscriber
 
 import (
 	r "github.com/vincent-scw/gframe/redisctl"
-	"github.com/vincent-scw/gframe/game_svc/config"
+	"github.com/vincent-scw/gframe/game_svc/singleton"
 )
 
 // ChannelSubscriber interface
@@ -19,7 +19,7 @@ type ChannelSubscribers struct {
 // NewChannelSubscribers listens from Redis channels
 func NewChannelSubscribers(subs ...ChannelSubscriber) *ChannelSubscribers {
 	sub := ChannelSubscribers{ 
-		client: r.NewRedisClient(config.GetRedisServer()),
+		client: singleton.GetRedisClient(),
 		subscribers: subs,
 	}
 	

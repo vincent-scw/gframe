@@ -7,6 +7,9 @@ import (
 
 	c "github.com/vincent-scw/gframe/contracts"
 	r "github.com/vincent-scw/gframe/redisctl"
+	u "github.com/vincent-scw/gframe/util"
+
+	"github.com/vincent-scw/gframe/game_svc/singleton"
 )
 
 // Service is service
@@ -15,8 +18,8 @@ type Service struct {
 }
 
 // NewService returns game service
-func NewService(redis *r.RedisClient) *Service {
-	svc := Service{redisClient: redis}
+func NewService() *Service {
+	svc := Service{redisClient: singleton.GetRedisClient()}
 	return &svc
 }
 
@@ -24,13 +27,15 @@ func NewService(redis *r.RedisClient) *Service {
 func (svc *Service) Play(game *c.GameEvent) {
 	gameKey := fmt.Sprintf(r.GameEventFormat, game.Group.Id)
 	countKey := fmt.Sprintf(r.GameEventCountFormat, game.Group.Id)
-	svc.redisClient.PushToList(gameKey, game.Play)
+	svc.redisClient.PushToList(gameKey, string(u.ToJSON(game.Play)))
 	count := svc.redisClient.Increment(countKey)
 	// TODO: get 2 play, shall be configurable
 	if count == 2 {
 		list := svc.redisClient.GetAllFromList(gameKey)
 		plays := toPlayingList(list)
-		_ = judge(plays)
+		result := judge(plays)
+		resultStr, _ := json.Marshal(result)
+		svc.redisClient.Publish(r.GameChannel, string(resultStr))
 	}
 }
 

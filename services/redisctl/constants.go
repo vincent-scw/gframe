@@ -15,5 +15,7 @@ const (
 	// GroupChannel Redis channel
 	GroupChannel = "group_chan"
 	// PlayerChannel Redis channel
-	PlayerChannel = "player_chann"
+	PlayerChannel = "player_chan"
+	// GameChannel Redis channel
+	GameChannel = "game_chan"
 )

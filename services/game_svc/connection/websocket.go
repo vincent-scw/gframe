@@ -1,6 +1,7 @@
 package connection
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 
@@ -10,6 +11,7 @@ import (
 
 	"github.com/vincent-scw/gframe/contracts"
 	"github.com/vincent-scw/gframe/game_svc/auth"
+	"github.com/vincent-scw/gframe/game_svc/game"
 )
 
 var upgrader = gorilla.Upgrader{
@@ -21,6 +23,7 @@ var upgrader = gorilla.Upgrader{
 // CreateWebsocket returns Websocket Server
 func CreateWebsocket(hub *Hub, onConnect func(user *contracts.User) error,
 	onDisconnect func(user *contracts.User)) *neffos.Server {
+	gameSvc := game.NewService()
 	serverEvents := websocket.Namespaces{
 		"default": websocket.Events{
 			websocket.OnNamespaceConnected: func(nsConn *websocket.NSConn, msg websocket.Message) error {
@@ -37,9 +40,13 @@ func CreateWebsocket(hub *Hub, onConnect func(user *contracts.User) error,
 				return nil
 			},
 			"game": func(nsConn *websocket.NSConn, msg websocket.Message) error {
-				ctx := websocket.GetContext(nsConn.Conn)
-				auth.GetUserFromTokenForWS(ctx)
+				//ctx := websocket.GetContext(nsConn.Conn)
+				//auth.GetUserFromTokenForWS(ctx)
 				log.Printf("[%s] sent: %s", nsConn, string(msg.Body))
+				gameEvent := &contracts.GameEvent{}
+				json.Unmarshal(msg.Body, gameEvent)
+				gameEvent.Type = contracts.EventType_Play
+				gameSvc.Play(gameEvent)
 				return nil
 			},
 		},

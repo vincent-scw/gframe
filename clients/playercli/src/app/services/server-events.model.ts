@@ -9,4 +9,4 @@ export interface Player {
   name: string;
 }
 
-export const GroupFormed = 202;
+export const GroupFormed = 2;

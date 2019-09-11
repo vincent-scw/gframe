@@ -90,8 +90,8 @@ func (cli *RedisClient) Decrement(key string) int64 {
 }
 
 // PushToList use RPush to a redis list
-func (cli *RedisClient) PushToList(key string, values ...interface{}) {
-	err := cli.redisdb.RPush(key, values).Err()
+func (cli *RedisClient) PushToList(key string, value string) {
+	err := cli.redisdb.RPush(key, value).Err()
 	if err != nil {
 		log.Printf("Push to list error %v", err)
 	}

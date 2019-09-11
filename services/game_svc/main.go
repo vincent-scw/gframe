@@ -141,6 +141,7 @@ func handleUserReception(pep *producer.PlayerEventProducer, user *c.UserEvent) i
 func startSubscribers(hub *connection.Hub) {
 	subs := subscriber.NewChannelSubscribers(
 		subscriber.NewGroupSubscriber(hub),
+		subscriber.NewPlaySubscriber(hub),
 	)
 	subs.StartSubscribing()
 }
