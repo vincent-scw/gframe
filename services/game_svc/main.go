@@ -51,6 +51,15 @@ func main() {
 		ctx.Writef("Not Found")
 	})
 
+	app.OnErrorCode(iris.StatusInternalServerError, func(ctx iris.Context) {
+        errMessage := ctx.Values().GetString("error")
+        if errMessage != "" {
+            ctx.Writef("Internal server error: %s", errMessage)
+            return
+        }
+        ctx.Writef("(Unexpected) internal server error")
+    })
+
 	app.Get("/metrics", iris.FromStd(promhttp.Handler()))
 
 	app.Get("/health", func(ctx iris.Context) {
@@ -110,7 +119,7 @@ func main() {
 	}
 	app.Get("/swagger/{any:path}", swagger.CustomWrapHandler(swConfig, swaggerFiles.Handler))
 
-	app.Run(iris.Addr(config.GetPort()))
+	app.Run(iris.Addr(config.GetPort()), iris.WithoutInterruptHandler)
 	sigterm := make(chan os.Signal, 1)
 	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)
 	select {

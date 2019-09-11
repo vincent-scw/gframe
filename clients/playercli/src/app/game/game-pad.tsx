@@ -13,6 +13,7 @@ interface GamePadState {
 
 export class GamePad extends React.Component<any, GamePadState> {
   groupSub: Subscription | null = null;
+  connSub: Subscription | null = null;
   
   constructor(prop: any) {
     super(prop);
@@ -23,9 +24,7 @@ export class GamePad extends React.Component<any, GamePadState> {
   }
 
   onStart() {
-    gameService.startListening().then(
-      () => this.setState({ started: true })
-    );
+    gameService.startListening();
   }
 
   componentDidMount() {
@@ -36,11 +35,12 @@ export class GamePad extends React.Component<any, GamePadState> {
         }
       }
     });
+    this.connSub = gameService.connected.subscribe(c => this.setState({started: c}));
   }
 
   componentWillUnmount() {
-    if (!!this.groupSub)
-      this.groupSub.unsubscribe();
+    if (!!this.groupSub) this.groupSub.unsubscribe();
+    if (!!this.connSub) this.connSub.unsubscribe();
   }
 
   render() {

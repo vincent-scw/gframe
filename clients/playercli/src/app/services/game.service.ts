@@ -8,6 +8,7 @@ export class GameService {
   onGroup = new BehaviorSubject<GroupEvent | null>(null);
   onPlayer = new BehaviorSubject<null>(null);
   onGame = new BehaviorSubject<null>(null);
+  connected = new BehaviorSubject<boolean>(false);
 
   private _opponents: Player[] = [];
   get opponents(): Player[] {
@@ -23,9 +24,11 @@ export class GameService {
               console.log("re-connected after " + nsConn.conn.reconnectTries.toString() + " trie(s)");
             }
             console.log("connected to namespace: " + msg.Namespace);
+            this.connected.next(true);
           },
           _OnNamespaceDisconnect: (nsConn: neffos.NSConn, msg: neffos.Message) => {
             console.log("disconnected from namespace: " + msg.Namespace);
+            this.connected.next(false);
           },
           group: (nsConn: neffos.NSConn, msg: neffos.Message) => {
             console.log(msg.Body);
@@ -43,13 +46,7 @@ export class GameService {
             this.onGame.next(JSON.parse(msg.Body));
           }
         }
-      }, { // optional.
-          reconnect: 2000,
-          // set custom headers.
-          headers: {
-            // 'X-Username': 'kataras',
-          }
-        });
+      });
 
       await this.wsConn.connect("default");
     } catch (err) {
