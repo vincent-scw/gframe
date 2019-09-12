@@ -31,7 +31,7 @@ func (sub *PlaySubscriber) handlePlay(msg string) string {
 		log.Fatal(err)
 	}
 
-	for _, p := range event.Plays {
+	for _, p := range event.Moves {
 		// try send to player client
 		sub.hub.SendToClient(p.Player.Id, conn.NewMessage(conn.Game, []byte(msg)))
 	}

@@ -1,7 +1,6 @@
 package game
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 
@@ -27,36 +26,35 @@ func NewService() *Service {
 func (svc *Service) Play(game *c.GameEvent) {
 	gameKey := fmt.Sprintf(r.GameEventFormat, game.Group.Id)
 	countKey := fmt.Sprintf(r.GameEventCountFormat, game.Group.Id)
-	svc.redisClient.PushToList(gameKey, string(u.ToJSON(game.Play)))
+	svc.redisClient.PushToList(gameKey, string(u.ToJSON(game.Move)))
 	count := svc.redisClient.Increment(countKey)
-	// TODO: get 2 play, shall be configurable
+	// TODO: get 2 move, shall be configurable
 	if count == 2 {
 		list := svc.redisClient.GetAllFromList(gameKey)
-		plays := toPlayingList(list)
-		result := judge(plays)
-		resultStr, _ := json.Marshal(result)
-		svc.redisClient.Publish(r.GameChannel, string(resultStr))
+		moves := toMovesList(list)
+		result := judge(moves)
+		svc.redisClient.Publish(r.GameChannel, string(u.ToJSON(result)))
 	}
 }
 
-func toPlayingList(strs []string) []*c.Playing {
-	var ret []*c.Playing
+func toMovesList(strs []string) []*c.Move {
+	var ret []*c.Move
 	for _, g := range strs {
-		p := c.Playing{}
-		json.Unmarshal([]byte(g), &p)
+		p := c.Move{}
+		u.ToModel([]byte(g), &p)
 		ret = append(ret, &p)
 	}
 	return ret
 }
 
-func judge(plays []*c.Playing) *c.Result {
-	if len(plays) != 2 {
+func judge(moves []*c.Move) *c.Result {
+	if len(moves) != 2 {
 		log.Print("wrong round.")
 		return nil
 	}
-	result := c.Result{Plays: plays}
-	p1 := plays[0]
-	p2 := plays[1]
+	result := c.Result{Moves: moves}
+	p1 := moves[0]
+	p2 := moves[1]
 	diff := p1.Shape - p2.Shape
 	if diff == 1 || diff == -2 {
 		// p1 win

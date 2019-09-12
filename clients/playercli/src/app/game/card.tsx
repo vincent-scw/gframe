@@ -1,7 +1,6 @@
 import React from 'react';
 import { gameService, EVENT_GAME } from '../services';
-import { Shape, PlayEvent } from './event.model';
-import { Player, GroupEvent } from '../services/server-events.model';
+import { Shape, Move, Player, GroupEvent } from '../services/events.model';
 
 interface CardProps {
   readonly: boolean;
@@ -28,7 +27,7 @@ export class Card extends React.Component<CardProps, CardState> {
     let ret = gameService.ask(
       EVENT_GAME,
       {
-        play: {
+        move: {
           player: this.props.player,
           shape: shape
         },

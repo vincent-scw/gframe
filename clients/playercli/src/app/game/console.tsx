@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { gameService } from '../services';
 import { Subscription } from 'rxjs';
-import { GroupFormed } from '../services/server-events.model';
+import { GroupFormed } from '../services/events.model';
 
 interface ConsoleState {
   latestMsg: string;
@@ -9,6 +9,7 @@ interface ConsoleState {
 
 export class Console extends React.Component<any, ConsoleState> {
   groupSub: Subscription | null = null;
+  gameSub: Subscription | null = null;
 
   constructor(props: any) {
     super(props);
@@ -30,11 +31,14 @@ export class Console extends React.Component<any, ConsoleState> {
         }
       }
     });
+    this.gameSub = gameService.onGame.subscribe(e => {
+
+    });
   }
 
   componentWillUnmount() {
-    if (!!this.groupSub)
-      this.groupSub.unsubscribe();
+    if (!!this.groupSub) this.groupSub.unsubscribe();
+    if (!!this.gameSub) this.gameSub.unsubscribe();
   }
 
   render() {

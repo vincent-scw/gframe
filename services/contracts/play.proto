@@ -13,18 +13,18 @@ enum Shape {
   Scissors = 3;
 }
 
-message Playing {
+message Move {
   User player = 1;
   Shape shape = 2;
 }
 
 message GameEvent {
-  Playing play = 1;
+  Move move = 1;
   GroupInfo group = 2;
   EventType type = 3;
 }
 
 message Result {
-  repeated Playing plays = 1;
+  repeated Move moves = 1;
   int32 winner = 2;
 }

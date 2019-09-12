@@ -3,7 +3,7 @@ import { gameService, authService } from '../services';
 import { Card, Console } from '../game';
 import './game-pad.scss';
 import { Subscription } from 'rxjs';
-import { GroupFormed, Player, GroupEvent } from '../services/server-events.model';
+import { GroupFormed, Player, GroupEvent } from '../services/events.model';
 
 interface GamePadState {
   started: boolean;

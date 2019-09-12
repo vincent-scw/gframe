@@ -1,7 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 import * as neffos from 'neffos.js';
 import { authService, env } from '../services';
-import { GroupEvent, Player } from './server-events.model';
+import { GroupEvent, Player } from './events.model';
 
 export class GameService {
   private wsConn: neffos.Conn | null = null;
