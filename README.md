@@ -1,24 +1,41 @@
+[![Build Status](https://travis-ci.org/vincent-scw/gframe.svg?branch=master)](https://travis-ci.org/vincent-scw/gframe)
+
 # gframe
 
-In [gframe](https://gframe.fun), you can play a classic game --Rock-Paper-Scissors-- with others.
+**Let's play a classic game --Rock-Paper-Scissors-- with others in [gframe](https://gframe.fun).**
 
 ## Motivation
-This repository is for practicing microservices architecture. It contains two web clients - Player Client & Admin Client, and several backend services as well. 
-I will use as many technologies as possible in different projects. It includes Restful Api, GraphQL, Websocket, OAuth2, Redis, Kafka, Docker, Kubernetes...etc. For deployment, I've setup Azure Kubernetes Service (AKS) with 2 nodes for everything. Refer to [depoly](https://github.com/vincent-scw/gframe/tree/master/deploy) folder for details.
+This is a [proof-of-concept application](https://gframe.fun), which demostrates [Microservice Architecture Pattern](http://martinfowler.com/microservices/) using various technologies.
+For technical perspective, it includes Restful Api, GraphQL, Websocket, OAuth2, Redis, Kafka, Docker, Kubernetes...etc. For deployment, I've setup Azure Kubernetes Service (AKS) for everything. Refer to [depoly](https://github.com/vincent-scw/gframe/tree/master/deploy) folder for details.
 - Note: it is still in beginning stage.
 
-## Architecture
-![Architecture](https://github.com/vincent-scw/gframe/blob/master/gframe.png)
+## Functional services
+<img with="880" alt="Functional services" src="https://github.com/vincent-scw/gframe/blob/master/gframe-functional.png" />
 
-## How to Start
-- PowerShell: `.\services\run.ps1` & `.\clients\run.ps1`
-- Docker Compose: 
-  - Backend: `docker-compose -f .\services\docker-compose.yml up`
-  - Frontend: `docker-compose -f .\clients\docker-compose.yml up`
-  - Open `Player Client` at http://localhost:8080
-  - Open `Admin Client` at http://localhost:8081
+### Game service
+Handle player login/logout, and interact with game playing.
 
-## Behaviors
+### Broker service
+Group players.
+
+### Admin service
+Setup, control and monitor a game. 
+
+## Infrastructure services
+
+### Redis
+This project heavily depends on Redis. It uses several features in Redis, like Cache, Pub/Sub, Sets...etc
+
+### Kafka
+This project use Kafka as message queue.
+
+### Monitoring services
+
+#### Promethuse & Grafana (https://grafana.gframe.fun)
+
+#### Jaeger
+
+## Clients
 - Player Client (https://www.gframe.fun)
   - User must be able to access the Player Client, and join the game with simply providing a name
   - When player presses Start, he/she must be added to a gaming group
@@ -27,6 +44,14 @@ I will use as many technologies as possible in different projects. It includes R
   - Admin must be able to access the Admin Client with username/password
   - Admin must be able to control the game (including creation, setting, etc...)
   - Admin must be able to simulate game playing via Simulator
+
+## How to Start
+- PowerShell: `.\services\run.ps1` & `.\clients\run.ps1`
+- Docker Compose: 
+  - Backend: `docker-compose -f .\services\docker-compose.yml up`
+  - Frontend: `docker-compose -f .\clients\docker-compose.yml up`
+  - Open `Player Client` at http://localhost:8080
+  - Open `Admin Client` at http://localhost:8081
   
 ## Key Features
 - [ ] [Auth Service](https://github.com/vincent-scw/gframe/tree/master/services/oauth)
@@ -36,7 +61,7 @@ I will use as many technologies as possible in different projects. It includes R
   - [x] Join
   - [ ] Leave
 - [x] Players Matching
-- [ ] Gaming
+- [x] Gaming
 - [ ] Admin Client & Simulator
   - [ ] Admin Client
   - [ ] Simulator
