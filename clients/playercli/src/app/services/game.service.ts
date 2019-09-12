@@ -58,14 +58,15 @@ export class GameService {
     this.wsConn && this.wsConn.close();
   }
 
-  ask(event: string, content: any) {
+  ask(event: string, content: any): null | Promise<void | neffos.Message> {
     if (this.wsConn && !this.wsConn.isClosed()) {
       let msg = new neffos.Message();
       msg.Namespace = "default";
       msg.Event = event;
       msg.Body = JSON.stringify(content);
       console.log(msg)
-      this.wsConn.ask(msg).catch(err => console.error(err));
+      return this.wsConn.ask(msg).catch(err => console.error(err));
     }
+    return null;
   }
 }
