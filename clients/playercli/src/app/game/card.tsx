@@ -1,6 +1,6 @@
 import React from 'react';
 import { gameService, EVENT_GAME } from '../services';
-import { Shape, Move, Player, GroupEvent } from '../services/events.model';
+import { Shape, Player, GroupEvent } from '../services/events.model';
 
 interface CardProps {
   readonly: boolean;

@@ -8,11 +8,11 @@ export class Welcome extends React.Component<User, any> {
     return (
       <div className="title">
         <span>Hello, {this.props.username}!</span>
-        <a onClick={authService.logout} className="button logout" title="Logout">
+        <button onClick={authService.logout} className="button logout" title="Logout">
           <span className="icon has-text-grey-light">
             <i className="fas fa-lg fa-sign-out-alt"></i>
           </span>
-        </a>
+        </button>
       </div>
     );
   }
