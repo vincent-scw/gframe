@@ -1,13 +1,13 @@
 import { BehaviorSubject } from 'rxjs';
 import * as neffos from 'neffos.js';
 import { authService, env } from '../services';
-import { GroupEvent, Player } from './events.model';
+import { GroupEvent, Player, PlayEvent } from './events.model';
 
 export class GameService {
   private wsConn: neffos.Conn | null = null;
   onGroup = new BehaviorSubject<GroupEvent | null>(null);
   onPlayer = new BehaviorSubject<null>(null);
-  onGame = new BehaviorSubject<null>(null);
+  onGame = new BehaviorSubject<PlayEvent | null>(null);
   connected = new BehaviorSubject<boolean>(false);
 
   private _opponents: Player[] = [];

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { gameService } from '../services';
+import { gameService, authService } from '../services';
 import { Subscription } from 'rxjs';
 import { GroupFormed } from '../services/events.model';
 
@@ -32,7 +32,13 @@ export class Console extends React.Component<any, ConsoleState> {
       }
     });
     this.gameSub = gameService.onGame.subscribe(e => {
-
+      if (e != null) {
+        let winner = e.moves[e.winner];
+        this.setState({latestMsg:
+          winner.player.id === authService.user.id ?
+          `You WIN!`: `You lose.`
+        });
+      }
     });
   }
 

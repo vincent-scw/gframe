@@ -19,11 +19,11 @@ export interface GroupEvent {
 }
 
 export interface Move {
-  group: string;
+  player: Player;
   shape: Shape;
 }
 
 export interface PlayEvent {
   winner: number;
-  plays: Move[];
+  moves: Move[];
 }

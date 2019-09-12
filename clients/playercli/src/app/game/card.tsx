@@ -5,6 +5,7 @@ import { Shape, Move, Player, GroupEvent } from '../services/events.model';
 interface CardProps {
   readonly: boolean;
   player: Player;
+  shape: Shape;
   group: GroupEvent | null;
 }
 
@@ -17,7 +18,7 @@ export class Card extends React.Component<CardProps, CardState> {
   constructor(props: CardProps) {
     super(props);
 
-    this.state = { selectedShape: Shape.NotSet, readonly: props.readonly }
+    this.state = { selectedShape: props.shape, readonly: props.readonly }
 
     this.onSelected = this.onSelected.bind(this);
   }
@@ -49,7 +50,9 @@ export class Card extends React.Component<CardProps, CardState> {
         </header>
         <div className="field has-addons">
           <p className="control">
-            <button className="button is-large" disabled={this.state.readonly}
+            <button 
+              className={`button is-large ${this.state.selectedShape===Shape.Rock ? 'is-info is-selected' : ''}`} 
+              disabled={this.state.readonly}
               onClick={() => this.onSelected(Shape.Rock)}>
               <span className="icon">
                 <i className="far fa-hand-rock"></i>
@@ -58,7 +61,9 @@ export class Card extends React.Component<CardProps, CardState> {
             </button>
           </p>
           <p className="control">
-            <button className="button is-large" disabled={this.state.readonly}
+            <button 
+              className={`button is-large ${this.state.selectedShape===Shape.Paper ? 'is-info is-selected' : ''}`} 
+              disabled={this.state.readonly}
               onClick={() => this.onSelected(Shape.Paper)}>
               <span className="icon">
                 <i className="far fa-hand-paper"></i>
@@ -67,7 +72,9 @@ export class Card extends React.Component<CardProps, CardState> {
             </button>
           </p>
           <p className="control">
-            <button className="button is-large" disabled={this.state.readonly}
+            <button 
+              className={`button is-large ${this.state.selectedShape===Shape.Scissors ? 'is-info is-selected' : ''}`} 
+              disabled={this.state.readonly}
               onClick={() => this.onSelected(Shape.Scissors)}>
               <span className="icon">
                 <i className="far fa-hand-scissors"></i>
