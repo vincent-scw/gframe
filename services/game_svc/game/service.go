@@ -24,6 +24,10 @@ func NewService() *Service {
 
 // Play a game
 func (svc *Service) Play(game *c.GameEvent) {
+	if game.Group == nil {
+		log.Printf("data with error: no group in %s", string(u.ToJSON(game)))
+		return
+	}
 	gameKey := fmt.Sprintf(r.GameEventFormat, game.Group.Id)
 	countKey := fmt.Sprintf(r.GameEventCountFormat, game.Group.Id)
 	svc.redisClient.PushToList(gameKey, string(u.ToJSON(game.Move)))

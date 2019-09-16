@@ -33,6 +33,10 @@ export class Console extends React.Component<any, ConsoleState> {
     });
     this.gameSub = gameService.onGame.subscribe(e => {
       if (e != null) {
+        if (e.winner === -1) {
+          this.setState({latestMsg: "Draw Game."});
+          return;
+        }
         let winner = e.moves[e.winner];
         this.setState({latestMsg:
           winner.player.id === authService.user.id ?

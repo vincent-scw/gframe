@@ -13,6 +13,8 @@ import (
 	"github.com/iris-contrib/swagger/swaggerFiles"
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/websocket"
+	"github.com/kataras/iris/middleware/logger"
+    "github.com/kataras/iris/middleware/recover"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	c "github.com/vincent-scw/gframe/contracts"
@@ -33,6 +35,9 @@ func main() {
 
 	app := iris.Default()
 	m := prometheusMiddleware.New("game_svc", 0.3, 1.2, 5.0)
+
+	app.Use(recover.New())
+    app.Use(logger.New())
 
 	cors := corsmid.New(corsmid.Options{
 		AllowedOrigins:   []string{"*"},

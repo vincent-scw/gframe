@@ -42,6 +42,7 @@ export class GamePad extends React.Component<any, GamePadState> {
     this.gameSub = gameService.onGame.subscribe(e => {
       if (e != null) {
         let opponent = e.moves.filter(x => x.player.id !== authService.user.id);
+        console.log(opponent)
         this.setState({opponentMove: opponent[0].shape});
       }
     });

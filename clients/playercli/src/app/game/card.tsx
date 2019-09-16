@@ -17,7 +17,7 @@ interface CardState {
 export class Card extends React.Component<CardProps, CardState> {
   constructor(props: CardProps) {
     super(props);
-
+    
     this.state = { selectedShape: props.shape, readonly: props.readonly }
 
     this.onSelected = this.onSelected.bind(this);
