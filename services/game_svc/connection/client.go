@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/kataras/iris/websocket"
+	c "github.com/vincent-scw/gframe/contracts"
 )
 
 const (
@@ -25,8 +26,8 @@ var (
 
 // Client is a middleman between the websocket connection and the hub.
 type Client struct {
-	// ID is client id
-	ID string
+	// User is user
+	User *c.User
 	// The websocket connection.
 	conn *websocket.Conn
 	// Buffered channel of outbound messages.
@@ -37,19 +38,24 @@ func (c *Client) writePump() {
 	for {
 		message := <-c.send
 		if !c.conn.IsClosed() {
-			log.Printf("send msg to %s: %s", c.ID, string(message.Content))
+			log.Printf("send msg to %s: %s", c.User.Id, string(message.Content))
 			c.conn.Write(websocket.Message{Namespace: "default", Event: string(message.Type), Body: message.Content})
 		}
 	}
 }
 
-func registerNewClient(hub *Hub, conn *websocket.Conn, id string) {
-	client := &Client{ID: id, conn: conn, send: make(chan *Message, 256)}
+func registerNewClient(hub *Hub, conn *websocket.Conn, user *c.User) {
+	client := &Client{User: user, conn: conn, send: make(chan *Message, 256)}
 	hub.register <- client
 
 	go client.writePump()
 }
 
-func unregisterClient(hub *Hub, id string) {
-	hub.unregister <- id
+func unregisterClient(hub *Hub, connID string) *c.User {
+	client := hub.findClient(connID)
+	hub.unregister <- connID
+	if client != nil {
+		return client.User
+	}
+	return nil
 }

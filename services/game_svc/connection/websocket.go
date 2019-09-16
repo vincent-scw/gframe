@@ -70,7 +70,7 @@ func CreateWebsocket(hub *Hub, onConnect func(user *contracts.User) error,
 
 		log.Printf("[%s] connected to server.", c.ID())
 		// register client
-		registerNewClient(hub, c, user.Id)
+		registerNewClient(hub, c, user)
 
 		if onConnect != nil {
 			return onConnect(user)
@@ -79,18 +79,13 @@ func CreateWebsocket(hub *Hub, onConnect func(user *contracts.User) error,
 	}
 
 	srv.OnDisconnect = func(c *websocket.Conn) {
-		ctx := websocket.GetContext(c)
-		user, err := auth.GetUserFromTokenForWS(ctx)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-
-		unregisterClient(hub, user.Id)
+		user := unregisterClient(hub, c.ID())
 
 		log.Printf("[%s] disconnected from the server.", c.ID())
 		if onDisconnect != nil {
-			onDisconnect(user)
+			if user != nil {
+				onDisconnect(user)
+			}
 		}
 	}
 

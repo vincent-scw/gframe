@@ -1,5 +1,7 @@
 package connection
 
+import "log"
+
 // Hub maintains the set of active clients and broadcasts messages to the
 // clients.
 type Hub struct {
@@ -29,24 +31,34 @@ func (h *Hub) run() {
 	for {
 		select {
 		case client := <-h.register:
-			h.clients[client.ID] = client
-		case clientID := <-h.unregister:
-			if client, ok := h.clients[clientID]; ok {
-				delete(h.clients, clientID)
+			h.clients[client.User.Id] = client
+		case userID := <-h.unregister:
+			if client, ok := h.clients[userID]; ok {
+				delete(h.clients, userID)
 				close(client.send)
 			}
 		}
 	}
 }
 
+func (h *Hub) findClient(connID string) *Client {
+	for _, client := range h.clients {
+		if client.conn.ID() == connID {
+			return client
+		}
+	}
+	log.Printf("conn %s cannot be found", connID)
+	return nil
+}
+
 // SendToClient send message to given client
-func (h *Hub) SendToClient(clientID string, message *Message) {
-	if client, ok := h.clients[clientID]; ok {
+func (h *Hub) SendToClient(userID string, message *Message) {
+	if client, ok := h.clients[userID]; ok {
 		select {
 		case client.send <- message:
 		default:
 			close(client.send)
-			delete(h.clients, clientID)
+			delete(h.clients, userID)
 		}
 	}
 }
