@@ -3,9 +3,8 @@ package game
 import (
 	"time"
 
-	"github.com/rs/xid"
-
 	c "github.com/vincent-scw/gframe/contracts"
+	u "github.com/vincent-scw/gframe/util"
 )
 
 // GroupFormed event
@@ -74,7 +73,7 @@ func (m *Matching) groupFormed() {
 }
 
 func newGroup(groupSize int) *Group {
-	id := xid.New().String()
+	id := u.NextRandom()
 	g := Group{GroupInfo: c.GroupInfo{Id: id, Status: c.GroupStatus_Forming}}
 	g.userChan = make(chan c.User)
 	g.killChan = make(chan struct{})
