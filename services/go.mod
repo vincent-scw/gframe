@@ -11,6 +11,7 @@ require (
 	github.com/functionalfoundry/graphqlws v0.0.0-20180830144941-4a19181eb54f
 	github.com/go-redis/redis v6.15.2+incompatible
 	github.com/go-session/session v3.1.2+incompatible
+	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/golang/protobuf v1.3.2
 	github.com/google/go-cmp v0.3.1 // indirect
 	github.com/google/pprof v0.0.0-20190723021845-34ac40c74b70 // indirect
@@ -38,6 +39,7 @@ require (
 	github.com/spf13/viper v1.3.2
 	github.com/swaggo/swag v1.6.2
 	github.com/x-cray/logrus-prefixed-formatter v0.5.2 // indirect
+	go.mongodb.org/mongo-driver v1.1.1
 	golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4 // indirect
 	golang.org/x/mobile v0.0.0-20190814143026-e8b3e6111d02 // indirect
 	golang.org/x/net v0.0.0-20190813141303-74dc4d7220e7 // indirect

@@ -11,6 +11,7 @@ const (
 	redisServer = "REDIS_SERVER"
 	gameURL     = "GAME_URL"
 	oauthURL    = "OAUTH_URL"
+	mongoConn	= "MONGO_CONN"
 )
 
 func init() {
@@ -19,6 +20,7 @@ func init() {
 	viper.SetDefault(port, 8451)
 	viper.SetDefault(gameURL, "http://localhost:8441")
 	viper.SetDefault(oauthURL, "http://localhost:8440")
+	viper.SetDefault(mongoConn, "mongodb://localhost:27017")
 
 	viper.AutomaticEnv() // automatically bind env
 }
@@ -41,4 +43,9 @@ func GetGameURL() string {
 // GetOAuthURL returns oauth url
 func GetOAuthURL() string {
 	return viper.GetString(oauthURL)
+}
+
+// GetMongoConnection returns mongo connection string
+func GetMongoConnection() string {
+	return viper.GetString(mongoConn)
 }
