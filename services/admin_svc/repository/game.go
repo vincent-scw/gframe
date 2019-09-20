@@ -8,6 +8,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	
+	c "github.com/vincent-scw/gframe/contracts"
+	u "github.com/vincent-scw/gframe/util"
 	s "github.com/vincent-scw/gframe/admin_svc/singleton"
 )
 
@@ -17,6 +19,24 @@ type GameModel struct {
 	ID			string 	`bson:"_id" json:"id,omitempty"`
 	CreatedBy 	string	`bson:"createdBy" json:"createdBy"`
 	Name 		string	`bson:"name" json:"name"`
+	RegisterTime	time.Time	`bson:"registerTime" json:"registerTime"`
+	StartTime	time.Time	`bson:"startTime" json:"startTime"`
+	Winner 		*c.User	`bson:"winner" json:"winner"`
+	Type		int		`bson:"type" json:"type"`
+	IsCancelled	bool	`bson:"isCancelled" json:"isCancelled"`
+}
+
+// NewGame return a game model
+func NewGame(name, createdBy string, reg time.Time) *GameModel {
+	model := GameModel{
+		ID: 		  u.NextRandom(),
+		Name:	      name,
+		CreatedBy:    createdBy,
+		RegisterTime: reg,
+		Type:         1,
+		IsCancelled:  false,
+	}
+	return &model
 }
 
 // GameRepository represents game
