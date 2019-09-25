@@ -1,1 +1,49 @@
-<p>list works!</p>
+<div>
+  <table mat-table [dataSource]="games">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let element">{{element.id}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Title</th>
+      <td mat-cell *matCellDef="let element">{{element.name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="registerTime">
+      <th mat-header-cell *matHeaderCellDef>Register Time</th>
+      <td mat-cell *matCellDef="let element">
+        {{element.registerTime | date: 'yyyy/MM/dd hh:mm:ss'}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="startTime">
+      <th mat-header-cell *matHeaderCellDef>Start Time</th>
+      <td mat-cell *matCellDef="let element">
+        {{element.startTime | date: 'yyyy/MM/dd hh:mm:ss'}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="completed">
+      <th mat-header-cell *matHeaderCellDef>Completed?</th>
+      <td mat-cell *matCellDef="let element">
+        <mat-checkbox [checked]="element.startTime != null"></mat-checkbox>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="winner">
+      <th mat-header-cell *matHeaderCellDef>Winner</th>
+      <td mat-cell *matCellDef="let element">{{element.winner && element.winner.name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="cancelled">
+        <th mat-header-cell *matHeaderCellDef>Cancelled?</th>
+        <td mat-cell *matCellDef="let element">
+          <mat-checkbox [checked]="element.isCancelled"></mat-checkbox>
+        </td>
+      </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

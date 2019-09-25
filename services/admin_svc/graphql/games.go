@@ -11,7 +11,7 @@ import (
 
 var playerType = graphql.NewObject(
 	graphql.ObjectConfig{
-		Name: "Player",
+		Name: "PlayerType",
 		Fields: graphql.Fields{
 			"id": &graphql.Field{
 				Type: graphql.String,
@@ -25,7 +25,7 @@ var playerType = graphql.NewObject(
 
 var gameType = graphql.NewObject(
 	graphql.ObjectConfig{
-		Name: "Game",
+		Name: "GameType",
 		Fields: graphql.Fields{
 			"id": &graphql.Field{
 				Type: graphql.String,
