@@ -16,7 +16,7 @@ func init() {
 		graphql.ObjectConfig{
 			Name: "Query",
 			Fields: graphql.Fields{
-				"hello": &fields,
+				"getGames": &getGamesField,
 			},
 		},
 	)
@@ -26,6 +26,9 @@ func init() {
 			Name: "Mutation",
 			Fields: graphql.Fields{
 				"injectPlayers": &injectPlayersField,
+				"startGame":     &startGameField,
+				"cancelGame":    &cancelGameField,
+				"updateGame":    &updateGameField,
 			},
 		},
 	)

@@ -16,5 +16,10 @@ func TestNewGame(t *testing.T) {
 
 // func TestCreateGame(t *testing.T) {
 // 	repo := NewGameRepository()
-// 	repo.FindGames("testg")
+// 	one, err := repo.GetOne("test321")
+// 	if err != nil {
+// 		if one != nil {
+
+// 		}
+// 	}
 // }

@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Admin Client';
-  opened = true;
+  opened = false;
 }

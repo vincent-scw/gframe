@@ -18,6 +18,7 @@ type GameModel struct {
 	// Use generated id instead of bson ObjectID
 	ID           string    `bson:"_id" json:"id,omitempty"`
 	CreatedBy    string    `bson:"createdBy" json:"createdBy"`
+	CreatedTime  time.Time `json:"createdTime" json:"createdTime"`
 	Name         string    `bson:"name" json:"name"`
 	RegisterTime time.Time `bson:"registerTime" json:"registerTime"`
 	StartTime    time.Time `bson:"startTime" json:"startTime"`
@@ -32,6 +33,7 @@ func NewGame(name, createdBy string, reg time.Time) *GameModel {
 		ID:           u.NextRandom(),
 		Name:         name,
 		CreatedBy:    createdBy,
+		CreatedTime:  time.Now().UTC(),
 		RegisterTime: reg,
 		Type:         1,
 		IsCancelled:  false,
@@ -63,6 +65,18 @@ func (repo *GameRepository) CreateGame(model *GameModel) error {
 		log.Printf("create game error: %v", err)
 	}
 	return err
+}
+
+// GetOne returns one game by id
+func (repo *GameRepository) GetOne(id string) (*GameModel, error) {
+	coll := repo.getCollection()
+	filter := bson.M{"_id": id}
+	var result GameModel
+	err := coll.FindOne(repo.ctx, filter).Decode(&result)
+	if err != nil {
+		log.Printf("get one game error: %v", err)
+	}
+	return &result, err
 }
 
 // UpdateGame updates a game
