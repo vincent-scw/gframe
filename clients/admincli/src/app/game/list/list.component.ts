@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { GameModel } from 'src/app/models/game.model';
 import { GameService } from 'src/app/services/game.service';
 import { Subscription } from 'rxjs';
+import { MatTableDataSource } from '@angular/material';
 
 @Component({
   selector: 'app-list',
@@ -9,9 +10,9 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit, OnDestroy {
-  games: GameModel[];
   displayedColumns: string[] = ['id', 'name', 'registerTime', 'startTime', 
     'completed', 'winner', 'cancelled'];
+  dataSource: MatTableDataSource<GameModel>;
 
   private gameSub: Subscription;
   
@@ -19,11 +20,18 @@ export class ListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.gameSub = this.gameSvc.getGames().valueChanges.subscribe(({data}) => {
-      this.games = data.getGames;
+      this.dataSource = new MatTableDataSource(data.getGames);
+      this.dataSource.filterPredicate = (data, filter): boolean => {
+        return data.id.includes(filter) || data.name.includes(filter);
+      };
     });
   }
 
   ngOnDestroy() {
     if (!!this.gameSub) { this.gameSub.unsubscribe(); }
+  }
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

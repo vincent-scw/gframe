@@ -1,5 +1,13 @@
+<div class="level filter">
+  <mat-form-field class="level-left">
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Type ID or Title to filter">
+  </mat-form-field>
+  <div class="level-right">
+    <a class="button is-link" routerLink="/game/create">Create Game</a>
+  </div>
+</div>
 <div>
-  <table mat-table [dataSource]="games">
+  <table mat-table [dataSource]="dataSource">
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef>ID</th>
       <td mat-cell *matCellDef="let element">
@@ -29,7 +37,7 @@
     <ng-container matColumnDef="completed">
       <th mat-header-cell *matHeaderCellDef>Completed?</th>
       <td mat-cell *matCellDef="let element">
-        <mat-checkbox [checked]="element.startTime != null"></mat-checkbox>
+        <mat-checkbox [checked]="element.startTime != null" disabled></mat-checkbox>
       </td>
     </ng-container>
 
@@ -39,11 +47,11 @@
     </ng-container>
 
     <ng-container matColumnDef="cancelled">
-        <th mat-header-cell *matHeaderCellDef>Cancelled?</th>
-        <td mat-cell *matCellDef="let element">
-          <mat-checkbox [checked]="element.isCancelled"></mat-checkbox>
-        </td>
-      </ng-container>
+      <th mat-header-cell *matHeaderCellDef>Cancelled?</th>
+      <td mat-cell *matCellDef="let element">
+        <mat-checkbox [checked]="element.isCancelled" disabled></mat-checkbox>
+      </td>
+    </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
