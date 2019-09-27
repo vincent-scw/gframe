@@ -1,6 +1,10 @@
+<h1 class="title">{{game && game.id}}</h1>
 <section class="section">
-	<app-setting></app-setting>
+	<h2 class="subtitle">Game Setting</h2>
+	<app-setting [game]="game"></app-setting>
 </section>
-<section class="section">
+<hr class="hr">
+<section class="section" *ngIf="showSimulator">
+	<h2 class="subtitle">Simulator</h2>
 	<app-simulator></app-simulator>
 </section>

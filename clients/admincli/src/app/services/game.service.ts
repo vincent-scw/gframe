@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { Observable } from 'rxjs';
-import { GameListResponse } from '../models/game.model';
+import { GameListResponse, GameResponse } from '../models/game.model';
 
 const gameFragment = gql`
 fragment GameInfo on GameType {
@@ -30,6 +30,15 @@ query games($owner: String!) {
 ${gameFragment}
 `;
 
+const getGame = gql`
+query games($id: String!) {
+  getGame(id: $id) {
+    ...GameInfo
+  }
+}
+${gameFragment}
+`;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -42,6 +51,13 @@ export class GameService {
     return this.apollo.watchQuery<GameListResponse>({
       query: getGames,
       variables: {owner: owner}
+    });
+  }
+
+  getGame(id: string) {
+    return this.apollo.watchQuery<GameResponse>({
+      query: getGame,
+      variables: {id: id}
     });
   }
 }

@@ -72,7 +72,25 @@ var getGamesField = graphql.Field{
 			gameRepo := repo.NewGameRepository()
 			return gameRepo.FindGames(owner)
 		}
-		return nil, nil
+		return nil, errors.New("no games found")
+	},
+}
+
+var getGameField = graphql.Field{
+	Type:        gameType,
+	Description: "Get game by id",
+	Args: graphql.FieldConfigArgument{
+		"id": &graphql.ArgumentConfig{
+			Type: graphql.String,
+		},
+	},
+	Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+		id, ok := p.Args["id"].(string)
+		if ok {
+			gameRepo := repo.NewGameRepository()
+			return gameRepo.GetOne(id)
+		}
+		return nil, errors.New("cannot find game")
 	},
 }
 

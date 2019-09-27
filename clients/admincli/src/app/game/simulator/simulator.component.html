@@ -1,12 +1,20 @@
 <form>
-  <div>
-    <mat-form-field>
-      <input matInput placeholder="a number" type="number" [(ngModel)]="amount" name="amount">
-      <span matPrefix>Inject&nbsp;</span>
-      <span matSuffix>&nbsp;players.</span>
-    </mat-form-field>
+  <div class="field">
+    <div class="field has-addons">
+      <p class="control">
+        <a class="button is-static">Inject</a>
+      </p>
+      <p class="control is-expanded">
+        <input class="input" type="number" placeholder="a number" [(ngModel)]="amount" name="amount">
+      </p>
+      <p class="control">
+        <a class="button is-static">players.</a>
+      </p>
+    </div>
   </div>
-  <div>
-    <button mat-raised-button color="primary" (click)="inject()">Inject</button>
+  <div class="field">
+    <div class="control">
+      <button class="button is-primary inject-btn" (click)="inject()">Inject</button>
+    </div>
   </div>
 </form>

@@ -3,16 +3,18 @@ import { CommonModule } from '@angular/common';
 import { ConsoleComponent } from './console/console.component';
 import { SharedModule } from '../shared.module';
 import { GameModule } from '../game/game.module';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
-  declarations: [ConsoleComponent],
+  declarations: [ConsoleComponent, FooterComponent],
   imports: [
     CommonModule,
     SharedModule,
     GameModule
   ],
   exports: [
-    ConsoleComponent
+    ConsoleComponent,
+    FooterComponent
   ]
 })
 export class LayoutModule { }

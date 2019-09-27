@@ -12,6 +12,10 @@ export interface GameModel {
   isCancelled: boolean;
 }
 
+export interface GameResponse extends ResponseBase {
+  getGame: GameModel;
+}
+
 export interface GameListResponse extends ResponseBase {
   getGames: GameModel[];
 }

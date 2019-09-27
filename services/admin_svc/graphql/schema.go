@@ -17,6 +17,7 @@ func init() {
 			Name: "Query",
 			Fields: graphql.Fields{
 				"getGames": &getGamesField,
+				"getGame":  &getGameField,
 			},
 		},
 	)
