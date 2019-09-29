@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { Observable } from 'rxjs';
-import { GameListResponse, GameResponse } from '../models/game.model';
+import { GameListResponse, GameResponse, GameModel } from '../models/game.model';
 
 const gameFragment = gql`
 fragment GameInfo on GameType {
@@ -39,6 +39,15 @@ query games($id: String!) {
 ${gameFragment}
 `;
 
+const createGame = gql`
+mutation games($game: GameInputType!) {
+  createGame(game: $game) {
+    ...GameInfo
+  }
+}
+${gameFragment}
+`;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -58,6 +67,19 @@ export class GameService {
     return this.apollo.watchQuery<GameResponse>({
       query: getGame,
       variables: {id: id}
+    });
+  }
+
+  createGame(name: string) {
+    const parameters = {
+      game: {
+        name: name,
+        createdBy: 'testg'
+      }
+    }
+    return this.apollo.mutate({
+      mutation: createGame,
+      variables: parameters
     });
   }
 }

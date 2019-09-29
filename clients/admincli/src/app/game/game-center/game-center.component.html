@@ -1,7 +1,21 @@
 <h1 class="title">{{game && game.id}}</h1>
 <section class="section">
 	<h2 class="subtitle">Game Setting</h2>
-	<app-setting [game]="game"></app-setting>
+	<form>
+		<div class="field">
+			<label class="label">Title</label>
+			<div class="control">
+				<input class="input" type="text" placeholder="Game Title" name="name" [(ngModel)]="game.name">
+			</div>
+		</div>
+		<div class="field">
+			<div class="control">
+				<button class="button is-primary submit-btn" (click)="submit()">
+					{{isNew ? 'Create Game': 'Update Game'}}
+				</button>
+			</div>
+		</div>
+	</form>
 </section>
 <hr class="hr">
 <section class="section" *ngIf="showSimulator">

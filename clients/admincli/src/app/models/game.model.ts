@@ -10,6 +10,10 @@ export interface GameModel {
   winner: Player;
   type: number;
   isCancelled: boolean;
+  isCompleted: boolean;
+  isStarted: boolean;
+
+  status?: string;
 }
 
 export interface GameResponse extends ResponseBase {

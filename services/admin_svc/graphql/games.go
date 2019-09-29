@@ -54,6 +54,26 @@ var gameType = graphql.NewObject(
 			"isCancelled": &graphql.Field{
 				Type: graphql.Boolean,
 			},
+			"isCompleted": &graphql.Field{
+				Type: graphql.Boolean,
+			},
+			"isStarted": &graphql.Field{
+				Type: graphql.Boolean,
+			},
+		},
+	},
+)
+
+var gameInputType = graphql.NewInputObject(
+	graphql.InputObjectConfig{
+		Name: "GameInputType",
+		Fields: graphql.InputObjectConfigFieldMap{
+			"name": &graphql.InputObjectFieldConfig{
+				Type: graphql.String,
+			},
+			"createdBy": &graphql.InputObjectFieldConfig{
+				Type: graphql.String,
+			},
 		},
 	},
 )
@@ -63,7 +83,7 @@ var getGamesField = graphql.Field{
 	Description: "Get games created by owner",
 	Args: graphql.FieldConfigArgument{
 		"owner": &graphql.ArgumentConfig{
-			Type: graphql.String,
+			Type: graphql.NewNonNull(graphql.String),
 		},
 	},
 	Resolve: func(p graphql.ResolveParams) (interface{}, error) {
@@ -81,7 +101,7 @@ var getGameField = graphql.Field{
 	Description: "Get game by id",
 	Args: graphql.FieldConfigArgument{
 		"id": &graphql.ArgumentConfig{
-			Type: graphql.String,
+			Type: graphql.NewNonNull(graphql.String),
 		},
 	},
 	Resolve: func(p graphql.ResolveParams) (interface{}, error) {
@@ -94,12 +114,31 @@ var getGameField = graphql.Field{
 	},
 }
 
+var createGameFied = graphql.Field{
+	Type:        gameType,
+	Description: "Create a game",
+	Args: graphql.FieldConfigArgument{
+		"game": &graphql.ArgumentConfig{
+			Type: graphql.NewNonNull(gameInputType),
+		},
+	},
+	Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+		game, ok := p.Args["game"].(map[string]interface{})
+		if ok {
+			gameRepo := repo.NewGameRepository()
+			newgame := repo.NewGame(game["name"].(string), game["createdBy"].(string), time.Time{})
+			return gameRepo.CreateGame(newgame)
+		}
+		return nil, errors.New("create game failed")
+	},
+}
+
 var startGameField = graphql.Field{
 	Type:        graphql.Boolean,
 	Description: "Start a game",
 	Args: graphql.FieldConfigArgument{
 		"gameId": &graphql.ArgumentConfig{
-			Type: graphql.String,
+			Type: graphql.NewNonNull(graphql.String),
 		},
 	},
 	Resolve: func(p graphql.ResolveParams) (interface{}, error) {
@@ -112,6 +151,7 @@ var startGameField = graphql.Field{
 			}
 
 			game.StartTime = time.Now().UTC()
+			game.IsStarted = true
 			err = gameRepo.UpdateGame(game)
 
 			// TODO: publish this event
@@ -126,7 +166,7 @@ var cancelGameField = graphql.Field{
 	Description: "Cancel a game",
 	Args: graphql.FieldConfigArgument{
 		"gameId": &graphql.ArgumentConfig{
-			Type: graphql.String,
+			Type: graphql.NewNonNull(graphql.String),
 		},
 	},
 	Resolve: func(p graphql.ResolveParams) (interface{}, error) {
@@ -151,7 +191,7 @@ var updateGameField = graphql.Field{
 	Description: "Update a game",
 	Args: graphql.FieldConfigArgument{
 		"game": &graphql.ArgumentConfig{
-			Type: gameType,
+			Type: graphql.NewNonNull(gameInputType),
 		},
 	},
 	Resolve: func(p graphql.ResolveParams) (interface{}, error) {
@@ -181,7 +221,7 @@ func checkGame(gameRepo *repo.GameRepository, gameID string) (*repo.GameModel, e
 	if game.IsCancelled {
 		return nil, errors.New("the game has been cancelled")
 	}
-	if !game.StartTime.IsZero() {
+	if !game.StartTime.IsZero() || game.IsStarted {
 		return nil, errors.New("the game has already started")
 	}
 	return game, nil

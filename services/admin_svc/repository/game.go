@@ -25,6 +25,8 @@ type GameModel struct {
 	Winner       *c.User   `bson:"winner" json:"winner"`
 	Type         int       `bson:"type" json:"type"`
 	IsCancelled  bool      `bson:"isCancelled" json:"isCancelled"`
+	IsCompleted  bool      `bson:"isCompleted" json:"isCompleted"`
+	IsStarted    bool      `bson:"isStartted" json:"isStarted"`
 }
 
 // NewGame return a game model
@@ -37,6 +39,8 @@ func NewGame(name, createdBy string, reg time.Time) *GameModel {
 		RegisterTime: reg,
 		Type:         1,
 		IsCancelled:  false,
+		IsCompleted:  false,
+		IsStarted:    false,
 	}
 	return &model
 }
@@ -58,13 +62,14 @@ func NewGameRepository() *GameRepository {
 }
 
 // CreateGame creates a new game
-func (repo *GameRepository) CreateGame(model *GameModel) error {
+func (repo *GameRepository) CreateGame(model *GameModel) (*GameModel, error) {
 	coll := repo.getCollection()
-	_, err := coll.InsertOne(repo.ctx, model)
+	result, err := coll.InsertOne(repo.ctx, model)
 	if err != nil {
 		log.Printf("create game error: %v", err)
 	}
-	return err
+	newModel, err := repo.GetOne(result.InsertedID.(string))
+	return newModel, err
 }
 
 // GetOne returns one game by id

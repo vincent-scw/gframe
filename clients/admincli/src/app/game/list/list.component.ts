@@ -11,7 +11,7 @@ import { MatTableDataSource } from '@angular/material';
 })
 export class ListComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['id', 'name', 'registerTime', 'startTime', 
-    'completed', 'winner', 'cancelled'];
+    'status', 'winner'];
   dataSource: MatTableDataSource<GameModel>;
 
   private gameSub: Subscription;
@@ -21,6 +21,17 @@ export class ListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.gameSub = this.gameSvc.getGames().valueChanges.subscribe(({data}) => {
       this.dataSource = new MatTableDataSource(data.getGames);
+      this.dataSource.data.forEach(d => {
+        if (d.isCancelled) {
+          d.status = "Cancelled";
+        } else if (d.isCompleted) {
+          d.status = "Completed";
+        } else if (d.isStarted) {
+          d.status = "Started";
+        } else {
+          d.status = "Created";
+        }
+      });
       this.dataSource.filterPredicate = (data, filter): boolean => {
         return data.id.includes(filter) || data.name.includes(filter);
       };

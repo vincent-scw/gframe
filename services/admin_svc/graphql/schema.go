@@ -30,6 +30,7 @@ func init() {
 				"startGame":     &startGameField,
 				"cancelGame":    &cancelGameField,
 				"updateGame":    &updateGameField,
+				"createGame":    &createGameFied,
 			},
 		},
 	)
