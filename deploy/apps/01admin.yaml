@@ -21,6 +21,8 @@ spec:
           value: "80"
         - name: REDIS_SERVER
           value: "redis:6379"
+        - name: MONGO_CONN
+          value: "mongodb://mongodb:27017"
         - name: GAME_URL
           value: "http://game:80"
         - name: OAUTH_URL

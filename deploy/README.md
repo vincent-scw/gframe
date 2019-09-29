@@ -29,6 +29,8 @@
 - Deploy [Nginx](https://www.nginx.com/) to Kubernetes
   - Create a static IP, reference to https://docs.microsoft.com/en-us/azure/aks/static-ip
   - Run `helm install stable/nginx-ingress --name nginx-gframe --namespace gframe --set controller.replicaCount=2 --set controller.service.loadBalancerIP={{StaticIP}}`
+- Deploy [Mongodb](https://mongodb.com/) to Kubernetes
+  - Rum `helm install stable/mongodb --name mongodb --namespace infra --set mongodbRootPassword={your-password}`
  
 ### Monitoring
 - Deploy [Prometheus](https://prometheus.io/) to Kubernetes
