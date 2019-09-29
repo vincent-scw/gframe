@@ -10,7 +10,7 @@ import { MatTableDataSource } from '@angular/material';
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit, OnDestroy {
-  displayedColumns: string[] = ['id', 'name', 'registerTime', 'startTime', 
+  displayedColumns: string[] = ['id', 'name', 'createdTime', 'startTime', 
     'status', 'winner'];
   dataSource: MatTableDataSource<GameModel>;
 

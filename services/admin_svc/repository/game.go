@@ -26,7 +26,7 @@ type GameModel struct {
 	Type         int       `bson:"type" json:"type"`
 	IsCancelled  bool      `bson:"isCancelled" json:"isCancelled"`
 	IsCompleted  bool      `bson:"isCompleted" json:"isCompleted"`
-	IsStarted    bool      `bson:"isStartted" json:"isStarted"`
+	IsStarted    bool      `bson:"isStarted" json:"isStarted"`
 }
 
 // NewGame return a game model
