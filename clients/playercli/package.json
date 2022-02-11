@@ -14,7 +14,7 @@
     "bulma": "^0.7.5",
     "jwt-decode": "^2.2.0",
     "neffos.js": "^0.1.21",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1",
